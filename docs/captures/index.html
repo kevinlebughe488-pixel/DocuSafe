@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DocuSafe – captures d'écran (phase 3)</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 24px; background: #FAF9FE; color: #1A1B1F; }
+  h1 { font-weight: 500; }
+  p { max-width: 70ch; color: #434750; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 24px; }
+  figure { margin: 0; background: #EEEDF3; border-radius: 16px; padding: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  img { width: 100%; border-radius: 12px; border: 1px solid #C3C6D1; }
+  figcaption { grid-column: 1 / -1; font-size: 14px; padding: 4px 4px 0; }
+  code { background: #E8E7ED; padding: 2px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>DocuSafe – captures d'écran de la phase 3</h1>
+<p>Rendu réel de l'application Flutter (360 × 800 points, densité 3), en clair et en sombre. Produites par le test <code>test/screenshots/screenshots_test.dart</code> avec la commande <code>DOCUSAFE_SCREENSHOTS=1 flutter test test/screenshots --update-goldens</code>.</p>
+<div class="grid">
+    <figure><img src="01-onboarding-1.png" alt="Onboarding – bienvenue (clair)" loading="lazy"><img src="01-onboarding-1-sombre.png" alt="Onboarding – bienvenue (sombre)" loading="lazy"><figcaption>01. Onboarding – bienvenue</figcaption></figure>
+    <figure><img src="02-onboarding-4.png" alt="Onboarding – confidentialité (clair)" loading="lazy"><img src="02-onboarding-4-sombre.png" alt="Onboarding – confidentialité (sombre)" loading="lazy"><figcaption>02. Onboarding – confidentialité</figcaption></figure>
+    <figure><img src="03-creation-code.png" alt="Création du coffre – code (clair)" loading="lazy"><img src="03-creation-code-sombre.png" alt="Création du coffre – code (sombre)" loading="lazy"><figcaption>03. Création du coffre – code</figcaption></figure>
+    <figure><img src="04-cle-de-recuperation.png" alt="Création du coffre – clé de récupération (clair)" loading="lazy"><img src="04-cle-de-recuperation-sombre.png" alt="Création du coffre – clé de récupération (sombre)" loading="lazy"><figcaption>04. Création du coffre – clé de récupération</figcaption></figure>
+    <figure><img src="05-biometrie.png" alt="Création du coffre – biométrie (clair)" loading="lazy"><img src="05-biometrie-sombre.png" alt="Création du coffre – biométrie (sombre)" loading="lazy"><figcaption>05. Création du coffre – biométrie</figcaption></figure>
+    <figure><img src="06-deverrouillage.png" alt="Déverrouillage (clair)" loading="lazy"><img src="06-deverrouillage-sombre.png" alt="Déverrouillage (sombre)" loading="lazy"><figcaption>06. Déverrouillage</figcaption></figure>
+    <figure><img src="07-trop-d-essais.png" alt="Déverrouillage – trop d'essais (clair)" loading="lazy"><img src="07-trop-d-essais-sombre.png" alt="Déverrouillage – trop d'essais (sombre)" loading="lazy"><figcaption>07. Déverrouillage – trop d'essais</figcaption></figure>
+    <figure><img src="08-code-oublie.png" alt="Code oublié (clair)" loading="lazy"><img src="08-code-oublie-sombre.png" alt="Code oublié (sombre)" loading="lazy"><figcaption>08. Code oublié</figcaption></figure>
+    <figure><img src="09-accueil.png" alt="Tableau de bord (phase 3) (clair)" loading="lazy"><img src="09-accueil-sombre.png" alt="Tableau de bord (phase 3) (sombre)" loading="lazy"><figcaption>09. Tableau de bord (phase 3)</figcaption></figure>
+    <figure><img src="10-securite.png" alt="Paramètres – Sécurité (clair)" loading="lazy"><img src="10-securite-sombre.png" alt="Paramètres – Sécurité (sombre)" loading="lazy"><figcaption>10. Paramètres – Sécurité</figcaption></figure>
+    <figure><img src="11-changer-le-code.png" alt="Changer le code (clair)" loading="lazy"><img src="11-changer-le-code-sombre.png" alt="Changer le code (sombre)" loading="lazy"><figcaption>11. Changer le code</figcaption></figure>
+    <figure><img src="12-confidentialite.png" alt="Politique de confidentialité (clair)" loading="lazy"><img src="12-confidentialite-sombre.png" alt="Politique de confidentialité (sombre)" loading="lazy"><figcaption>12. Politique de confidentialité</figcaption></figure>
+</div>
+</body>
+</html>

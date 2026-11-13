@@ -20,11 +20,11 @@ Le document de référence est [docs/cahier-des-charges.md](docs/cahier-des-char
 | Phase | État |
 |---|---|
 | 1 – Analyse et conception | Validée |
-| 2 – Design (système de design, 46 maquettes) | Terminée, **en attente de validation** |
-| 3 – Socle : projet Flutter, chiffrement, base de données, authentification | Pas commencée |
-| 4 à 6 – Fonctionnalités, sécurité et optimisation, publication | À venir |
+| 2 – Design (système de design, 46 maquettes) | Validée |
+| 3 – Socle : projet Flutter, chiffrement, base de données, authentification | Terminée en session en ligne, **en attente de validation**. Jamais lancée sur un téléphone. |
+| 4 à 6 – Fonctionnalités, sécurité et optimisation, publication | À venir (phase 4 en trois lots, voir D18) |
 
-Il n'existe encore **aucun code Flutter** : le dépôt contient la documentation et les maquettes.
+Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session en ligne, lancer d'abord `bash tool/setup_cloud.sh` puis `export PATH="/home/user/sdk/flutter/bin:$PATH"`.
 
 ## À lire avant d'écrire du code
 
@@ -41,6 +41,7 @@ Il n'existe encore **aucun code Flutter** : le dépôt contient la documentation
 ## Choix structurants
 
 - Flutter 3.50 / Dart 3.14. Android : `minSdk` 24, `compileSdk` 37, `targetSdk` 36. iOS 15.
+- Depuis Flutter 3.50, `package:flutter/material.dart` est déprécié : importer `package:material_ui/material_ui.dart` (et `package:cupertino_ui/cupertino_ui.dart` pour les éléments iOS). Les deux paquets sont publiés par flutter.dev.
 - Identifiant de l'application : `com.docusafe.app` (modifiable jusqu'à la création du projet, définitif après publication). Paquet Dart : `docusafe`.
 - Riverpod sans génération de code, go_router, drift.
 - Base entièrement chiffrée avec **SQLite3MultipleCiphers**, activé par les hooks du paquet `sqlite3` dans `pubspec.yaml` (`hooks` → `user_defines` → `sqlite3` → `source: sqlite3mc`). Ne pas utiliser `sqlcipher_flutter_libs`, `sqlite3_flutter_libs` ni `drift_flutter`.
@@ -48,7 +49,9 @@ Il n'existe encore **aucun code Flutter** : le dépôt contient la documentation
 - Fichiers chiffrés en AES-256-GCM par blocs de 1 Mo (format `DSF1`). Code PIN de 6 chiffres minimum dérivé avec Argon2id. Clé de récupération. Biométrie liée au Keystore à partir d'Android 9.
 - Aucune permission `INTERNET` dans l'application publiée. Notifications au texte générique, alarmes inexactes.
 - Sauvegarde chiffrée manuelle incluse dans le MVP.
-- Textes en fichiers ARB (français seul). Identifiants de code en anglais ; commentaires et documentation en français.
+- Textes en fichiers ARB (français seul) dans `lib/app/l10n/app_fr.arb`, classe générée `AppLocalizations` (régénérée par `flutter pub get`). Identifiants de code en anglais ; commentaires et documentation en français.
+- Après toute modification des tables drift : `dart run build_runner build`.
+- Tests de widgets : utiliser `test/support/test_app.dart` (stockage sécurisé en mémoire, base ouverte dans l'isolate du test, Argon2id léger).
 - Couleurs : recopier les valeurs de `docs/07-design.md`, ne pas les recalculer.
 - Versions des paquets vérifiées le 13/11/2026 : les revérifier sur pub.dev avant de les ajouter.
 
@@ -62,5 +65,5 @@ Il n'existe encore **aucun code Flutter** : le dépôt contient la documentation
 ## Environnements
 
 - **PC du développeur : infecté par un virus (Expiro) depuis le 13/11/2026.** Flutter y est inutilisable tant que le PC n'est pas nettoyé. Ne jamais conseiller de désactiver Microsoft Defender, d'ajouter une exclusion ou de restaurer un fichier signalé. Voir [docs/problemes-connus.md](docs/problemes-connus.md).
-- **Session en ligne (claude.ai/code)** : machine Ubuntu 24.04. Le SDK Flutter n'est pas dans le dépôt : l'installer au début de la phase 3 (archive Linux officielle, empreinte SHA-256 vérifiée). `flutter analyze` et `flutter test` y fonctionnent ; l'émulateur et le téléphone, non. Le SDK Android (téléchargé depuis dl.google.com) peut exiger d'élargir l'accès réseau de l'environnement.
+- **Session en ligne (claude.ai/code)** : machine Ubuntu 24.04. Le SDK Flutter n'est pas dans le dépôt : `bash tool/setup_cloud.sh` l'installe dans `/home/user/sdk/flutter` (archive Linux officielle, empreinte SHA-256 vérifiée, environ 2 minutes). `flutter analyze` et `flutter test` y fonctionnent ; l'émulateur et le téléphone, non. L'hôte `dl.google.com` (SDK Android, dépôt Maven de Google) est bloqué par le réseau de l'environnement : aucun APK ne peut y être compilé (voir docs/problemes-connus.md, P3).
 - Les tests sur téléphone se feront sur le PC une fois nettoyé, ou avec un APK compilé dans le cloud.

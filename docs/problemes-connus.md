@@ -6,6 +6,8 @@ Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera te
 |---|---|---|---|
 | P1 | Le PC de développement est infecté par un virus (« Expiro ») | **Bloquant** | Ouvert depuis le 13/11/2026 |
 | P2 | Flutter est installé mais ne peut pas s'exécuter | Bloquant (conséquence de P1) | Ouvert depuis le 13/11/2026 |
+| P3 | La session en ligne ne peut pas compiler d'APK Android | Gênant | Ouvert depuis le 13/11/2026 |
+| P4 | La phase 3 n'a jamais été lancée sur un téléphone | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
 
 ---
 
@@ -67,6 +69,18 @@ Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera te
 Une fois le PC sain : supprimer `D:\dev\flutter`, réinstaller Flutter (15 minutes, voir [guide-installation-windows.md](guide-installation-windows.md)), vérifier avec `flutter doctor -v`, puis commencer la phase 3.
 
 ---
+
+## P3 – Pas de compilation Android dans la session en ligne
+
+- La machine Ubuntu de la session en ligne accède à `storage.googleapis.com` (Flutter), `pub.dev`, GitHub et aux dépôts Maven publics, mais **pas à `dl.google.com`**. Or le SDK Android, le plugin Android Gradle et les bibliothèques Google y sont hébergés.
+- Conséquence : `flutter analyze`, `flutter test` et la génération de code fonctionnent (c'est ainsi que la phase 3 a été écrite et testée), mais `flutter build apk` est impossible dans cette session.
+- Solutions possibles : (a) élargir l'accès réseau de l'environnement de la session en ligne à `dl.google.com` et `maven.google.com` ; (b) compiler sur le PC une fois nettoyé ; (c) utiliser un service de build dans le cloud (Codemagic, GitHub Actions), prévu de toute façon pour iOS.
+
+## P4 – Phase 3 jamais exécutée sur un téléphone
+
+- Le socle a été validé par 49 tests automatiques (chiffrement, clés, base chiffrée, écrans) et par des captures d'écran rendues par Flutter (voir `docs/captures/`).
+- Ce qui n'a pas pu être vérifié : la biométrie réelle (Keystore, `flutter_secure_storage`), le canal `FLAG_SECURE`, la vitesse d'Argon2id sur un téléphone d'entrée de gamme (réglage prévu : 0,5 à 1 s), le comportement en arrière-plan, et toute la partie iOS (marquée « à vérifier sur iOS »).
+- À faire au premier lancement : `flutter doctor -v`, `flutter run`, créer un coffre, verrouiller/déverrouiller, mesurer le temps de vérification du code.
 
 ## P2 – Flutter installé mais inutilisable
 

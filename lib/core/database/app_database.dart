@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:drift/isolate.dart' show DriftRemoteException;
+import 'package:drift/native.dart';
 import 'package:sqlite3/sqlite3.dart' as sqlite;
 
 import '../config/app_config.dart';
@@ -50,6 +50,16 @@ class AppDatabase extends _$AppDatabase {
   /// Base en mémoire, pour les tests : pas de chiffrement.
   factory AppDatabase.inMemory() => AppDatabase(NativeDatabase.memory());
 
+  /// Comme [AppDatabase.openEncrypted], mais dans l'isolate courant.
+  /// Réservé aux tests de widgets, où l'isolate de fond se marie mal avec le
+  /// temps simulé de `flutter_test`.
+  factory AppDatabase.openEncryptedInline(File file, Uint8List key) {
+    final hexKey = Bytes.toHex(key);
+    return AppDatabase(
+      NativeDatabase(file, setup: (db) => applyEncryptionKey(db, hexKey)),
+    );
+  }
+
   /// Applique la clé et vérifie qu'elle ouvre bien la base.
   ///
   /// Fonction de niveau supérieur : elle s'exécute dans l'isolate de la base.
@@ -85,6 +95,9 @@ class AppDatabase extends _$AppDatabase {
         throw cause;
       }
       throw StorageException('database.open', cause: cause);
+    } on AppException {
+      await close();
+      rethrow;
     } on Object {
       await close();
       rethrow;

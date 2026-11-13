@@ -12,6 +12,13 @@ Les versions seront figées dans `pubspec.lock` au moment de l'installation (pha
 
 ## 1. Paquets retenus pour le MVP
 
+### Interface
+
+| Paquet | Version | Rôle | Licence | Éditeur |
+|---|---|---|---|---|
+| `material_ui` | 1.11.0 | Widgets Material 3. Depuis Flutter 3.50, `package:flutter/material.dart` est déprécié au profit de ce paquet. | BSD-3 | flutter.dev |
+| `cupertino_ui` | 1.1.6 | Widgets et textes iOS (transitions, `GlobalCupertinoLocalizations`) | BSD-3 | flutter.dev |
+
 ### Structure de l'application
 
 | Paquet | Version | Rôle | Licence | Éditeur |
@@ -78,7 +85,7 @@ Les versions seront figées dans `pubspec.lock` au moment de l'installation (pha
 | `flutter_launcher_icons` | 0.14.4 | Génération des icônes Android et iOS | MIT |
 | `flutter_native_splash` | 2.4.8 | Écran de démarrage natif | MIT |
 
-**Bilan :** 25 paquets dans l'application, tous sous licence permissive (MIT, BSD, Apache-2.0), donc utilisables dans un produit commercial. Leur seule obligation est de reproduire les mentions de licence : Flutter le fait automatiquement dans l'écran « Licences » (Paramètres → À propos).
+**Bilan :** 27 paquets dans l'application, tous sous licence permissive (MIT, BSD, Apache-2.0), donc utilisables dans un produit commercial. Leur seule obligation est de reproduire les mentions de licence : Flutter le fait automatiquement dans l'écran « Licences » (Paramètres → À propos).
 
 Composants natifs embarqués : SQLite (domaine public), SQLite3MultipleCiphers (MIT), PDFium (BSD-3 / Apache-2.0), Tink (Apache-2.0). Le scanner ML Kit est soumis aux conditions d'utilisation de Google ML Kit, gratuites pour un usage commercial ; elles seront relues en phase 6.
 
@@ -127,7 +134,7 @@ Composants natifs embarqués : SQLite (domaine public), SQLite3MultipleCiphers (
 
 | Paquet | Constat | Mesure |
 |---|---|---|
-| `cryptography`, `cryptography_flutter` | Dernière version en novembre 2025 : paquets stables mais peu actifs. La partie Android utilise une configuration Gradle ancienne. | Chiffrement isolé derrière l'interface `CryptoEngine`. Compilation et mesure de vitesse dès le début de la phase 3. **Plan B : `webcrypto`** (éditeur google.dev, mis à jour le 11/11/2026), sans Argon2id mais avec PBKDF2 natif. |
+| `cryptography`, `cryptography_flutter` | Dernière version en novembre 2025 : paquets stables mais peu actifs. La partie Android utilise une configuration Gradle ancienne. `FlutterCryptography.enable()` est déprécié : le paquet s'active seul. | Chiffrement isolé derrière l'interface `CryptoEngine` (phase 3 : fait). Mesure de vitesse sur téléphone encore à faire (P4). **Plan B : `webcrypto`** (éditeur google.dev, mis à jour le 11/11/2026), sans Argon2id mais avec PBKDF2 natif. |
 | `sqlite3` | Télécharge un binaire précompilé pendant la compilation (contrôlé par empreinte SHA-256). | **La première compilation exige une connexion Internet.** |
 | `flutter_local_notifications` | Exige `compileSdk` 37 et l'option Gradle « desugaring ». | Configuration Android en phase 3. La plateforme Android 37 est déjà installée sur le PC. |
 | `cunning_document_scanner` | Déclare ses propres règles de sauvegarde Android, qui entrent en conflit avec celles de DocuSafe. Écrit ses images dans un dossier externe privé. | Attribut `tools:replace` dans le manifeste. Purge du dossier après chaque scan. |

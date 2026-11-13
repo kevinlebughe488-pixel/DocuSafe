@@ -181,7 +181,7 @@ Les miniatures utilisent le même format, avec leur propre clé.
 - Sont ainsi protégés : titres, descriptions, tags, dates, catégories, réglages, index de recherche, texte OCR.
 - Les données effacées sont écrasées dans le fichier de la base (`secure_delete`).
 
-L'algorithme exact (ChaCha20-Poly1305 par défaut, ou le schéma AES-256 compatible SQLCipher) sera confirmé en phase 3 après mesure sur téléphone réel. Les deux sont robustes.
+**Confirmé en phase 3 :** schéma **ChaCha20-Poly1305** (celui par défaut de SQLite3MultipleCiphers 2.6.1), clé brute de 32 octets passée par `PRAGMA key = "x'…'"` (pas de dérivation supplémentaire côté SQLite : la clé est déjà dérivée par HKDF). Avant d'appliquer la clé, l'application vérifie que le moteur chiffré est bien présent (`PRAGMA cipher`) et refuse d'ouvrir une base en clair. Les tests vérifient que le fichier ne commence pas par `SQLite format 3` et qu'un SQLite ordinaire ne peut pas le lire.
 
 ---
 
