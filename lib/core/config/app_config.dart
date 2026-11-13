@@ -1,0 +1,52 @@
+/// Constantes de configuration de l'application.
+///
+/// Les valeurs viennent de docs/04-securite.md et docs/01-analyse.md.
+abstract final class AppConfig {
+  /// Longueur du code : 6 à 12 chiffres (D5).
+  static const int pinMinLength = 6;
+  static const int pinMaxLength = 12;
+
+  /// Essais libres avant la première attente (§5).
+  static const int pinFreeAttempts = 5;
+
+  /// Attentes successives après les essais libres (§5).
+  static const List<Duration> pinLockoutSteps = [
+    Duration(seconds: 30),
+    Duration(minutes: 1),
+    Duration(minutes: 5),
+    Duration(minutes: 15),
+    Duration(hours: 1),
+  ];
+
+  /// Délai de verrouillage après inactivité, par défaut (D12).
+  static const Duration defaultAutoLock = Duration(minutes: 2);
+
+  /// Choix proposés pour le délai de verrouillage (D12).
+  static const List<Duration> autoLockChoices = [
+    Duration(seconds: 30),
+    Duration(minutes: 1),
+    Duration(minutes: 2),
+    Duration(minutes: 5),
+    Duration(minutes: 10),
+  ];
+
+  /// Tolérance maximale en arrière-plan pendant une opération lancée par
+  /// DocuSafe (scanner, sélecteur, partage, fenêtre biométrique) (§10).
+  static const Duration externalOperationTolerance = Duration(minutes: 5);
+
+  /// Une authentification récente n'est pas redemandée (§11).
+  static const Duration reauthGracePeriod = Duration(seconds: 30);
+
+  /// Le presse-papiers est vidé après ce délai (§7).
+  static const Duration clipboardClearDelay = Duration(seconds: 60);
+
+  /// Taille d'un bloc chiffré (§8).
+  static const int cipherBlockSize = 1024 * 1024;
+
+  /// Version du schéma de la base.
+  static const int databaseSchemaVersion = 1;
+
+  /// Nom du fichier de la base et du fichier de la serrure de récupération.
+  static const String databaseFileName = 'docusafe.db';
+  static const String recoverySlotFileName = 'recovery.slot';
+}
