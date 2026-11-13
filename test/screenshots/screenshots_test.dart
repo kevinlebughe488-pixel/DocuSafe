@@ -12,6 +12,7 @@ import 'package:docusafe/core/security/auth/biometric_service.dart';
 import 'package:docusafe/core/security/vault_service.dart';
 import 'package:docusafe/features/auth/presentation/setup/setup_view_model.dart';
 import 'package:docusafe/features/auth/presentation/unlock/unlock_view_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -29,8 +30,16 @@ import '../support/test_app.dart';
 ///
 /// Les polices Roboto et Material Icons sont chargées depuis le SDK Flutter,
 /// pour un rendu fidèle à Android.
+///
+/// Avec `DOCUSAFE_PLATFORM=ios`, les écrans sont rendus comme sur un iPhone 15
+/// (composants adaptatifs, transitions et flèche de retour iOS) dans
+/// `docs/captures/ios/`. La police San Francisco d'Apple n'étant pas
+/// disponible hors d'un Mac, le texte y est rendu en Roboto : sur un vrai
+/// iPhone, la police sera San Francisco. À vérifier sur iOS.
 void main() {
   final enabled = Platform.environment['DOCUSAFE_SCREENSHOTS'] == '1';
+  final ios = Platform.environment['DOCUSAFE_PLATFORM'] == 'ios';
+  final outputDir = ios ? '../../docs/captures/ios' : '../../docs/captures';
   const pin = '204915';
 
   setUpAll(() async {
@@ -50,9 +59,15 @@ void main() {
       }
       await loader.load();
     }
-    await load('Roboto', ['Roboto-Regular.ttf', 'Roboto-Medium.ttf', 'Roboto-Bold.ttf']);
+    const roboto = ['Roboto-Regular.ttf', 'Roboto-Medium.ttf', 'Roboto-Bold.ttf'];
+    await load('Roboto', roboto);
     await load('MaterialIcons', ['MaterialIcons-Regular.otf']);
     await load('monospace', ['RobotoCondensed-Regular.ttf']);
+    if (ios) {
+      // Noms de famille utilisés par la typographie iOS de Flutter.
+      await load('CupertinoSystemText', roboto);
+      await load('CupertinoSystemDisplay', roboto);
+    }
   });
 
   late TestEnvironment env;
@@ -67,7 +82,7 @@ void main() {
     await settle(tester, rounds: 8);
     await expectLater(
       find.byType(DocuSafeApp),
-      matchesGoldenFile('../../docs/captures/$name.png'),
+      matchesGoldenFile('$outputDir/$name.png'),
     );
   }
 
@@ -83,6 +98,8 @@ void main() {
       await prepare();
       await shoot(tester, dark ? '$name-sombre' : name);
       await teardownApp(tester);
+      // Le cadre de test exige que ce réglage soit remis avant la fin du test.
+      debugDefaultTargetPlatformOverride = null;
     }
   }
 
@@ -103,7 +120,12 @@ void main() {
     List<Override> extra = const [],
     BiometricService? biometrics,
   }) async {
-    usePhoneSize(tester);
+    if (ios) {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      useIphoneSize(tester);
+    } else {
+      usePhoneSize(tester);
+    }
     await tester.pumpWidget(
       ProviderScope(
         overrides: [...env.overrides(biometrics: biometrics), ...extra],

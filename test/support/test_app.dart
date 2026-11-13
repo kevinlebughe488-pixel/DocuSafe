@@ -118,6 +118,13 @@ Future<void> teardownApp(WidgetTester tester) async {
   }
 }
 
+/// Taille d'un iPhone 15 (393 × 852 points, densité 3).
+void useIphoneSize(WidgetTester tester) {
+  tester.view.physicalSize = const Size(1179, 2556);
+  tester.view.devicePixelRatio = 3;
+  addTearDown(tester.view.reset);
+}
+
 /// Taille d'un téléphone courant (360 × 800 points).
 void usePhoneSize(WidgetTester tester) {
   tester.view.physicalSize = const Size(1080, 2400);

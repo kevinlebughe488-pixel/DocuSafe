@@ -38,7 +38,7 @@ start docs\maquettes\index.html
 | [docs/06-dependances.md](docs/06-dependances.md) | Paquets retenus et justification |
 | [docs/07-design.md](docs/07-design.md) | Système de design : couleurs, typographie, composants, navigation |
 | [docs/maquettes/index.html](docs/maquettes/index.html) | Maquettes des 46 écrans, en clair et en sombre |
-| [docs/captures/index.html](docs/captures/index.html) | Captures d'écran réelles des 12 écrans de la phase 3, en clair et en sombre |
+| [docs/captures/index.html](docs/captures/index.html) | Captures d'écran réelles des 12 écrans de la phase 3, Android et iPhone, en clair et en sombre |
 | [docs/guide-installation-windows.md](docs/guide-installation-windows.md) | Installation de l'environnement de développement |
 | [docs/problemes-connus.md](docs/problemes-connus.md) | Problèmes connus |
 
@@ -64,7 +64,7 @@ export PATH="/home/user/sdk/flutter/bin:$PATH"
 flutter analyze && flutter test
 ```
 
-Le script installe Flutter 3.50.0 (empreinte vérifiée), récupère les paquets et génère le code de la base. Pour régénérer les captures d'écran : `DOCUSAFE_SCREENSHOTS=1 flutter test test/screenshots --update-goldens`. L'émulateur, le téléphone et la compilation d'un APK ne sont pas disponibles dans la session en ligne (voir [docs/problemes-connus.md](docs/problemes-connus.md), P3).
+Le script installe Flutter 3.50.0 (empreinte vérifiée), récupère les paquets et génère le code de la base. Pour régénérer les captures d'écran : `DOCUSAFE_SCREENSHOTS=1 flutter test test/screenshots --update-goldens` (ajouter `DOCUSAFE_PLATFORM=ios` pour le rendu iPhone). L'émulateur, le téléphone et la compilation d'un APK ne sont pas disponibles dans la session en ligne (voir [docs/problemes-connus.md](docs/problemes-connus.md), P3).
 
 ## Organisation du code
 
