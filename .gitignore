@@ -1,0 +1,48 @@
+# Fichiers du système et des éditeurs
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.log
+.history
+.atom/
+.build/
+.buildlog/
+.svn/
+.swiftpm/
+.idea/
+*.iml
+*.ipr
+*.iws
+# Le dossier .vscode peut contenir des réglages de lancement utiles : il n'est pas ignoré.
+
+# Réglages locaux de Claude Code (propres à chaque machine)
+.claude/settings.local.json
+
+# Flutter / Dart / Pub
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+**/doc/api/
+**/ios/Flutter/.last_build_id
+migrate_working_dir/
+app.*.symbols
+app.*.map.json
+
+# Android
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Secrets : ne jamais publier les clés de signature ni les mots de passe
+key.properties
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+.env
+.env.*

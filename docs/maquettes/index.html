@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DocuSafe – Maquettes</title>
+<!-- Police Roboto (celle d'Android). Sans connexion, la police du système est utilisée à la place. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="page-head">
+  <h1>
+    <svg width="28" height="28" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#205DB0"/><path d="M16 9.5h11.2l8.3 8.3V36a2.5 2.5 0 0 1-2.5 2.5H16a2.5 2.5 0 0 1-2.5-2.5V12A2.5 2.5 0 0 1 16 9.5Z" fill="#fff"/><path d="M27.2 9.5v5.8a2.5 2.5 0 0 0 2.5 2.5h5.8Z" fill="#ABC7FF"/><circle cx="24.5" cy="25.6" r="3.5" fill="#205DB0"/><path d="M23 27.6h3l1.2 6.2h-5.4Z" fill="#205DB0"/></svg>
+    DocuSafe – Maquettes
+  </h1>
+  <span class="sub">Phase 2 · <span id="count"></span></span>
+  <span class="spacer"></span>
+  <div class="toggle" role="group" aria-label="Thème">
+    <button type="button" data-set-theme="light" aria-pressed="true">Clair</button>
+    <button type="button" data-set-theme="dark" aria-pressed="false">Sombre</button>
+  </div>
+</header>
+<nav class="toc" id="toc" aria-label="Sommaire"></nav>
+
+<p class="intro">
+  Ces maquettes montrent <b>l'apparence et le contenu prévus</b> de chaque écran. Les documents affichés sont des exemples.
+  Le bouton <b>Clair / Sombre</b> change le thème de tous les écrans.
+  Chaque écran est dessiné pour un <b>petit téléphone</b> (360 × 784 points), la taille la plus répandue en entrée de gamme.
+  Les règles de design sont décrites dans <b>docs/07-design.md</b>.
+</p>
+
+<main id="app"></main>
+
+<footer class="page-foot">
+  Icônes : Material Symbols (Google, licence Apache 2.0). Police : Roboto si elle est disponible, sinon celle du système.
+  Les maquettes ne sont pas l'application : elles servent à valider le design avant le développement.
+</footer>
+
+<script src="icons.js"></script>
+<script src="ui.js"></script>
+<script src="screens-1.js"></script>
+<script src="screens-2.js"></script>
+<script>DS.render();</script>
+</body>
+</html>

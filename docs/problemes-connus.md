@@ -1,0 +1,75 @@
+# Problèmes connus
+
+Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera tenu à jour à chaque phase.
+
+| N° | Problème | Gravité | État |
+|---|---|---|---|
+| P1 | Le PC de développement est infecté par un virus (« Expiro ») | **Bloquant** | Ouvert depuis le 13/11/2026 |
+| P2 | Flutter est installé mais ne peut pas s'exécuter | Bloquant (conséquence de P1) | Ouvert depuis le 13/11/2026 |
+
+---
+
+## P1 – Virus « Expiro » sur le PC de développement
+
+### Ce qui a été constaté le 13/11/2026
+
+1. Microsoft Defender signale des fichiers infectés par **Virus:Win32/Expiro** et **Virus:Win64/Expiro** : 310 détections au total (134 le 31/10/2026, 134 le 10/11/2026, 40 le 13/11/2026), toutes sur le disque D:.
+2. Pour 154 d'entre elles, Defender indique que **la mise en quarantaine a échoué**. Les menaces sont marquées « actives ».
+3. Le SDK Flutter 3.50.0 a été téléchargé depuis le site officiel de Google. L'empreinte SHA-256 de l'archive correspondait à celle publiée par Google : **le téléchargement était sain**.
+4. Moins de deux minutes après l'extraction dans `D:\dev\flutter`, 20 programmes du SDK étaient signalés comme infectés.
+5. Vérification : ces programmes ont **grossi d'environ 580 Ko** par rapport à l'archive officielle, alors que leur date de modification n'a pas changé. Les fichiers non exécutables (par exemple `flutter_windows.dll`) sont restés identiques.
+
+| Fichier | Taille d'origine | Taille sur le disque | Écart |
+|---|---|---|---|
+| `dart.exe` | 5 452 288 | 6 031 360 | + 579 072 |
+| `dartaotruntime.exe` | 5 411 840 | 5 990 912 | + 579 072 |
+| `dartvm.exe` | 42 589 184 | 43 170 304 | + 581 120 |
+| `impellerc.exe` | 6 356 992 | 6 938 624 | + 581 632 |
+| `gen_snapshot.exe` | 5 255 680 | 5 834 240 | + 578 560 |
+| `mingit\cmd\git.exe` | 38 552 | 612 352 | + 573 800 |
+| `flutter_windows.dll` | 46 605 312 | 46 605 312 | 0 |
+
+6. Defender attribue ces modifications au programme `jetbrains-toolbox.exe`, qui démarre avec Windows. Il est probablement contaminé lui-même et sert de relais.
+
+### Ce que cela signifie
+
+- Un virus **actif** sur ce PC ajoute son code aux fichiers `.exe` qu'il trouve, y compris ceux qui viennent d'être créés. Ce n'est pas une fausse alerte : les fichiers ont réellement été modifiés.
+- D'après la description de Microsoft, cette famille de virus peut aussi **voler des informations** (identifiants, mots de passe).
+- Ce constat repose sur le rapport de Defender et sur la comparaison des tailles de fichiers. Un diagnostic complet demande une analyse antivirus approfondie.
+
+### Conséquences pour le projet
+
+| Sujet | Conséquence |
+|---|---|
+| Flutter | Inutilisable sur ce PC tant qu'il n'est pas nettoyé : ses programmes sont contaminés puis bloqués par Defender (problème P2) |
+| Phase 3 et suivantes | **Bloquées** sur ce PC |
+| Documents et maquettes du projet | **Non touchés** : ce sont des fichiers texte, pas des programmes |
+| Clés de signature (phase 6) | Ne jamais en créer sur un PC infecté : elles pourraient être volées |
+
+### Ce qu'il ne faut pas faire
+
+- Ne pas désactiver Defender.
+- Ne pas « autoriser » ou « restaurer » les fichiers signalés.
+- Ne pas ajouter d'exclusion sur le dossier Flutter : cela laisserait tourner des programmes contaminés.
+
+### Marche à suivre conseillée
+
+1. **Mettre le projet à l'abri :** copier le dossier `DocSafe` sur une clé USB ou un espace en ligne. Ne copier aucun fichier `.exe`.
+2. **Analyse hors ligne de Microsoft Defender :** Sécurité Windows → Protection contre les virus et menaces → Options d'analyse → Analyse Microsoft Defender hors ligne. Le PC redémarre et l'analyse dure environ 15 minutes.
+3. Lancer ensuite une **analyse complète**, puis consulter l'historique de protection.
+4. Si des détections reviennent, ce qui est fréquent avec ce type de virus : la solution fiable est de **réinstaller Windows** en effaçant les disques (C: et D:), puis de ne remettre que les fichiers personnels (documents, photos, code source), jamais d'anciens programmes.
+5. **Changer les mots de passe importants** (messagerie, GitHub, Google…) depuis un autre appareil sain, par précaution.
+6. Après nettoyage : **mettre Windows à jour**. La version installée (Windows 11, build 22000) ne reçoit plus de correctifs de sécurité.
+7. Les clés USB et disques externes utilisés sur ce PC peuvent contenir des programmes contaminés : les analyser aussi.
+
+### Reprise du projet
+
+Une fois le PC sain : supprimer `D:\dev\flutter`, réinstaller Flutter (15 minutes, voir [guide-installation-windows.md](guide-installation-windows.md)), vérifier avec `flutter doctor -v`, puis commencer la phase 3.
+
+---
+
+## P2 – Flutter installé mais inutilisable
+
+- Flutter 3.50.0 est extrait dans `D:\dev\flutter` et ce dossier a été ajouté au PATH de l'utilisateur.
+- La commande `flutter` répond « Le système ne peut exécuter le programme spécifié » : Defender bloque `dart.exe`, contaminé (voir P1).
+- Ce dossier doit être **supprimé et réinstallé** après le nettoyage du PC. Il ne faut pas tenter de le réparer.
