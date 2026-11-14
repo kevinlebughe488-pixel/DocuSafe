@@ -69,3 +69,14 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 - **PC du développeur : infecté par un virus (Expiro) depuis le 13/11/2026.** Flutter y est inutilisable tant que le PC n'est pas nettoyé. Ne jamais conseiller de désactiver Microsoft Defender, d'ajouter une exclusion ou de restaurer un fichier signalé. Voir [docs/problemes-connus.md](docs/problemes-connus.md).
 - **Session en ligne (claude.ai/code)** : machine Ubuntu 24.04. Le SDK Flutter n'est pas dans le dépôt : `bash tool/setup_cloud.sh` l'installe dans `/home/user/sdk/flutter` (archive Linux officielle, empreinte SHA-256 vérifiée, environ 2 minutes). `flutter analyze` et `flutter test` y fonctionnent ; l'émulateur et le téléphone, non. L'hôte `dl.google.com` (SDK Android, dépôt Maven de Google) est bloqué par le réseau de l'environnement : aucun APK ne peut y être compilé (voir docs/problemes-connus.md, P3).
 - Les tests sur téléphone se feront sur le PC une fois nettoyé, ou avec un APK compilé dans le cloud.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- When graphify-out/graph.json exists, run `graphify query "<question>"` before your first grep, search or source-file read for a codebase question, and put this rule in every subagent prompt that explores code. Read raw files only for lines the graph or an earlier read already located. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+- graphify-out/ n'est pas versionné : le graphe est reconstruit au démarrage de chaque session par `tool/graphify_bootstrap.sh` (hook SessionStart), qui installe aussi graphify s'il manque. Exclusions dans `.graphifyignore`.
