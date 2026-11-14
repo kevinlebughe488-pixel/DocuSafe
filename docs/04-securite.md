@@ -242,6 +242,10 @@ Point d'attention : sur Android, le scanner écrit ses images dans le dossier «
 3. Déchiffrement et contrôle d'intégrité.
 4. **Partage** : fichier temporaire dans `secure_tmp/`, transmis par la feuille de partage du système avec un droit de lecture temporaire. **Export** : écriture directe à l'emplacement choisi par l'utilisateur, sans fichier intermédiaire.
 5. Suppression du fichier temporaire : 10 minutes après le partage, au verrouillage et au démarrage. (L'application qui reçoit le fichier a besoin d'un moment pour le lire ; le supprimer immédiatement ferait échouer le partage.)
+6. **Exporter mes données** (Paramètres) : mêmes étapes 1 à 3 pour chaque document, puis archive ZIP rangée par catégorie, préparée dans `secure_tmp/export/` par un isolate (chaque document déchiffré est ajouté puis effacé aussitôt), lue en mémoire et remise au sélecteur « Enregistrer sous ». Le dossier est supprimé dès la fin, réussie ou non. Limite : 200 Mo de documents (voir docs/problemes-connus.md, P6).
+7. Un fichier dont l'empreinte ne correspond plus ne sort jamais : le partage, l'export ou l'archive s'arrêtent avec le message « fichier altéré ».
+
+Code : `lib/core/documents/export_document.dart` (`DocumentExporter`), `lib/core/platform/share_service.dart`, parcours à l'écran dans `lib/features/documents/presentation/share/document_exit_flow.dart`.
 
 ---
 

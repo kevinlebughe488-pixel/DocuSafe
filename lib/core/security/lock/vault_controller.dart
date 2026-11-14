@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../config/app_config.dart';
 import '../../database/daos/settings_dao.dart';
+import '../../documents/export_document.dart';
 import '../../errors/app_exception.dart';
 import '../../providers.dart';
 import '../../utils/app_log.dart';
@@ -185,6 +186,8 @@ final class VaultController extends Notifier<VaultState> {
     _pendingLocation = null;
     _currentSession = null;
     await current.session.close();
+    DocumentExporter.cancelPendingDeletes();
+    await _service.purgeTemporaryFiles();
     AppLog.event('vault.locked.${reason.name}');
   }
 

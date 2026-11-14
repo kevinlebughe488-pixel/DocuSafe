@@ -677,6 +677,64 @@ class AppLocalizationsFr extends AppLocalizations {
   String get detailOpen => 'Ouvrir';
 
   @override
+  String get detailShare => 'Partager';
+
+  @override
+  String get detailExport => 'Exporter';
+
+  @override
+  String get shareWarningTitle => 'Partager ce document ?';
+
+  @override
+  String get shareWarningBody =>
+      'Le fichier partagé ne sera plus protégé par DocuSafe. Envoyez-le uniquement à une personne de confiance.';
+
+  @override
+  String get exportWarningTitle => 'Exporter ce document ?';
+
+  @override
+  String get exportWarningBody =>
+      'La copie enregistrée ne sera plus protégée par DocuSafe. Choisissez un emplacement sûr.';
+
+  @override
+  String get exportDone => 'Copie enregistrée.';
+
+  @override
+  String get exportAllTitle => 'Exporter mes données';
+
+  @override
+  String get exportAllSubtitle =>
+      'Tous les documents, non chiffrés, dans un fichier ZIP';
+
+  @override
+  String get exportAllWarningTitle => 'Exporter tous vos documents ?';
+
+  @override
+  String get exportAllWarningBody =>
+      'Le fichier ZIP contiendra tous vos documents en clair : il ne sera plus protégé par DocuSafe. Rangez-le dans un endroit sûr et supprimez-le quand vous n\'en avez plus besoin.';
+
+  @override
+  String get exportAllEmpty => 'Aucun document à exporter.';
+
+  @override
+  String get exportAllInProgress => 'Préparation de l\'archive…';
+
+  @override
+  String get exportAllDone => 'Archive enregistrée.';
+
+  @override
+  String get exportUncategorized => 'Sans catégorie';
+
+  @override
+  String exportArchiveName(String date) {
+    return 'DocuSafe-export-$date.zip';
+  }
+
+  @override
+  String get exportTooLarge =>
+      'Vos documents dépassent 200 Mo : l\'export en un seul fichier n\'est pas possible. Exportez-les un par un depuis leur fiche.';
+
+  @override
   String get detailEdit => 'Modifier';
 
   @override

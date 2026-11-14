@@ -1156,6 +1156,108 @@ abstract class AppLocalizations {
   /// **'Ouvrir'**
   String get detailOpen;
 
+  /// No description provided for @detailShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager'**
+  String get detailShare;
+
+  /// No description provided for @detailExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter'**
+  String get detailExport;
+
+  /// No description provided for @shareWarningTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager ce document ?'**
+  String get shareWarningTitle;
+
+  /// No description provided for @shareWarningBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier partagé ne sera plus protégé par DocuSafe. Envoyez-le uniquement à une personne de confiance.'**
+  String get shareWarningBody;
+
+  /// No description provided for @exportWarningTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter ce document ?'**
+  String get exportWarningTitle;
+
+  /// No description provided for @exportWarningBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'La copie enregistrée ne sera plus protégée par DocuSafe. Choisissez un emplacement sûr.'**
+  String get exportWarningBody;
+
+  /// No description provided for @exportDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copie enregistrée.'**
+  String get exportDone;
+
+  /// No description provided for @exportAllTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter mes données'**
+  String get exportAllTitle;
+
+  /// No description provided for @exportAllSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les documents, non chiffrés, dans un fichier ZIP'**
+  String get exportAllSubtitle;
+
+  /// No description provided for @exportAllWarningTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter tous vos documents ?'**
+  String get exportAllWarningTitle;
+
+  /// No description provided for @exportAllWarningBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier ZIP contiendra tous vos documents en clair : il ne sera plus protégé par DocuSafe. Rangez-le dans un endroit sûr et supprimez-le quand vous n\'en avez plus besoin.'**
+  String get exportAllWarningBody;
+
+  /// No description provided for @exportAllEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun document à exporter.'**
+  String get exportAllEmpty;
+
+  /// No description provided for @exportAllInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparation de l\'archive…'**
+  String get exportAllInProgress;
+
+  /// No description provided for @exportAllDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archive enregistrée.'**
+  String get exportAllDone;
+
+  /// No description provided for @exportUncategorized.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans catégorie'**
+  String get exportUncategorized;
+
+  /// No description provided for @exportArchiveName.
+  ///
+  /// In fr, this message translates to:
+  /// **'DocuSafe-export-{date}.zip'**
+  String exportArchiveName(String date);
+
+  /// No description provided for @exportTooLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos documents dépassent 200 Mo : l\'export en un seul fichier n\'est pas possible. Exportez-les un par un depuis leur fiche.'**
+  String get exportTooLarge;
+
   /// No description provided for @detailEdit.
   ///
   /// In fr, this message translates to:

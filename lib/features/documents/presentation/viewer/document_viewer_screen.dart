@@ -14,6 +14,7 @@ import '../../../../core/documents/open_document.dart';
 import '../../../../core/errors/app_exception.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/widgets/state_view.dart';
+import '../share/document_exit_flow.dart';
 
 /// Lecture d'un document (écran 7b) : toujours sur fond sombre. Le document
 /// est déchiffré à ce moment-là seulement, son intégrité vérifiée ; le clair
@@ -24,10 +25,12 @@ final class DocumentViewerScreen extends ConsumerStatefulWidget {
   final String documentId;
 
   @override
-  ConsumerState<DocumentViewerScreen> createState() => _DocumentViewerScreenState();
+  ConsumerState<DocumentViewerScreen> createState() =>
+      _DocumentViewerScreenState();
 }
 
-final class _DocumentViewerScreenState extends ConsumerState<DocumentViewerScreen> {
+final class _DocumentViewerScreenState
+    extends ConsumerState<DocumentViewerScreen> {
   OpenedDocument? _opened;
   DocumentRow? _document;
   Object? _error;
@@ -42,7 +45,10 @@ final class _DocumentViewerScreenState extends ConsumerState<DocumentViewerScree
 
   Future<void> _open() async {
     try {
-      final row = await ref.read(databaseProvider).documentsDao.getById(widget.documentId);
+      final row = await ref
+          .read(databaseProvider)
+          .documentsDao
+          .getById(widget.documentId);
       if (row == null) {
         throw const StorageException('document.missing');
       }
@@ -74,13 +80,27 @@ final class _DocumentViewerScreenState extends ConsumerState<DocumentViewerScree
     final l10n = AppLocalizations.of(context);
     const dark = AppColors.dark;
     return Theme(
-      data: Theme.of(context).copyWith(colorScheme: dark, scaffoldBackgroundColor: dark.surface),
+      data: Theme.of(context)
+          .copyWith(colorScheme: dark, scaffoldBackgroundColor: dark.surface),
       child: Scaffold(
         backgroundColor: dark.surface,
         appBar: AppBar(
           backgroundColor: dark.surface,
           foregroundColor: dark.onSurface,
           title: Text(_document?.title ?? ''),
+          actions: [
+            if (_opened != null)
+              IconButton(
+                tooltip: l10n.detailShare,
+                icon: const Icon(Icons.share_outlined),
+                onPressed: () => runDocumentExit(
+                  context,
+                  ref,
+                  _opened!.document,
+                  DocumentExit.share,
+                ),
+              ),
+          ],
         ),
         body: _body(context, l10n),
       ),
@@ -98,7 +118,9 @@ final class _DocumentViewerScreenState extends ConsumerState<DocumentViewerScree
         isError: true,
         actions: [
           FilledButton.tonal(
-            onPressed: () => context.pushReplacement(Routes.documentDelete(widget.documentId)),
+            onPressed: () => context.pushReplacement(
+              Routes.documentDelete(widget.documentId),
+            ),
             child: Text(l10n.viewerDeleteEntry),
           ),
         ],
@@ -129,10 +151,15 @@ final class _DocumentViewerScreenState extends ConsumerState<DocumentViewerScree
                 color: Theme.of(context).colorScheme.inverseSurface,
                 borderRadius: BorderRadius.circular(16),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   child: Text(
                     l10n.viewerPage(_page, _pageCount),
-                    style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onInverseSurface,
+                    ),
                   ),
                 ),
               ),
@@ -159,7 +186,11 @@ final class _DocumentViewerScreenState extends ConsumerState<DocumentViewerScree
     );
     final bytes = opened.bytes;
     if (bytes != null) {
-      return PdfViewer.data(bytes, sourceName: opened.document.id, params: params);
+      return PdfViewer.data(
+        bytes,
+        sourceName: opened.document.id,
+        params: params,
+      );
     }
     return PdfViewer.file(opened.tempFile!.path, params: params);
   }
@@ -169,9 +200,6 @@ final class _DocumentViewerScreenState extends ConsumerState<DocumentViewerScree
     final image = bytes != null
         ? Image.memory(bytes, fit: BoxFit.contain)
         : Image.file(opened.tempFile!, fit: BoxFit.contain);
-    return InteractiveViewer(
-      maxScale: 6,
-      child: Center(child: image),
-    );
+    return InteractiveViewer(maxScale: 6, child: Center(child: image));
   }
 }

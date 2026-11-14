@@ -9,6 +9,7 @@ Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera te
 | P3 | La session en ligne ne peut pas compiler d'APK Android | Gênant | Ouvert depuis le 13/11/2026 |
 | P4 | Les phases 3 et 4 (lots a et b) n'ont jamais été lancées sur un téléphone | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
 | P5 | Miniatures et lecture des PDF (PDFium), scanner du système (ML Kit, VisionKit) non vérifiés hors des tests | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
+| P6 | « Exporter mes données » limité à 200 Mo ; partage et « Enregistrer sous » non vérifiés sur téléphone | Limite connue | Ouvert depuis le 14/11/2026 |
 
 ---
 
@@ -89,6 +90,12 @@ Une fois le PC sain : supprimer `D:\dev\flutter`, réinstaller Flutter (15 minut
 - Si le rendu PDF échoue sur le téléphone, le document reste valide (sans miniature) et l'erreur est journalisée sans donnée sensible. À vérifier au premier lancement : miniature d'un PDF importé, ouverture d'un PDF de plusieurs pages, vitesse sur un PDF de 20 Mo.
 - **Scanner (lot b)** : l'écran du système (ML Kit sur Android, VisionKit sur iOS, repli à recadrage manuel sans services Google Play) ne peut pas s'ouvrir hors d'un téléphone. Les tests utilisent un scanner simulé qui rend de vraies images ; l'aperçu, l'assemblage en PDF, l'enregistrement chiffré et l'effacement des images en clair sont couverts. À vérifier au premier lancement : scan d'une page puis de plusieurs, refus de la caméra (message affiché), dossier du scanner vide après le scan, téléphone sans services Google Play.
 - La vitesse du chiffrement dans un isolate (Dart pur, sans accélération native) est aussi à mesurer sur un téléphone d'entrée de gamme ; le plan B est décrit dans `docs/06-dependances.md` §5.
+
+## P6 – Export : limite de 200 Mo, à vérifier sur téléphone
+
+- Le sélecteur « Enregistrer sous » du système (paquet `file_picker`) reçoit le contenu **en mémoire**. Pour ne pas saturer la mémoire d'un téléphone modeste, l'archive « Exporter mes données » est refusée au-delà de 200 Mo de documents, avec un message clair qui propose l'export document par document.
+- Piste pour lever la limite : écrire l'archive directement dans le fichier choisi, par petits morceaux (petit code natif Android, et iOS « à vérifier »). À décider après les premiers essais sur téléphone.
+- Les tests utilisent un service de partage simulé. À vérifier au premier lancement : feuille de partage (messagerie, e-mail), enregistrement dans « Téléchargements » et sur Google Drive, suppression de la copie partagée 10 minutes après ou au verrouillage.
 
 ## P2 – Flutter installé mais inutilisable
 

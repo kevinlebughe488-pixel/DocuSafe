@@ -83,6 +83,15 @@ final class VaultService {
       await _store.read(SecureStoreKeys.biometricEnabled) == '1';
 
   /// Captures d'écran bloquées (vrai par défaut).
+  /// Supprime les fichiers temporaires en clair (appelé au verrouillage).
+  Future<void> purgeTemporaryFiles() async {
+    try {
+      await _paths.purgeSecureTemp();
+    } on FileSystemException catch (e, s) {
+      AppLog.error('vault.temp_purge', e, s);
+    }
+  }
+
   Future<bool> isScreenSecure() async =>
       await _store.read(SecureStoreKeys.screenSecure) != '0';
 

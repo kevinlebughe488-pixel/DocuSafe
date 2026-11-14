@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,11 +5,13 @@ import 'database/app_database.dart';
 import 'documents/delete_document.dart';
 import 'documents/document_repository.dart';
 import 'documents/document_search.dart';
+import 'documents/export_document.dart';
 import 'documents/ingest_document.dart';
 import 'documents/open_document.dart';
 import 'platform/file_picker_service.dart';
 import 'platform/notification_service.dart';
 import 'platform/scanner_service.dart';
+import 'platform/share_service.dart';
 import 'platform/thumbnail_service.dart';
 import 'reminders/reminder_service.dart';
 import 'security/auth/biometric_service.dart';
@@ -94,7 +95,8 @@ final vaultControllerProvider = NotifierProvider<VaultController, VaultState>(
 /// Base de données de la session en cours. Lève [VaultLockedException] si le
 /// coffre est verrouillé : aucun écran protégé ne doit l'observer dans cet état.
 final databaseProvider = Provider<AppDatabase>(
-  (ref) => ref.watch(vaultControllerProvider.notifier).requireSession().database,
+  (ref) =>
+      ref.watch(vaultControllerProvider.notifier).requireSession().database,
 );
 
 // ---------------------------------------------------------------------------
@@ -148,6 +150,17 @@ final ingestDocumentProvider = Provider<IngestDocument>(
 
 final openDocumentProvider = Provider<OpenDocument>(
   (ref) => OpenDocument(
+    session: ref.watch(sessionProvider),
+    paths: ref.watch(vaultPathsProvider),
+  ),
+);
+
+final shareServiceProvider = Provider<ShareService>(
+  (ref) => const PlatformShareService(),
+);
+
+final documentExporterProvider = Provider<DocumentExporter>(
+  (ref) => DocumentExporter(
     session: ref.watch(sessionProvider),
     paths: ref.watch(vaultPathsProvider),
   ),

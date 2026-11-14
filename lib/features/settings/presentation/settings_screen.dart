@@ -5,10 +5,11 @@ import 'package:material_ui/material_ui.dart';
 import '../../../app/l10n/generated/app_localizations.dart';
 import '../../../app/router/routes.dart';
 import '../../../core/widgets/settings_tile.dart';
+import '../../documents/presentation/share/document_exit_flow.dart';
 import 'about_view_model.dart';
 
 /// Paramètres (écran 18) : sécurité, notifications, catégories, textes
-/// légaux, à propos. Les autres entrées (stockage, export, sauvegarde)
+/// légaux, à propos. export des données. Les autres entrées (stockage, sauvegarde)
 /// arrivent avec leurs fonctions, jamais avant.
 final class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -36,6 +37,12 @@ final class SettingsScreen extends ConsumerWidget {
             title: l10n.settingsCategories,
             onTap: () => context.push(Routes.categories),
           ),
+          SettingsTile(
+            icon: Icons.file_download_outlined,
+            title: l10n.exportAllTitle,
+            subtitle: l10n.exportAllSubtitle,
+            onTap: () => runExportAll(context, ref),
+          ),
           const Divider(),
           SettingsTile(
             icon: Icons.policy_outlined,
@@ -50,7 +57,9 @@ final class SettingsScreen extends ConsumerWidget {
           SettingsTile(
             icon: Icons.info_outline_rounded,
             title: l10n.settingsAbout,
-            subtitle: version == null ? null : l10n.settingsAboutVersion(version),
+            subtitle: version == null
+                ? null
+                : l10n.settingsAboutVersion(version),
             onTap: () => context.push(Routes.settingsAbout),
           ),
         ],

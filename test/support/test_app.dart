@@ -1,10 +1,12 @@
 import 'dart:io';
 
-import 'package:cupertino_ui/cupertino_ui.dart' show GlobalCupertinoLocalizations;
+import 'package:cupertino_ui/cupertino_ui.dart'
+    show GlobalCupertinoLocalizations;
 import 'package:docusafe/app/app.dart';
 import 'package:docusafe/app/l10n/generated/app_localizations.dart';
 import 'package:docusafe/core/database/app_database.dart';
 import 'package:docusafe/core/platform/notification_service.dart';
+import 'package:docusafe/core/platform/share_service.dart';
 import 'package:docusafe/core/providers.dart';
 import 'package:docusafe/core/security/auth/biometric_service.dart';
 import 'package:docusafe/core/security/auth/pin_attempts.dart';
@@ -41,6 +43,9 @@ final class TestEnvironment {
   /// Notifications simulées : ce qui serait programmé.
   final FakeNotificationService notifications = FakeNotificationService();
 
+  /// Partage et « Enregistrer sous » simulés : ce qui serait sorti.
+  final FakeShareService shares = FakeShareService();
+
   VaultPaths get paths => VaultPaths.under(root);
 
   List<Override> overrides({BiometricService? biometrics}) => [
@@ -52,6 +57,7 @@ final class TestEnvironment {
     ),
     screenSecurityProvider.overrideWithValue(const NoopScreenSecurity()),
     notificationServiceProvider.overrideWithValue(notifications),
+    shareServiceProvider.overrideWithValue(shares),
     vaultServiceProvider.overrideWith(
       (ref) => VaultService(
         crypto: ref.watch(cryptoEngineProvider),

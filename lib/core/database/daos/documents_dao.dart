@@ -46,6 +46,11 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
             ..limit(1))
           .getSingleOrNull();
 
+  /// Tous les documents, du plus récent au plus ancien.
+  Future<List<DocumentRow>> getAll() => (select(
+    documents,
+  )..orderBy([(d) => OrderingTerm.desc(d.createdAt)])).get();
+
   Stream<List<DocumentRow>> watchAll({String? categoryId}) {
     final query = select(documents)
       ..orderBy([(d) => OrderingTerm.desc(d.createdAt)]);
@@ -89,7 +94,9 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
       );
       List<TagRow> tagRows;
       if (tagNames != null) {
-        await (delete(documentTags)..where((t) => t.documentId.equals(id))).go();
+        await (delete(
+          documentTags,
+        )..where((t) => t.documentId.equals(id))).go();
         tagRows = await _attachTags(id, tagNames);
       } else {
         tagRows = await tagsOf(id);
@@ -115,10 +122,9 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
   /// ligne d'index. Le fichier chiffré est supprimé par l'appelant ensuite.
   Future<void> deleteDocument(String id) async {
     await transaction(() async {
-      await customStatement(
-        'DELETE FROM documents_fts WHERE document_id = ?',
-        [id],
-      );
+      await customStatement('DELETE FROM documents_fts WHERE document_id = ?', [
+        id,
+      ]);
       await (delete(documents)..where((d) => d.id.equals(id))).go();
       await _deleteOrphanTags();
     });
@@ -153,7 +159,10 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
     return words.map((w) => '"$w"*').join(' ');
   }
 
-  Future<List<TagRow>> _attachTags(String documentId, List<String> names) async {
+  Future<List<TagRow>> _attachTags(
+    String documentId,
+    List<String> names,
+  ) async {
     final result = <TagRow>[];
     final seen = <String>{};
     for (final raw in names) {
@@ -193,10 +202,9 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
   );
 
   Future<void> _writeSearchRow(DocumentRow doc, List<String> tagNames) async {
-    await customStatement(
-      'DELETE FROM documents_fts WHERE document_id = ?',
-      [doc.id],
-    );
+    await customStatement('DELETE FROM documents_fts WHERE document_id = ?', [
+      doc.id,
+    ]);
     await customStatement(
       'INSERT INTO documents_fts '
       '(document_id, title, doc_type, description, tags, file_name, content) '

@@ -18,9 +18,9 @@ import '../../../../core/widgets/secure_label.dart';
 import '../../../../core/widgets/state_view.dart';
 import '../../../../core/widgets/status_badge.dart';
 import '../list/documents_view_model.dart';
+import '../share/document_exit_flow.dart';
 
 /// Fiche d'un document (écran 7) : aperçu, informations, actions.
-/// Partage et export arrivent au lot c.
 final class DocumentDetailScreen extends ConsumerWidget {
   const DocumentDetailScreen({super.key, required this.documentId});
 
@@ -118,11 +118,14 @@ final class _Detail extends ConsumerWidget {
                 child: Stack(
                   children: [
                     DocumentThumbnail(document: doc, size: ThumbnailSize.xl),
-                    if (doc.pageCount != null && doc.fileType == DocumentFileType.pdf)
+                    if (doc.pageCount != null &&
+                        doc.fileType == DocumentFileType.pdf)
                       Positioned(
                         right: 8,
                         bottom: 8,
-                        child: StatusBadge(label: l10n.pageCount(doc.pageCount!)),
+                        child: StatusBadge(
+                          label: l10n.pageCount(doc.pageCount!),
+                        ),
                       ),
                   ],
                 ),
@@ -147,8 +150,9 @@ final class _Detail extends ConsumerWidget {
                         size: 24,
                       ),
                       label: Text(detail.category.name),
-                      onPressed: () =>
-                          context.go(Routes.documentsOfCategory(detail.category.id)),
+                      onPressed: () => context.go(
+                        Routes.documentsOfCategory(detail.category.id),
+                      ),
                     ),
                     Chip(
                       avatar: Icon(
@@ -162,13 +166,46 @@ final class _Detail extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                FilledButton.icon(
-                  style: FilledButton.styleFrom(
-                    minimumSize: const Size.fromHeight(AppSpacing.touchTarget),
-                  ),
-                  onPressed: () => context.push(Routes.documentView(doc.id)),
-                  icon: const Icon(Icons.description_outlined),
-                  label: Text(l10n.detailOpen),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton.icon(
+                        style: _actionStyle,
+                        onPressed: () =>
+                            context.push(Routes.documentView(doc.id)),
+                        icon: const Icon(Icons.description_outlined),
+                        label: Text(l10n.detailOpen),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: FilledButton.tonalIcon(
+                        style: _actionStyle,
+                        onPressed: () => runDocumentExit(
+                          context,
+                          ref,
+                          doc,
+                          DocumentExit.share,
+                        ),
+                        icon: const Icon(Icons.share_outlined),
+                        label: Text(l10n.detailShare),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: FilledButton.tonalIcon(
+                        style: _actionStyle,
+                        onPressed: () => runDocumentExit(
+                          context,
+                          ref,
+                          doc,
+                          DocumentExit.export,
+                        ),
+                        icon: const Icon(Icons.download_outlined),
+                        label: Text(l10n.detailExport),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -182,14 +219,19 @@ final class _Detail extends ConsumerWidget {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    StatusBadge.expiry(ExpiryInfo.of(l10n, expiration, DateOnly.today())),
+                    StatusBadge.expiry(
+                      ExpiryInfo.of(l10n, expiration, DateOnly.today()),
+                    ),
                     const Icon(Icons.chevron_right_rounded),
                   ],
                 ),
               ),
             ),
           if (doc.issueDate != null)
-            _KeyValueRow(label: l10n.detailIssue, value: Formats.date(doc.issueDate!)),
+            _KeyValueRow(
+              label: l10n.detailIssue,
+              value: Formats.date(doc.issueDate!),
+            ),
           if (doc.docType != null)
             _KeyValueRow(label: l10n.detailType, value: doc.docType!),
           if (detail.tags.isNotEmpty)
@@ -207,10 +249,16 @@ final class _Detail extends ConsumerWidget {
                 ],
               ),
             ),
-          _KeyValueRow(label: l10n.detailAddedOn, value: Formats.dateTime(doc.createdAt)),
+          _KeyValueRow(
+            label: l10n.detailAddedOn,
+            value: Formats.dateTime(doc.createdAt),
+          ),
           _KeyValueRow(label: l10n.detailFile, value: doc.fileName),
           if (doc.description != null)
-            _KeyValueRow(label: l10n.detailDescription, value: doc.description!),
+            _KeyValueRow(
+              label: l10n.detailDescription,
+              value: doc.description!,
+            ),
           const Padding(
             padding: EdgeInsets.fromLTRB(
               AppSpacing.screenMargin,
@@ -225,7 +273,16 @@ final class _Detail extends ConsumerWidget {
     );
   }
 
-  Future<void> _onAction(BuildContext context, WidgetRef ref, _Action action) async {
+  static final _actionStyle = FilledButton.styleFrom(
+    minimumSize: const Size.fromHeight(AppSpacing.touchTarget),
+    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+  );
+
+  Future<void> _onAction(
+    BuildContext context,
+    WidgetRef ref,
+    _Action action,
+  ) async {
     final doc = detail.document;
     switch (action) {
       case _Action.edit:
@@ -234,7 +291,8 @@ final class _Detail extends ConsumerWidget {
         await context.push(Routes.documentDelete(doc.id));
       case _Action.move:
         final l10n = AppLocalizations.of(context);
-        final categories = ref.read(categoriesByIdProvider).value?.values.toList() ?? [];
+        final categories =
+            ref.read(categoriesByIdProvider).value?.values.toList() ?? [];
         final target = await showModalBottomSheet<String>(
           context: context,
           builder: (ctx) => SafeArea(
@@ -243,13 +301,18 @@ final class _Detail extends ConsumerWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(AppSpacing.lg),
-                  child: Text(l10n.detailMoveTitle, style: Theme.of(ctx).textTheme.titleMedium),
+                  child: Text(
+                    l10n.detailMoveTitle,
+                    style: Theme.of(ctx).textTheme.titleMedium,
+                  ),
                 ),
                 for (final c in categories)
                   ListTile(
                     leading: CategoryIcon(icon: c.icon, color: c.color),
                     title: Text(c.name),
-                    trailing: c.id == doc.categoryId ? const Icon(Icons.check_rounded) : null,
+                    trailing: c.id == doc.categoryId
+                        ? const Icon(Icons.check_rounded)
+                        : null,
                     onTap: () => Navigator.of(ctx).pop(c.id),
                   ),
               ],
@@ -257,7 +320,9 @@ final class _Detail extends ConsumerWidget {
           ),
         );
         if (target != null && target != doc.categoryId) {
-          await ref.read(documentRepositoryProvider).moveToCategory(doc.id, target);
+          await ref
+              .read(documentRepositoryProvider)
+              .moveToCategory(doc.id, target);
         }
     }
   }
@@ -300,7 +365,10 @@ final class _KeyValueRow extends StatelessWidget {
           Expanded(
             child: child ?? Text(value ?? '', style: theme.textTheme.bodyLarge),
           ),
-          if (trailing != null) ...[const SizedBox(width: AppSpacing.sm), trailing!],
+          if (trailing != null) ...[
+            const SizedBox(width: AppSpacing.sm),
+            trailing!,
+          ],
         ],
       ),
     );

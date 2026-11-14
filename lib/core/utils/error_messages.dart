@@ -8,7 +8,9 @@ abstract final class ErrorMessages {
     AuthException(code: 'auth.wrong_pin', :final remainingAttempts) =>
       l10n.unlockWrongPin(remainingAttempts ?? 0),
     AuthException(code: 'auth.locked_out', :final lockedFor) =>
-      l10n.unlockRetryIn(DurationFormat.short(l10n, lockedFor ?? Duration.zero)),
+      l10n.unlockRetryIn(
+        DurationFormat.short(l10n, lockedFor ?? Duration.zero),
+      ),
     AuthException(code: 'auth.recovery_key_invalid') => l10n.recoveryInvalid,
     AuthException(code: 'auth.biometric_unavailable') =>
       l10n.errorBiometricUnavailable,
@@ -21,6 +23,7 @@ abstract final class ErrorMessages {
     ValidationException(code: 'validation.pin_mismatch') =>
       l10n.setupPinMismatch,
     CryptoException() => l10n.errorIntegrity,
+    StorageException(code: 'export.too_large') => l10n.exportTooLarge,
     StorageException() => l10n.errorStorage,
     VaultLockedException() => l10n.errorVaultLocked,
     ScannerException() => l10n.errorScanner,
