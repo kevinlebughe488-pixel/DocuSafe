@@ -23,7 +23,7 @@ abstract final class ErrorMessages {
     ValidationException(code: 'validation.pin_mismatch') =>
       l10n.setupPinMismatch,
     CryptoException() => l10n.errorIntegrity,
-    StorageException(code: 'export.too_large') => l10n.exportTooLarge,
+    StorageException(code: 'storage.insufficient') => l10n.storageInsufficient,
     StorageException() => l10n.errorStorage,
     VaultLockedException() => l10n.errorVaultLocked,
     ScannerException() => l10n.errorScanner,

@@ -153,7 +153,7 @@ void main() {
     );
     expect(archive!.fileName, 'DocuSafe.zip');
     expect(archive.mimeType, 'application/zip');
-    final zip = ZipDecoder().decodeBytes(archive.bytes!);
+    final zip = ZipDecoder().decodeBytes(archive.file!.readAsBytesSync());
     final categories = {
       for (final c in await session.database.categoriesDao.getAll())
         c.id: c.name,
@@ -167,7 +167,18 @@ void main() {
     });
     final png = zip.files.firstWhere((f) => f.name.endsWith('Photo.png'));
     expect(png.content, File('${fixtures.path}/rouge.png').readAsBytesSync());
-    // Rien en clair ne reste dans les temporaires.
+    // Une fois enregistrée, l'archive en clair est supprimée.
+    await exporter.discardArchive(archive);
     expect(Directory('${paths.secureTempDir.path}/export').listSync(), isEmpty);
+
+    // Espace libre insuffisant : refus clair, avant toute écriture.
+    await expectLater(
+      exporter.buildArchive(
+        uncategorizedFolder: 'Autres',
+        archiveName: 'a.zip',
+        freeBytes: 1000,
+      ),
+      throwsA(isA<StorageException>()),
+    );
   });
 }

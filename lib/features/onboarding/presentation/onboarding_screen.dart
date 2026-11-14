@@ -139,6 +139,10 @@ final class _OnboardingScreenState extends State<OnboardingScreen> {
                   )
                 else
                   LargeFilledButton(label: l10n.commonNext, onPressed: _next),
+                TextButton(
+                  onPressed: () => context.push(Routes.restore),
+                  child: Text(l10n.onboardingRestore),
+                ),
               ],
             ),
           ],

@@ -98,6 +98,7 @@ Future<void> runExportAll(BuildContext context, WidgetRef ref) async {
     final archive = await exporter.buildArchive(
       uncategorizedFolder: l10n.exportUncategorized,
       archiveName: l10n.exportArchiveName(date),
+      freeBytes: await service.freeBytes(),
     );
     messenger.hideCurrentSnackBar();
     if (archive == null) {
@@ -105,16 +106,16 @@ Future<void> runExportAll(BuildContext context, WidgetRef ref) async {
       return;
     }
     try {
-      final saved = await service.saveFile(
+      final saved = await service.saveFileFrom(
+        archive.file!,
         fileName: archive.fileName,
-        bytes: archive.bytes!,
         mimeType: archive.mimeType,
       );
       if (saved) {
         messenger.showSnackBar(SnackBar(content: Text(l10n.exportAllDone)));
       }
     } finally {
-      archive.wipe();
+      await exporter.discardArchive(archive);
     }
   } on AppException catch (e, s) {
     AppLog.error('vault.export', e, s);

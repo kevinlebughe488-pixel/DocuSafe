@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -291,6 +292,37 @@ final class VaultController extends Notifier<VaultState> {
   }
 
   Future<void> disableBiometrics() => _service.disableBiometrics(session);
+
+  /// Remplace le coffre (s'il existe) par la sauvegarde décompressée, ouverte
+  /// avec [vaultKey], protégée par le nouveau code [pin]. L'état passe
+  /// directement à « déverrouillé » sur le coffre restauré.
+  Future<void> restoreVault({
+    required Uint8List vaultKey,
+    required String pin,
+  }) async {
+    beginExternalOperation();
+    _inactivityTimer?.cancel();
+    try {
+      final current = session;
+      _currentSession = null;
+      final restored = await _service.restore(
+        vaultKey: vaultKey,
+        pin: pin,
+        current: current,
+      );
+      await _screenSecurity.setSecure(true);
+      await _enterUnlocked(restored);
+    } on Object {
+      // Échec après l'effacement de l'ancien coffre : retour à l'accueil.
+      if (!await _service.hasVault()) {
+        _lastSession = null;
+        state = const VaultAbsent();
+      }
+      rethrow;
+    } finally {
+      endExternalOperation();
+    }
+  }
 
   Future<RecoveryKey> regenerateRecoveryKey() =>
       _service.regenerateRecoveryKey(requireSession());

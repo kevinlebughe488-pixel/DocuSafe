@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../errors/app_exception.dart';
@@ -22,10 +22,61 @@ abstract interface class ShareService {
     required Uint8List bytes,
     required String mimeType,
   });
+
+  /// Enregistre une copie de [file] à l'emplacement choisi, sans charger le
+  /// fichier en mémoire (sauvegarde, archive d'export). Retourne `false` si
+  /// l'utilisateur annule.
+  Future<bool> saveFileFrom(
+    File file, {
+    required String fileName,
+    required String mimeType,
+  });
+
+  /// Espace libre sur le téléphone, en octets (`null` si inconnu).
+  Future<int?> freeBytes();
 }
 
 final class PlatformShareService implements ShareService {
   const PlatformShareService();
+
+  static const _channel = MethodChannel('docusafe/platform');
+
+  @override
+  Future<bool> saveFileFrom(
+    File file, {
+    required String fileName,
+    required String mimeType,
+  }) async {
+    if (!Platform.isAndroid) {
+      // iPhone : la feuille de partage propose « Enregistrer dans Fichiers »
+      // (à vérifier sur iOS).
+      return shareFile(file, mimeType: mimeType);
+    }
+    try {
+      final saved = await _channel.invokeMethod<bool>('saveFile', {
+        'path': file.path,
+        'name': fileName,
+        'mimeType': mimeType,
+      });
+      return saved ?? false;
+    } on PlatformException catch (e, s) {
+      AppLog.error('share.save_file', e, s);
+      throw StorageException('share.save_file', cause: e);
+    }
+  }
+
+  @override
+  Future<int?> freeBytes() async {
+    if (!Platform.isAndroid) {
+      return null; // à faire pour iOS (phase 6)
+    }
+    try {
+      return await _channel.invokeMethod<int>('freeBytes');
+    } on PlatformException catch (e, s) {
+      AppLog.error('platform.free_bytes', e, s);
+      return null;
+    }
+  }
 
   @override
   Future<bool> shareFile(File file, {required String mimeType}) async {
@@ -68,6 +119,24 @@ final class FakeShareService implements ShareService {
 
   /// `false` : l'utilisateur annule le sélecteur ou la feuille.
   bool accept = true;
+
+  /// Espace libre simulé.
+  int? free = 8 * 1000 * 1000 * 1000;
+
+  @override
+  Future<bool> saveFileFrom(
+    File file, {
+    required String fileName,
+    required String mimeType,
+  }) async {
+    if (accept) {
+      saved.add((fileName, await file.readAsBytes()));
+    }
+    return accept;
+  }
+
+  @override
+  Future<int?> freeBytes() async => free;
 
   @override
   Future<bool> shareFile(File file, {required String mimeType}) async {

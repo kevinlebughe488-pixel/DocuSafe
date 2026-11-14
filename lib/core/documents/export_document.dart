@@ -24,9 +24,9 @@ abstract final class ExportLimits {
   /// reçoit doit avoir le temps de le lire (docs/04-securite.md §13).
   static const Duration sharedFileLifetime = Duration(minutes: 10);
 
-  /// Taille maximale de l'archive « Exporter mes données ». L'enregistrement
-  /// passe par la mémoire (sélecteur « Enregistrer sous » du système).
-  static const int maxArchiveBytes = 200 * 1000 * 1000;
+  /// Marge d'espace libre gardée sur le téléphone pendant la préparation
+  /// d'une archive ou d'une sauvegarde.
+  static const int freeSpaceMargin = 200 * 1000 * 1000;
 }
 
 /// Fichier en clair prêt à sortir du coffre.
@@ -42,7 +42,7 @@ final class ExportedFile {
   final String fileName;
   final String mimeType;
 
-  /// Copie temporaire (partage). Supprimée automatiquement.
+  /// Copie temporaire (partage, archive). Supprimée automatiquement.
   final File? file;
 
   /// Contenu en mémoire (export). À effacer avec [wipe] après usage.
@@ -116,12 +116,14 @@ final class DocumentExporter {
     );
   }
 
-  /// Archive ZIP de tous les documents, rangés par catégorie. Retourne
-  /// `null` si le coffre est vide. Lève [StorageException]
-  /// (`export.too_large`) au-delà de [ExportLimits.maxArchiveBytes].
+  /// Archive ZIP de tous les documents, rangés par catégorie, préparée dans
+  /// `secure_tmp/export/` ([ExportedFile.file], à supprimer avec
+  /// [discardArchive]). Retourne `null` si le coffre est vide. Lève
+  /// [StorageException] (`storage.insufficient`) si [freeBytes] ne suffit pas.
   Future<ExportedFile?> buildArchive({
     required String uncategorizedFolder,
     required String archiveName,
+    int? freeBytes,
   }) async {
     final db = _session.database;
     final documents = await db.documentsDao.getAll();
@@ -129,8 +131,8 @@ final class DocumentExporter {
       return null;
     }
     final total = documents.fold<int>(0, (sum, d) => sum + d.fileSize);
-    if (total > ExportLimits.maxArchiveBytes) {
-      throw const StorageException('export.too_large');
+    if (freeBytes != null && total + ExportLimits.freeSpaceMargin > freeBytes) {
+      throw const StorageException('storage.insufficient');
     }
     final categories = {
       for (final c in await db.categoriesDao.getAll()) c.id: c.name,
@@ -159,16 +161,25 @@ final class DocumentExporter {
     final key = Uint8List.fromList(_session.filesRootKey);
     try {
       await _runArchiveIsolate(entries, zipPath, dir.path, key);
-      final bytes = await File(zipPath).readAsBytes();
       AppLog.event('vault.exported');
       return ExportedFile(
         fileName: archiveName,
         mimeType: 'application/zip',
-        bytes: bytes,
+        file: File(zipPath),
       );
+    } on Object {
+      await _deleteQuietly(dir);
+      rethrow;
     } finally {
       Bytes.wipe(key);
-      await _deleteQuietly(dir);
+    }
+  }
+
+  /// Supprime l'archive préparée par [buildArchive] (et son dossier).
+  Future<void> discardArchive(ExportedFile archive) async {
+    final file = archive.file;
+    if (file != null) {
+      await _deleteQuietly(file.parent);
     }
   }
 

@@ -8,6 +8,8 @@ import '../../core/security/lock/vault_state.dart';
 import '../../features/auth/presentation/recovery/recovery_screen.dart';
 import '../../features/auth/presentation/setup/setup_screen.dart';
 import '../../features/auth/presentation/unlock/unlock_screen.dart';
+import '../../features/backup/presentation/backup_screen.dart';
+import '../../features/backup/presentation/restore_screen.dart';
 import '../../features/categories/presentation/categories_screen.dart';
 import '../../features/categories/presentation/category_edit_screen.dart';
 import '../../features/dashboard/presentation/home_screen.dart';
@@ -33,6 +35,7 @@ import '../../features/settings/presentation/notification_settings_screen.dart';
 import '../../features/settings/presentation/recovery_key_screen.dart';
 import '../../features/settings/presentation/security_settings_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
+import '../../features/settings/presentation/storage/storage_screen.dart';
 import '../shell/app_shell.dart';
 import '../startup/splash_screen.dart';
 import 'routes.dart';
@@ -184,6 +187,21 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const AboutScreen(),
       ),
       GoRoute(
+        path: Routes.settingsStorage,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const StorageScreen(),
+      ),
+      GoRoute(
+        path: Routes.settingsBackup,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const BackupScreen(),
+      ),
+      GoRoute(
+        path: Routes.restore,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const RestoreScreen(),
+      ),
+      GoRoute(
         path: Routes.legalPrivacy,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const LegalTextScreen(text: LegalText.privacy),
@@ -211,7 +229,9 @@ String? _redirect(Ref ref, String location) {
       return location == Routes.splash ? null : Routes.splash;
 
     case VaultAbsent():
-      final allowed = location == Routes.onboarding || location == Routes.setup;
+      final allowed = location == Routes.onboarding ||
+          location == Routes.setup ||
+          location == Routes.restore;
       return allowed ? null : Routes.onboarding;
 
     case VaultLocked():

@@ -1198,6 +1198,240 @@ abstract class AppLocalizations {
   /// **'Copie enregistrée.'**
   String get exportDone;
 
+  /// No description provided for @storageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stockage'**
+  String get storageTitle;
+
+  /// No description provided for @storageDocumentCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun document} =1{1 document chiffré} other{{count} documents chiffrés}}'**
+  String storageDocumentCount(int count);
+
+  /// No description provided for @storageFree.
+  ///
+  /// In fr, this message translates to:
+  /// **'{size} libres sur le téléphone'**
+  String storageFree(String size);
+
+  /// No description provided for @storageTempTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichiers temporaires'**
+  String get storageTempTitle;
+
+  /// No description provided for @storageTempNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun fichier en attente'**
+  String get storageTempNone;
+
+  /// No description provided for @storageTempSome.
+  ///
+  /// In fr, this message translates to:
+  /// **'{size} en attente'**
+  String storageTempSome(String size);
+
+  /// No description provided for @storageTempClean.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nettoyer'**
+  String get storageTempClean;
+
+  /// No description provided for @storageTempCleaned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichiers temporaires supprimés.'**
+  String get storageTempCleaned;
+
+  /// No description provided for @backupTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde'**
+  String get backupTitle;
+
+  /// No description provided for @backupSettingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde et synchronisation'**
+  String get backupSettingsTitle;
+
+  /// No description provided for @backupOnlyHere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos documents se trouvent uniquement sur ce téléphone. Une sauvegarde vous protège en cas de perte ou de panne.'**
+  String get backupOnlyHere;
+
+  /// No description provided for @backupCardTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde chiffrée'**
+  String get backupCardTitle;
+
+  /// No description provided for @backupNever.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune sauvegarde pour l\'instant'**
+  String get backupNever;
+
+  /// No description provided for @backupLast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière : {date} · {size}'**
+  String backupLast(String date, String size);
+
+  /// No description provided for @backupCreate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer une sauvegarde'**
+  String get backupCreate;
+
+  /// No description provided for @backupInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparation…'**
+  String get backupInProgress;
+
+  /// No description provided for @backupRestore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restaurer une sauvegarde'**
+  String get backupRestore;
+
+  /// No description provided for @backupExplanation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier est chiffré. Pour le restaurer, il faut votre clé de récupération. Conservez-le hors du téléphone : carte mémoire, ordinateur, clé USB. Si vous changez de clé de récupération, refaites une sauvegarde.'**
+  String get backupExplanation;
+
+  /// No description provided for @backupSyncGroup.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisation'**
+  String get backupSyncGroup;
+
+  /// No description provided for @backupSyncUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non disponible'**
+  String get backupSyncUnavailable;
+
+  /// No description provided for @backupSyncLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévue dans une version future'**
+  String get backupSyncLater;
+
+  /// No description provided for @backupNeedsKeyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notez d\'abord votre clé'**
+  String get backupNeedsKeyTitle;
+
+  /// No description provided for @backupNeedsKeyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une sauvegarde ne s\'ouvre qu\'avec votre clé de récupération. Notez-la d\'abord, puis créez la sauvegarde.'**
+  String get backupNeedsKeyBody;
+
+  /// No description provided for @backupNeedsKeyAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Noter ma clé'**
+  String get backupNeedsKeyAction;
+
+  /// No description provided for @backupFileName.
+  ///
+  /// In fr, this message translates to:
+  /// **'DocuSafe-sauvegarde-{date}.{extension}'**
+  String backupFileName(String date, String extension);
+
+  /// No description provided for @backupDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde enregistrée.'**
+  String get backupDone;
+
+  /// No description provided for @restoreTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restaurer une sauvegarde'**
+  String get restoreTitle;
+
+  /// No description provided for @restoreIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez le fichier de sauvegarde DocuSafe (.docusafe). Il vous faudra ensuite votre clé de récupération.'**
+  String get restoreIntro;
+
+  /// No description provided for @restoreReplaceWarning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le contenu actuel du coffre sera remplacé par celui de la sauvegarde.'**
+  String get restoreReplaceWarning;
+
+  /// No description provided for @restoreChooseFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir le fichier'**
+  String get restoreChooseFile;
+
+  /// No description provided for @restoreUnpacking.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification de la sauvegarde…'**
+  String get restoreUnpacking;
+
+  /// No description provided for @restoreInvalidFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier n\'est pas une sauvegarde DocuSafe, ou il est abîmé.'**
+  String get restoreInvalidFile;
+
+  /// No description provided for @restoreFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde du {date} · {count}'**
+  String restoreFound(String date, String count);
+
+  /// No description provided for @restoreKeyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez la clé de récupération en vigueur au moment de la sauvegarde.'**
+  String get restoreKeyBody;
+
+  /// No description provided for @restorePinTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez votre code'**
+  String get restorePinTitle;
+
+  /// No description provided for @restorePinBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce code protégera le coffre restauré sur ce téléphone.'**
+  String get restorePinBody;
+
+  /// No description provided for @restoreRestoring.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restauration en cours…'**
+  String get restoreRestoring;
+
+  /// No description provided for @restoreDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde restaurée.'**
+  String get restoreDone;
+
+  /// No description provided for @onboardingRestore.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai une sauvegarde'**
+  String get onboardingRestore;
+
   /// No description provided for @exportAllTitle.
   ///
   /// In fr, this message translates to:
@@ -1252,11 +1486,11 @@ abstract class AppLocalizations {
   /// **'DocuSafe-export-{date}.zip'**
   String exportArchiveName(String date);
 
-  /// No description provided for @exportTooLarge.
+  /// No description provided for @storageInsufficient.
   ///
   /// In fr, this message translates to:
-  /// **'Vos documents dépassent 200 Mo : l\'export en un seul fichier n\'est pas possible. Exportez-les un par un depuis leur fiche.'**
-  String get exportTooLarge;
+  /// **'Pas assez d\'espace libre sur le téléphone. Libérez de la place, puis réessayez.'**
+  String get storageInsufficient;
 
   /// No description provided for @detailEdit.
   ///

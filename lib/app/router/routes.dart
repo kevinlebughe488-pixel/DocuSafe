@@ -45,6 +45,12 @@ abstract final class Routes {
   static const settingsRecoveryKey = '/settings/security/recovery-key';
   static const settingsAbout = '/settings/about';
   static const settingsNotifications = '/settings/notifications';
+  static const settingsStorage = '/settings/storage';
+  static const settingsBackup = '/settings/backup';
+
+  /// Restauration d'une sauvegarde : depuis l'accueil (pas encore de coffre)
+  /// ou depuis les réglages.
+  static const restore = '/restore';
 
   /// Première prise de note de la clé, depuis le rappel de l'accueil.
   static const recoveryKeyFirstTime = '/settings/security/recovery-key?first=1';

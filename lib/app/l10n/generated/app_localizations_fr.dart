@@ -700,6 +700,150 @@ class AppLocalizationsFr extends AppLocalizations {
   String get exportDone => 'Copie enregistrée.';
 
   @override
+  String get storageTitle => 'Stockage';
+
+  @override
+  String storageDocumentCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count documents chiffrés',
+      one: '1 document chiffré',
+      zero: 'Aucun document',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageFree(String size) {
+    return '$size libres sur le téléphone';
+  }
+
+  @override
+  String get storageTempTitle => 'Fichiers temporaires';
+
+  @override
+  String get storageTempNone => 'Aucun fichier en attente';
+
+  @override
+  String storageTempSome(String size) {
+    return '$size en attente';
+  }
+
+  @override
+  String get storageTempClean => 'Nettoyer';
+
+  @override
+  String get storageTempCleaned => 'Fichiers temporaires supprimés.';
+
+  @override
+  String get backupTitle => 'Sauvegarde';
+
+  @override
+  String get backupSettingsTitle => 'Sauvegarde et synchronisation';
+
+  @override
+  String get backupOnlyHere =>
+      'Vos documents se trouvent uniquement sur ce téléphone. Une sauvegarde vous protège en cas de perte ou de panne.';
+
+  @override
+  String get backupCardTitle => 'Sauvegarde chiffrée';
+
+  @override
+  String get backupNever => 'Aucune sauvegarde pour l\'instant';
+
+  @override
+  String backupLast(String date, String size) {
+    return 'Dernière : $date · $size';
+  }
+
+  @override
+  String get backupCreate => 'Créer une sauvegarde';
+
+  @override
+  String get backupInProgress => 'Préparation…';
+
+  @override
+  String get backupRestore => 'Restaurer une sauvegarde';
+
+  @override
+  String get backupExplanation =>
+      'Le fichier est chiffré. Pour le restaurer, il faut votre clé de récupération. Conservez-le hors du téléphone : carte mémoire, ordinateur, clé USB. Si vous changez de clé de récupération, refaites une sauvegarde.';
+
+  @override
+  String get backupSyncGroup => 'Synchronisation';
+
+  @override
+  String get backupSyncUnavailable => 'Non disponible';
+
+  @override
+  String get backupSyncLater => 'Prévue dans une version future';
+
+  @override
+  String get backupNeedsKeyTitle => 'Notez d\'abord votre clé';
+
+  @override
+  String get backupNeedsKeyBody =>
+      'Une sauvegarde ne s\'ouvre qu\'avec votre clé de récupération. Notez-la d\'abord, puis créez la sauvegarde.';
+
+  @override
+  String get backupNeedsKeyAction => 'Noter ma clé';
+
+  @override
+  String backupFileName(String date, String extension) {
+    return 'DocuSafe-sauvegarde-$date.$extension';
+  }
+
+  @override
+  String get backupDone => 'Sauvegarde enregistrée.';
+
+  @override
+  String get restoreTitle => 'Restaurer une sauvegarde';
+
+  @override
+  String get restoreIntro =>
+      'Choisissez le fichier de sauvegarde DocuSafe (.docusafe). Il vous faudra ensuite votre clé de récupération.';
+
+  @override
+  String get restoreReplaceWarning =>
+      'Le contenu actuel du coffre sera remplacé par celui de la sauvegarde.';
+
+  @override
+  String get restoreChooseFile => 'Choisir le fichier';
+
+  @override
+  String get restoreUnpacking => 'Vérification de la sauvegarde…';
+
+  @override
+  String get restoreInvalidFile =>
+      'Ce fichier n\'est pas une sauvegarde DocuSafe, ou il est abîmé.';
+
+  @override
+  String restoreFound(String date, String count) {
+    return 'Sauvegarde du $date · $count';
+  }
+
+  @override
+  String get restoreKeyBody =>
+      'Saisissez la clé de récupération en vigueur au moment de la sauvegarde.';
+
+  @override
+  String get restorePinTitle => 'Choisissez votre code';
+
+  @override
+  String get restorePinBody =>
+      'Ce code protégera le coffre restauré sur ce téléphone.';
+
+  @override
+  String get restoreRestoring => 'Restauration en cours…';
+
+  @override
+  String get restoreDone => 'Sauvegarde restaurée.';
+
+  @override
+  String get onboardingRestore => 'J\'ai une sauvegarde';
+
+  @override
   String get exportAllTitle => 'Exporter mes données';
 
   @override
@@ -731,8 +875,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get exportTooLarge =>
-      'Vos documents dépassent 200 Mo : l\'export en un seul fichier n\'est pas possible. Exportez-les un par un depuis leur fiche.';
+  String get storageInsufficient =>
+      'Pas assez d\'espace libre sur le téléphone. Libérez de la place, puis réessayez.';
 
   @override
   String get detailEdit => 'Modifier';

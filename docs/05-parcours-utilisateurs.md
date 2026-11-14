@@ -176,7 +176,7 @@ L'écran de confirmation affiche le nom du document et indique que la suppressio
 | Notifications | Voir §9 |
 | Stockage (19) | Espace occupé, nombre de documents, répartition par catégorie, nettoyage des fichiers temporaires |
 | Exportation des données | Exporter tous les documents en clair vers un dossier choisi (authentification et avertissement) |
-| Sauvegarde et synchronisation | Explication : les documents sont uniquement sur ce téléphone. Sauvegarde chiffrée si elle est retenue (D13). La synchronisation n'est pas proposée dans cette version : aucun bouton factice. |
+| Sauvegarde et synchronisation | Explication : les documents sont uniquement sur ce téléphone. Créer une sauvegarde chiffrée (fichier `.docusafe`, clé de récupération notée au préalable) ou en restaurer une (le contenu actuel est remplacé). La synchronisation est annoncée comme indisponible, sans bouton. Restauration aussi possible depuis l'accueil : « J'ai une sauvegarde » → fichier → clé de récupération → nouveau code. |
 | Confidentialité, Conditions d'utilisation | Textes consultables hors ligne |
 | À propos | Version, licences des composants |
 | Assistance | Questions fréquentes hors ligne, adresse de contact |

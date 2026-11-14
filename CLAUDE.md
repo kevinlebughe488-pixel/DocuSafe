@@ -24,7 +24,7 @@ Le document de référence est [docs/cahier-des-charges.md](docs/cahier-des-char
 | 3 – Socle : projet Flutter, chiffrement, base de données, authentification | Validée le 14/11/2026 |
 | 4 – lot a : importation, documents, catégories, navigation, paramètres | Validé le 14/11/2026 |
 | 4 – lot b : scanner, recherche | Validé le 14/11/2026 |
-| 4 – lot c : échéances et notifications (fait), partage et export (fait), sauvegarde et stockage | **En cours** |
+| 4 – lot c : échéances et notifications (fait), partage et export (fait), sauvegarde et stockage (fait) | **En cours** |
 | 5, 6 | À venir |
 
 Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session en ligne, lancer d'abord `bash tool/setup_cloud.sh` puis `export PATH="/home/user/sdk/flutter/bin:$PATH"`.

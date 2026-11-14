@@ -86,7 +86,9 @@ def main():
     time.sleep(8)
     show("démarrage")
 
-    ok = tap("Passer", timeout=30) and tap("Créer mon coffre-fort", timeout=20)
+    # « Passer » mène directement au choix du code ; sinon, dernier écran.
+    ok = tap("Passer", timeout=30)
+    tap("Créer mon coffre-fort", timeout=5)
     show("après l'accueil")
     ok = ok and type_pin()
     show("après le choix du code")

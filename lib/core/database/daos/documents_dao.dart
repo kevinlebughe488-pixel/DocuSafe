@@ -34,6 +34,20 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
           .map((r) => r.read(documents.fileSize.sum()) ?? 0)
           .watchSingle();
 
+  /// Taille occupée par catégorie (identifiant → octets), pour l'écran
+  /// Stockage.
+  Stream<Map<String, int>> watchSizeByCategory() {
+    final size = documents.fileSize.sum();
+    final query = selectOnly(documents)
+      ..addColumns([documents.categoryId, size])
+      ..groupBy([documents.categoryId]);
+    return query.watch().map(
+      (rows) => {
+        for (final r in rows) r.read(documents.categoryId)!: r.read(size) ?? 0,
+      },
+    );
+  }
+
   Future<DocumentRow?> getById(String id) =>
       (select(documents)..where((d) => d.id.equals(id))).getSingleOrNull();
 

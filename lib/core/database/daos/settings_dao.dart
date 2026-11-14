@@ -90,6 +90,10 @@ abstract final class VaultConfigKeys {
   /// L'utilisateur a confirmé avoir conservé sa clé de récupération (D6 révisée).
   static const recoveryKeyConfirmed = 'recovery_key_confirmed';
 
+  /// Dernière sauvegarde : date (ISO 8601) et taille du fichier, en octets.
+  static const lastBackupAt = 'last_backup_at';
+  static const lastBackupSize = 'last_backup_size';
+
   static Duration autoLockOf(VaultSettingsRow row) =>
       Duration(seconds: row.autoLockDuration > 0
           ? row.autoLockDuration

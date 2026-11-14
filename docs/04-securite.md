@@ -242,12 +242,23 @@ Point d'attention : sur Android, le scanner écrit ses images dans le dossier «
 3. Déchiffrement et contrôle d'intégrité.
 4. **Partage** : fichier temporaire dans `secure_tmp/`, transmis par la feuille de partage du système avec un droit de lecture temporaire. **Export** : écriture directe à l'emplacement choisi par l'utilisateur, sans fichier intermédiaire.
 5. Suppression du fichier temporaire : 10 minutes après le partage, au verrouillage et au démarrage. (L'application qui reçoit le fichier a besoin d'un moment pour le lire ; le supprimer immédiatement ferait échouer le partage.)
-6. **Exporter mes données** (Paramètres) : mêmes étapes 1 à 3 pour chaque document, puis archive ZIP rangée par catégorie, préparée dans `secure_tmp/export/` par un isolate (chaque document déchiffré est ajouté puis effacé aussitôt), lue en mémoire et remise au sélecteur « Enregistrer sous ». Le dossier est supprimé dès la fin, réussie ou non. Limite : 200 Mo de documents (voir docs/problemes-connus.md, P6).
+6. **Exporter mes données** (Paramètres) : mêmes étapes 1 à 3 pour chaque document, puis archive ZIP rangée par catégorie, préparée dans `secure_tmp/export/` par un isolate (chaque document déchiffré est ajouté puis effacé aussitôt). Sur Android, l'archive est copiée par petits morceaux vers l'emplacement choisi (sélecteur « Enregistrer sous » du système, code natif dans `MainActivity.kt`), sans passer par la mémoire ; sur iPhone, par la feuille de partage (« Enregistrer dans Fichiers », à vérifier sur iOS). Le dossier est supprimé dès la fin, réussie ou non. L'espace libre est contrôlé avant de commencer.
 7. Un fichier dont l'empreinte ne correspond plus ne sort jamais : le partage, l'export ou l'archive s'arrêtent avec le message « fichier altéré ».
 
 Code : `lib/core/documents/export_document.dart` (`DocumentExporter`), `lib/core/platform/share_service.dart`, parcours à l'écran dans `lib/features/documents/presentation/share/document_exit_flow.dart`.
 
 ---
+
+## 13 bis. Sauvegarde chiffrée (choix D13)
+
+1. **Créer** (Paramètres → Sauvegarde et synchronisation) : la clé de récupération doit avoir été notée (sinon l'application propose de le faire d'abord), puis nouvelle authentification.
+2. Le fichier `.docusafe` (format `DSB1`) est une archive ZIP sans compression qui contient le coffre **tel qu'il est stocké, donc déjà chiffré** : la base (copiée dans une transaction de lecture, pour une copie cohérente), les documents et miniatures (DSF1), la serrure de récupération et un manifeste (format, date, nombre de documents, empreinte SHA-256 de chaque fichier ; aucun titre). **Rien n'est déchiffré pour sauvegarder.**
+3. Le fichier est préparé dans `secure_tmp/backup/`, enregistré à l'emplacement choisi (même mécanisme que l'export), puis supprimé.
+4. **Restaurer** (depuis l'accueil « J'ai une sauvegarde », ou depuis les réglages après nouvelle authentification) : la sauvegarde est décompressée à côté du coffre (`vault_restore/`) ; seuls les noms attendus sont acceptés et chaque empreinte est contrôlée. Un fichier étranger ou abîmé est refusé sans toucher au coffre.
+5. La clé de récupération ouvre la serrure de la sauvegarde ; une clé fausse est refusée. L'utilisateur choisit ensuite un code pour ce téléphone. Alors seulement, l'ancien coffre est effacé et remplacé. La biométrie est désactivée (à réactiver dans les réglages).
+6. Une sauvegarde s'ouvre avec la clé de récupération **en vigueur au moment où elle a été créée**. Après un changement de clé, il faut refaire une sauvegarde (indiqué à l'écran).
+
+Code : `lib/core/backup/backup_service.dart`, `VaultService.restore`, écrans dans `lib/features/backup/`.
 
 ## 14. Notifications
 

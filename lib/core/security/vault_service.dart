@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import '../config/app_config.dart';
 import '../database/app_database.dart';
 import '../errors/app_exception.dart';
 import '../storage/vault_paths.dart';
@@ -258,6 +259,40 @@ final class VaultService {
   }
 
   // ---------------------------------------------------------------------------
+  // Restauration d'une sauvegarde (choix D13)
+  // ---------------------------------------------------------------------------
+
+  /// Remplace le coffre par la sauvegarde décompressée dans
+  /// [VaultPaths.restoreDir], ouverte avec [vaultKey] (tirée de sa serrure de
+  /// récupération), et la protège par le nouveau code [pin].
+  ///
+  /// Le coffre actuel n'est effacé qu'une fois la nouvelle serrure prête. La
+  /// biométrie est désactivée : elle se réactive dans les réglages.
+  Future<VaultSession> restore({
+    required Uint8List vaultKey,
+    required String pin,
+    VaultSession? current,
+  }) async {
+    PinPolicy.validate(pin);
+    final source = _paths.restoreDir;
+    if (!await File('${source.path}/${AppConfig.databaseFileName}').exists()) {
+      throw const StorageException('backup.not_unpacked');
+    }
+    final pinSlot = await _wrapWithPin(vaultKey, pin);
+    await wipe(current);
+    await source.rename(_paths.vaultDir.path);
+    await _store.write(SecureStoreKeys.pinSlot, pinSlot.encode());
+    await _store.write(SecureStoreKeys.biometricEnabled, '0');
+    await _store.write(SecureStoreKeys.screenSecure, '1');
+    await attempts.reset();
+    await _store.write(SecureStoreKeys.vaultVersion, _vaultFormatVersion);
+    final session = await _openSession(vaultKey);
+    await session.database.settingsDao.setBiometricEnabled(false);
+    AppLog.event('vault.restored');
+    return session;
+  }
+
+  // ---------------------------------------------------------------------------
   // Détails
   // ---------------------------------------------------------------------------
 
@@ -383,7 +418,21 @@ final class VaultService {
     if (!await file.exists()) {
       throw const AuthException.slotMissing();
     }
-    final slot = VaultKeySlot.decode(await file.readAsString());
+    return unwrapRecoverySlot(await file.readAsString(), recoveryKey);
+  }
+
+  /// Ouvre une serrure de récupération (celle du coffre ou d'une sauvegarde).
+  /// Lève [AuthException.recoveryKeyInvalid] si la clé ne correspond pas.
+  Future<Uint8List> unwrapRecoverySlot(
+    String encodedSlot,
+    RecoveryKey recoveryKey,
+  ) async {
+    final VaultKeySlot slot;
+    try {
+      slot = VaultKeySlot.decode(encodedSlot);
+    } on Object {
+      throw CryptoException.badFormat;
+    }
     if (slot.kdf != VaultKeySlot.kdfHkdf) {
       throw CryptoException.badFormat;
     }

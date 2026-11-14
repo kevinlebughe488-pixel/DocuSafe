@@ -42,6 +42,12 @@ final class VaultPaths {
   Directory get filesDir => Directory(p.join(vaultDir.path, 'files'));
   Directory get thumbsDir => Directory(p.join(vaultDir.path, 'thumbs'));
 
+  /// Sauvegarde décompressée en attente de restauration. À côté du coffre
+  /// (même disque, pour un simple renommage) mais hors de lui : effacer le
+  /// coffre ne l'efface pas.
+  Directory get restoreDir =>
+      Directory(p.join(p.dirname(vaultDir.path), 'vault_restore'));
+
   /// Chemin relatif du fichier chiffré d'un document.
   static String documentRelativePath(String id) =>
       p.join('files', id.substring(0, 2), '$id.dsf');

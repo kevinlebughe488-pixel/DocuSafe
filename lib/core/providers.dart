@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'backup/backup_service.dart';
 import 'database/app_database.dart';
 import 'documents/delete_document.dart';
 import 'documents/document_repository.dart';
@@ -165,6 +166,10 @@ final openDocumentProvider = Provider<OpenDocument>(
     session: ref.watch(sessionProvider),
     paths: ref.watch(vaultPathsProvider),
   ),
+);
+
+final backupServiceProvider = Provider<BackupService>(
+  (ref) => BackupService(paths: ref.watch(vaultPathsProvider)),
 );
 
 final shareServiceProvider = Provider<ShareService>(

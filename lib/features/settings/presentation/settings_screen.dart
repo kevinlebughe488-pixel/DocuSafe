@@ -4,13 +4,14 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../app/l10n/generated/app_localizations.dart';
 import '../../../app/router/routes.dart';
+import '../../../core/utils/formats.dart';
 import '../../../core/widgets/settings_tile.dart';
 import '../../documents/presentation/share/document_exit_flow.dart';
 import 'about_view_model.dart';
+import 'storage/storage_screen.dart';
 
-/// Paramètres (écran 18) : sécurité, notifications, catégories, textes
-/// légaux, à propos. export des données. Les autres entrées (stockage, sauvegarde)
-/// arrivent avec leurs fonctions, jamais avant.
+/// Paramètres (écran 18) : sécurité, notifications, catégories, stockage,
+/// export des données, sauvegarde, textes légaux, à propos.
 final class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -18,6 +19,7 @@ final class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final version = ref.watch(appVersionProvider).value;
+    final totalSize = ref.watch(totalSizeProvider).value;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
@@ -38,10 +40,23 @@ final class SettingsScreen extends ConsumerWidget {
             onTap: () => context.push(Routes.categories),
           ),
           SettingsTile(
+            icon: Icons.storage_rounded,
+            title: l10n.storageTitle,
+            trailing: totalSize == null
+                ? null
+                : Text(Formats.fileSize(totalSize)),
+            onTap: () => context.push(Routes.settingsStorage),
+          ),
+          SettingsTile(
             icon: Icons.file_download_outlined,
             title: l10n.exportAllTitle,
             subtitle: l10n.exportAllSubtitle,
             onTap: () => runExportAll(context, ref),
+          ),
+          SettingsTile(
+            icon: Icons.settings_backup_restore_rounded,
+            title: l10n.backupSettingsTitle,
+            onTap: () => context.push(Routes.settingsBackup),
           ),
           const Divider(),
           SettingsTile(

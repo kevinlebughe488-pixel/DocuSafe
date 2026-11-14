@@ -30,6 +30,10 @@ abstract interface class FilePickerService {
   /// Galerie photos, plusieurs images possibles.
   Future<List<PickedFile>> pickPhotos();
 
+  /// Un fichier de sauvegarde DocuSafe (n'importe quel type : l'extension
+  /// `.docusafe` n'est pas connue du système). `null` si annulé.
+  Future<PickedFile?> pickBackup();
+
   /// Nettoie les copies temporaires créées par les sélecteurs.
   Future<void> clearTemporaryFiles();
 }
@@ -75,6 +79,21 @@ final class PlatformFilePickerService implements FilePickerService {
   }
 
   @override
+  Future<PickedFile?> pickBackup() async {
+    try {
+      final files = await FilePicker.pickFiles();
+      final f = files.isEmpty ? null : files.first;
+      if (f == null || f.path == null) {
+        return null;
+      }
+      return PickedFile(file: File(f.path!), displayName: f.name);
+    } on Exception catch (e, s) {
+      AppLog.error('picker.backup', e, s);
+      throw StorageException('picker.backup', cause: e);
+    }
+  }
+
+  @override
   Future<void> clearTemporaryFiles() async {
     try {
       await FilePicker.clearTemporaryFiles();
@@ -86,10 +105,15 @@ final class PlatformFilePickerService implements FilePickerService {
 
 /// Sélecteur simulé : retourne des fichiers préparés (tests).
 final class FakeFilePickerService implements FilePickerService {
-  FakeFilePickerService({this.documents = const [], this.photos = const []});
+  FakeFilePickerService({
+    this.documents = const [],
+    this.photos = const [],
+    this.backup,
+  });
 
   List<PickedFile> documents;
   List<PickedFile> photos;
+  PickedFile? backup;
   int clearCalls = 0;
 
   @override
@@ -97,6 +121,9 @@ final class FakeFilePickerService implements FilePickerService {
 
   @override
   Future<List<PickedFile>> pickPhotos() async => photos;
+
+  @override
+  Future<PickedFile?> pickBackup() async => backup;
 
   @override
   Future<void> clearTemporaryFiles() async => clearCalls++;
