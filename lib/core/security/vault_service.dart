@@ -108,8 +108,11 @@ final class VaultService {
     PinPolicy.validate(pin);
     final vaultKey = _crypto.randomBytes(CryptoEngine.keyLength);
     final recoveryKey = RecoveryKey.generate();
+    AppLog.event('vault.setup.pin_slot.start');
     final pinSlot = await _wrapWithPin(vaultKey, pin);
+    AppLog.event('vault.setup.recovery_slot.start');
     final recoverySlot = await _wrapWithRecoveryKey(vaultKey, recoveryKey);
+    AppLog.event('vault.setup.prepared');
     return PendingVaultSetup._(
       recoveryKey: recoveryKey,
       vaultKey: vaultKey,
@@ -262,6 +265,7 @@ final class VaultService {
     await _paths.ensureCreated();
     await _paths.purgeSecureTemp();
     await _paths.purgePartialFiles();
+    AppLog.event('vault.session.opening');
     final dbKey = await _keys.databaseKey(vaultKey);
     try {
       final database = _openDatabase(_paths.databaseFile, dbKey);
@@ -273,6 +277,7 @@ final class VaultService {
       );
       try {
         await database.ensureOpened();
+        AppLog.event('vault.session.database_opened');
       } on Object {
         await session.close();
         rethrow;

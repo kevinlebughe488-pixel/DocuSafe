@@ -75,6 +75,10 @@ base class SetupViewModel extends Notifier<SetupState> {
     } on AppException catch (e, s) {
       AppLog.error('setup.create', e, s);
       state = state.copyWith(stage: SetupStage.pin, error: e);
+    } on Object catch (e, s) {
+      // Erreur imprévue : jamais de roue qui tourne sans fin.
+      AppLog.error('setup.create.unexpected', e, s);
+      state = state.copyWith(stage: SetupStage.pin, error: e);
     }
   }
 

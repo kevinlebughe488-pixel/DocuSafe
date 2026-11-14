@@ -48,7 +48,7 @@ jobs:
       - name: Compilation de l'APK
         env:
           DOCUSAFE_APERCU: '1'
-        run: flutter build apk --release --build-number=${{ github.run_number }}
+        run: flutter build apk --release --build-number=${{ github.run_number }} --dart-define=DOCUSAFE_APERCU=true
 
       - name: Renommage
         run: |
@@ -72,3 +72,41 @@ jobs:
             --target "${{ github.sha }}" \
             --title "Aperçu n°${{ github.run_number }} (${GITHUB_REF_NAME})" \
             --notes "Version de test compilée automatiquement depuis la branche ${GITHUB_REF_NAME}, commit ${GITHUB_SHA::7}. À installer sur un téléphone Android (voir docs/apercu-telephone.md). Ne pas diffuser."
+
+  # Test de fumée : un émulateur Android installe l'APK et crée un coffre.
+  # Le journal de cette étape montre chaque écran et les erreurs éventuelles.
+  emulateur:
+    needs: apk
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: DocuSafe-apercu-${{ github.run_number }}
+          path: apk
+
+      - name: Accélération matérielle (KVM)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Parcours sur émulateur
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
+          script: python3 tool/smoke_test.py "$(ls apk/*.apk | head -n 1)" sortie-emulateur
+
+      - name: Capture et journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: emulateur-${{ github.run_number }}
+          path: sortie-emulateur
+          retention-days: 14
