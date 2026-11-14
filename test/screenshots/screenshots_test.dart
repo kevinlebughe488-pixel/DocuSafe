@@ -120,6 +120,10 @@ void main() {
     List<Override> extra = const [],
     BiometricService? biometrics,
   }) async {
+    // iPhone : Face ID ; Android : empreinte.
+    biometrics ??= _FakeBiometrics(
+      ios ? BiometricKind.face : BiometricKind.fingerprint,
+    );
     if (ios) {
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
       useIphoneSize(tester);
@@ -181,9 +185,11 @@ void main() {
         extra: [
           setupViewModelProvider.overrideWith(
             () => _FixedSetup(
-              const SetupState(
+              SetupState(
                 stage: SetupStage.biometric,
-                biometricKind: BiometricKind.fingerprint,
+                biometricKind: ios
+                    ? BiometricKind.face
+                    : BiometricKind.fingerprint,
               ),
             ),
           ),
@@ -261,6 +267,19 @@ void main() {
       unawaited(containerOf(tester).read(routerProvider).push(Routes.legalPrivacy));
     });
   }, skip: !enabled);
+}
+
+/// Biométrie simulée : disponible, jamais reconnue.
+final class _FakeBiometrics implements BiometricService {
+  const _FakeBiometrics(this.kind);
+
+  final BiometricKind kind;
+
+  @override
+  Future<BiometricKind> availableKind() async => kind;
+
+  @override
+  Future<bool> authenticate({required String reason}) async => false;
 }
 
 final class _FixedSetup extends SetupViewModel {

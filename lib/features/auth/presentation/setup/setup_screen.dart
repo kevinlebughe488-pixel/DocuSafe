@@ -5,7 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../../app/l10n/generated/app_localizations.dart';
 import '../../../../app/router/routes.dart';
 import '../../../../app/theme/app_spacing.dart';
-import '../../../../core/security/auth/biometric_service.dart';
+import '../../../../core/security/auth/biometric_labels.dart';
 import '../../../../core/widgets/bottom_actions.dart';
 import '../../../../core/widgets/illustration_circle.dart';
 import '../../../../core/widgets/step_header.dart';
@@ -161,7 +161,8 @@ final class _BiometricStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final face = state.biometricKind == BiometricKind.face;
+    final kind = state.biometricKind;
+    final method = BiometricLabels.inSentence(l10n, kind);
     final busy = state.stage == SetupStage.enablingBiometric;
     final error = state.errorMessage(l10n);
     return Column(
@@ -170,12 +171,12 @@ final class _BiometricStep extends StatelessWidget {
           step: 3,
           total: 3,
           title: l10n.setupBiometricTitle,
-          body: face ? l10n.setupBiometricBodyFace : l10n.setupBiometricBody,
+          body: l10n.setupBiometricBody(method),
         ),
         Expanded(
           child: Center(
             child: IllustrationCircle(
-              icon: face ? Icons.face_rounded : Icons.fingerprint_rounded,
+              icon: BiometricLabels.icon(kind),
               security: true,
             ),
           ),
@@ -192,10 +193,8 @@ final class _BiometricStep extends StatelessWidget {
         BottomActions(
           children: [
             LargeFilledButton(
-              label: face
-                  ? l10n.setupBiometricEnableFace
-                  : l10n.setupBiometricEnable,
-              icon: face ? Icons.face_rounded : Icons.fingerprint_rounded,
+              label: l10n.setupBiometricEnable(method),
+              icon: BiometricLabels.icon(kind),
               onPressed: busy ? null : vm.enableBiometrics,
             ),
             TextButton(

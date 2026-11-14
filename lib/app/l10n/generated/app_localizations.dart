@@ -385,32 +385,68 @@ abstract class AppLocalizations {
   /// No description provided for @setupBiometricBody.
   ///
   /// In fr, this message translates to:
-  /// **'Utilisez votre empreinte pour ouvrir DocuSafe. Votre code reste toujours valable.'**
-  String get setupBiometricBody;
-
-  /// No description provided for @setupBiometricBodyFace.
-  ///
-  /// In fr, this message translates to:
-  /// **'Utilisez votre visage pour ouvrir DocuSafe. Votre code reste toujours valable.'**
-  String get setupBiometricBodyFace;
+  /// **'Utilisez {method} pour ouvrir DocuSafe. Votre code reste toujours valable.'**
+  String setupBiometricBody(String method);
 
   /// No description provided for @setupBiometricEnable.
   ///
   /// In fr, this message translates to:
-  /// **'Activer l\'empreinte'**
-  String get setupBiometricEnable;
-
-  /// No description provided for @setupBiometricEnableFace.
-  ///
-  /// In fr, this message translates to:
-  /// **'Activer la reconnaissance du visage'**
-  String get setupBiometricEnableFace;
+  /// **'Activer {method}'**
+  String setupBiometricEnable(String method);
 
   /// No description provided for @setupBiometricFailed.
   ///
   /// In fr, this message translates to:
-  /// **'L\'empreinte n\'a pas pu être activée. Vous pourrez réessayer dans les paramètres.'**
+  /// **'Le déverrouillage rapide n\'a pas pu être activé. Vous pourrez réessayer dans les paramètres.'**
   String get setupBiometricFailed;
+
+  /// No description provided for @biometricFingerprint.
+  ///
+  /// In fr, this message translates to:
+  /// **'l\'empreinte'**
+  String get biometricFingerprint;
+
+  /// No description provided for @biometricFingerprintTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Empreinte digitale'**
+  String get biometricFingerprintTitle;
+
+  /// No description provided for @biometricFace.
+  ///
+  /// In fr, this message translates to:
+  /// **'la reconnaissance du visage'**
+  String get biometricFace;
+
+  /// No description provided for @biometricFaceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reconnaissance du visage'**
+  String get biometricFaceTitle;
+
+  /// No description provided for @biometricFaceId.
+  ///
+  /// In fr, this message translates to:
+  /// **'Face ID'**
+  String get biometricFaceId;
+
+  /// No description provided for @biometricTouchId.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touch ID'**
+  String get biometricTouchId;
+
+  /// No description provided for @biometricGeneric.
+  ///
+  /// In fr, this message translates to:
+  /// **'la biométrie'**
+  String get biometricGeneric;
+
+  /// No description provided for @biometricGenericTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouillage biométrique'**
+  String get biometricGenericTitle;
 
   /// No description provided for @unlockTitle.
   ///
@@ -469,8 +505,8 @@ abstract class AppLocalizations {
   /// No description provided for @unlockBiometricButton.
   ///
   /// In fr, this message translates to:
-  /// **'Déverrouiller avec l\'empreinte'**
-  String get unlockBiometricButton;
+  /// **'Déverrouiller avec {method}'**
+  String unlockBiometricButton(String method);
 
   /// No description provided for @unlockSlotMissing.
   ///
@@ -604,29 +640,11 @@ abstract class AppLocalizations {
   /// **'Changer le code'**
   String get settingsChangePin;
 
-  /// No description provided for @settingsBiometric.
-  ///
-  /// In fr, this message translates to:
-  /// **'Empreinte digitale'**
-  String get settingsBiometric;
-
-  /// No description provided for @settingsBiometricFace.
-  ///
-  /// In fr, this message translates to:
-  /// **'Reconnaissance du visage'**
-  String get settingsBiometricFace;
-
   /// No description provided for @settingsBiometricSubtitle.
   ///
   /// In fr, this message translates to:
-  /// **'Déverrouiller avec votre empreinte'**
-  String get settingsBiometricSubtitle;
-
-  /// No description provided for @settingsBiometricSubtitleFace.
-  ///
-  /// In fr, this message translates to:
-  /// **'Déverrouiller avec votre visage'**
-  String get settingsBiometricSubtitleFace;
+  /// **'Déverrouiller avec {method}'**
+  String settingsBiometricSubtitle(String method);
 
   /// No description provided for @settingsBiometricUnavailable.
   ///
@@ -757,20 +775,14 @@ abstract class AppLocalizations {
   /// No description provided for @settingsBiometricEnabled.
   ///
   /// In fr, this message translates to:
-  /// **'L\'empreinte est activée.'**
+  /// **'Le déverrouillage rapide est activé.'**
   String get settingsBiometricEnabled;
 
   /// No description provided for @settingsBiometricDisabled.
   ///
   /// In fr, this message translates to:
-  /// **'L\'empreinte est désactivée.'**
+  /// **'Le déverrouillage rapide est désactivé.'**
   String get settingsBiometricDisabled;
-
-  /// No description provided for @settingsBiometricEnableReason.
-  ///
-  /// In fr, this message translates to:
-  /// **'Activer le déverrouillage par empreinte'**
-  String get settingsBiometricEnableReason;
 
   /// No description provided for @changePinTitle.
   ///

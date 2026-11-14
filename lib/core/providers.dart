@@ -47,6 +47,12 @@ final biometricServiceProvider = Provider<BiometricService>(
   (ref) => LocalAuthBiometricService(),
 );
 
+/// Type de biométrie forte disponible sur ce téléphone (visage, empreinte,
+/// aucune). Détermine les textes et les icônes.
+final biometricKindProvider = FutureProvider<BiometricKind>(
+  (ref) => ref.watch(biometricServiceProvider).availableKind(),
+);
+
 final screenSecurityProvider = Provider<ScreenSecurity>(
   (ref) => const ChannelScreenSecurity(),
 );

@@ -8,6 +8,8 @@ import '../../../../app/l10n/generated/app_localizations.dart';
 import '../../../../app/router/routes.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/providers.dart';
+import '../../../../core/security/auth/biometric_labels.dart';
+import '../../../../core/security/auth/biometric_service.dart';
 import '../../../../core/security/lock/vault_state.dart';
 import '../../../../core/utils/duration_format.dart';
 import '../../../../core/widgets/ds_logo.dart';
@@ -45,6 +47,8 @@ final class _UnlockScreenState extends ConsumerState<UnlockScreen> {
     final vm = ref.read(unlockViewModelProvider.notifier);
     final vault = ref.watch(vaultControllerProvider);
     final biometricEnabled = vault is VaultLocked && vault.biometricEnabled;
+    final biometricKind =
+        ref.watch(biometricKindProvider).value ?? BiometricKind.fingerprint;
     final biometricChanged =
         vault is VaultLocked && vault.reason == LockReason.biometricChanged;
     final lockout = state.remainingLockout;
@@ -97,7 +101,10 @@ final class _UnlockScreenState extends ConsumerState<UnlockScreen> {
                 busy: state.busy,
                 resetToken: state.resetToken,
                 onBiometric: biometricEnabled ? vm.tryBiometrics : null,
-                biometricLabel: l10n.unlockBiometricButton,
+                biometricIcon: BiometricLabels.icon(biometricKind),
+                biometricLabel: l10n.unlockBiometricButton(
+                  BiometricLabels.inSentence(l10n, biometricKind),
+                ),
                 below: Center(
                   child: TextButton(
                     onPressed: () => context.push(Routes.lockRecovery),

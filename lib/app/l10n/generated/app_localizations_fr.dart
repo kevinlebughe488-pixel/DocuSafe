@@ -171,22 +171,42 @@ class AppLocalizationsFr extends AppLocalizations {
   String get setupBiometricTitle => 'Déverrouiller plus vite ?';
 
   @override
-  String get setupBiometricBody =>
-      'Utilisez votre empreinte pour ouvrir DocuSafe. Votre code reste toujours valable.';
+  String setupBiometricBody(String method) {
+    return 'Utilisez $method pour ouvrir DocuSafe. Votre code reste toujours valable.';
+  }
 
   @override
-  String get setupBiometricBodyFace =>
-      'Utilisez votre visage pour ouvrir DocuSafe. Votre code reste toujours valable.';
-
-  @override
-  String get setupBiometricEnable => 'Activer l\'empreinte';
-
-  @override
-  String get setupBiometricEnableFace => 'Activer la reconnaissance du visage';
+  String setupBiometricEnable(String method) {
+    return 'Activer $method';
+  }
 
   @override
   String get setupBiometricFailed =>
-      'L\'empreinte n\'a pas pu être activée. Vous pourrez réessayer dans les paramètres.';
+      'Le déverrouillage rapide n\'a pas pu être activé. Vous pourrez réessayer dans les paramètres.';
+
+  @override
+  String get biometricFingerprint => 'l\'empreinte';
+
+  @override
+  String get biometricFingerprintTitle => 'Empreinte digitale';
+
+  @override
+  String get biometricFace => 'la reconnaissance du visage';
+
+  @override
+  String get biometricFaceTitle => 'Reconnaissance du visage';
+
+  @override
+  String get biometricFaceId => 'Face ID';
+
+  @override
+  String get biometricTouchId => 'Touch ID';
+
+  @override
+  String get biometricGeneric => 'la biométrie';
+
+  @override
+  String get biometricGenericTitle => 'Déverrouillage biométrique';
 
   @override
   String get unlockTitle => 'Saisissez votre code';
@@ -228,7 +248,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Votre biométrie a changé. Saisissez votre code.';
 
   @override
-  String get unlockBiometricButton => 'Déverrouiller avec l\'empreinte';
+  String unlockBiometricButton(String method) {
+    return 'Déverrouiller avec $method';
+  }
 
   @override
   String get unlockSlotMissing =>
@@ -329,16 +351,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsChangePin => 'Changer le code';
 
   @override
-  String get settingsBiometric => 'Empreinte digitale';
-
-  @override
-  String get settingsBiometricFace => 'Reconnaissance du visage';
-
-  @override
-  String get settingsBiometricSubtitle => 'Déverrouiller avec votre empreinte';
-
-  @override
-  String get settingsBiometricSubtitleFace => 'Déverrouiller avec votre visage';
+  String settingsBiometricSubtitle(String method) {
+    return 'Déverrouiller avec $method';
+  }
 
   @override
   String get settingsBiometricUnavailable => 'Non disponible sur ce téléphone';
@@ -410,14 +425,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsPinChanged => 'Votre code a été changé.';
 
   @override
-  String get settingsBiometricEnabled => 'L\'empreinte est activée.';
+  String get settingsBiometricEnabled => 'Le déverrouillage rapide est activé.';
 
   @override
-  String get settingsBiometricDisabled => 'L\'empreinte est désactivée.';
-
-  @override
-  String get settingsBiometricEnableReason =>
-      'Activer le déverrouillage par empreinte';
+  String get settingsBiometricDisabled =>
+      'Le déverrouillage rapide est désactivé.';
 
   @override
   String get changePinTitle => 'Nouveau code';

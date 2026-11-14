@@ -8,6 +8,7 @@ import '../../../app/theme/app_spacing.dart';
 import '../../../core/config/app_config.dart';
 import '../../../core/errors/app_exception.dart';
 import '../../../core/providers.dart';
+import '../../../core/security/auth/biometric_labels.dart';
 import '../../../core/security/auth/biometric_service.dart';
 import '../../../core/utils/duration_format.dart';
 import '../../../core/utils/error_messages.dart';
@@ -36,8 +37,8 @@ final class SecuritySettingsScreen extends ConsumerWidget {
       }
     });
 
-    final face = state.biometricKind == BiometricKind.face;
-    final biometricAvailable = state.biometricKind != BiometricKind.none;
+    final kind = state.biometricKind;
+    final biometricAvailable = kind != BiometricKind.none;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsSecurityTitle)),
@@ -53,12 +54,12 @@ final class SecuritySettingsScreen extends ConsumerWidget {
             },
           ),
           SettingsTile.toggle(
-            icon: face ? Icons.face_rounded : Icons.fingerprint_rounded,
-            title: face ? l10n.settingsBiometricFace : l10n.settingsBiometric,
+            icon: BiometricLabels.icon(kind),
+            title: BiometricLabels.title(l10n, kind),
             subtitle: biometricAvailable
-                ? (face
-                      ? l10n.settingsBiometricSubtitleFace
-                      : l10n.settingsBiometricSubtitle)
+                ? l10n.settingsBiometricSubtitle(
+                    BiometricLabels.inSentence(l10n, kind),
+                  )
                 : l10n.settingsBiometricUnavailable,
             value: state.biometricEnabled,
             onChanged: biometricAvailable && !state.busy
