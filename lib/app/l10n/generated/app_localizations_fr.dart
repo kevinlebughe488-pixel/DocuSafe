@@ -1202,6 +1202,201 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String notificationTitle(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Échéance dans $days jours',
+      one: 'Échéance demain',
+      zero: 'Échéance aujourd\'hui',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationTitleNamed(String title, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$title expire dans $days jours',
+      one: '$title expire demain',
+      zero: '$title expire aujourd\'hui',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notificationBody =>
+      'Un document de votre coffre arrive à échéance.';
+
+  @override
+  String get navDeadlinesTitle => 'Échéances';
+
+  @override
+  String get deadlinesAll => 'Toutes';
+
+  @override
+  String deadlinesExpiredCount(int count) {
+    return 'Expirés · $count';
+  }
+
+  @override
+  String deadlinesSoonCount(int count) {
+    return '30 jours · $count';
+  }
+
+  @override
+  String get deadlinesGroupExpired => 'Expirés';
+
+  @override
+  String get deadlinesGroupSoon => 'Dans les 30 jours';
+
+  @override
+  String get deadlinesGroupLater => 'Plus tard';
+
+  @override
+  String deadlinesExpiredSince(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Depuis $days j',
+      zero: 'Aujourd\'hui',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deadlinesEmptyTitle => 'Aucune échéance';
+
+  @override
+  String get deadlinesEmptyBody =>
+      'Ajoutez une date d\'expiration à un document pour être prévenu à temps.';
+
+  @override
+  String get deadlinesNotificationsOff =>
+      'Les rappels sont désactivés. Les échéances restent visibles ici.';
+
+  @override
+  String get homeUpcomingDeadlines => 'Échéances à venir';
+
+  @override
+  String get remindersTitle => 'Rappels';
+
+  @override
+  String get remindersSection => 'Rappels';
+
+  @override
+  String remindersOffset(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days jours avant',
+      one: '1 jour avant',
+      zero: 'Le jour même',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String remindersPast(String date) {
+    return '$date · passé';
+  }
+
+  @override
+  String remindersAt(String date, String time) {
+    return '$date, vers $time';
+  }
+
+  @override
+  String get remindersAdd => 'Ajouter un rappel';
+
+  @override
+  String get remindersAddTitle => 'Nouveau rappel';
+
+  @override
+  String get remindersAddLabel => 'Jours avant l\'expiration';
+
+  @override
+  String get remindersAddInvalid =>
+      'Saisissez un nombre de jours entre 0 et 3650.';
+
+  @override
+  String get remindersDiscretion =>
+      'Par discrétion, la notification n\'affiche pas le nom du document.';
+
+  @override
+  String get remindersNoDate =>
+      'Ajoutez une date d\'expiration pour programmer des rappels.';
+
+  @override
+  String get remindersDisabledGlobally =>
+      'Les rappels sont désactivés dans les paramètres.';
+
+  @override
+  String get permissionTitle => 'Être prévenu avant l\'expiration ?';
+
+  @override
+  String get permissionBody =>
+      'DocuSafe vous rappelle l\'échéance 90, 30 et 7 jours avant, puis le jour même. Les rappels restent sur votre téléphone.';
+
+  @override
+  String get permissionAllow => 'Autoriser les notifications';
+
+  @override
+  String get settingsNotifications => 'Notifications';
+
+  @override
+  String get notifSettingsEnabled => 'Rappels d\'échéance';
+
+  @override
+  String get notifSettingsEnabledSub => 'Notifications locales, sans Internet';
+
+  @override
+  String get notifSettingsDefaults => 'Rappels par défaut';
+
+  @override
+  String get notifSettingsDefaultsHint =>
+      'Pour les nouvelles dates d\'expiration.';
+
+  @override
+  String get notifSettingsAddOffset => 'Ajouter';
+
+  @override
+  String get notifSettingsTime => 'Heure d\'envoi';
+
+  @override
+  String get notifSettingsShowTitle => 'Afficher le nom du document';
+
+  @override
+  String get notifSettingsShowTitleOff =>
+      'Désactivé : le nom n\'apparaît pas sur l\'écran verrouillé';
+
+  @override
+  String get notifSettingsShowTitleOn =>
+      'Activé : le nom apparaît sur l\'écran verrouillé';
+
+  @override
+  String get notifSettingsPreview => 'Aperçu';
+
+  @override
+  String get notifSettingsPreviewNow => 'DocuSafe · maintenant';
+
+  @override
+  String get notifSettingsExampleTitle => 'Passeport';
+
+  @override
+  String offsetChip(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days jours',
+      one: '1 jour',
+      zero: 'Le jour même',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get errorStorage =>
       'Le stockage du téléphone n\'a pas répondu. Vérifiez l\'espace disponible et réessayez.';
 

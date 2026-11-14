@@ -22,11 +22,14 @@ import '../../features/documents/presentation/list/documents_view_model.dart';
 import '../../features/documents/presentation/viewer/document_viewer_screen.dart';
 import '../../features/legal/presentation/legal_text_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/reminders/presentation/deadlines_screen.dart';
+import '../../features/reminders/presentation/document_reminders_screen.dart';
 import '../../features/scanner/presentation/scan_preview_screen.dart';
 import '../../features/scanner/presentation/scan_screen.dart';
 import '../../features/search/presentation/search_screen.dart';
 import '../../features/settings/presentation/about_screen.dart';
 import '../../features/settings/presentation/change_pin_screen.dart';
+import '../../features/settings/presentation/notification_settings_screen.dart';
 import '../../features/settings/presentation/recovery_key_screen.dart';
 import '../../features/settings/presentation/security_settings_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
@@ -89,6 +92,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: Routes.scan, builder: (_, _) => const ScanScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.deadlines, builder: (_, _) => const DeadlinesScreen())],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: Routes.settings, builder: (_, _) => const SettingsScreen())],
@@ -161,6 +167,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             ),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/deadlines/:id/reminders',
+        parentNavigatorKey: _rootKey,
+        builder: (_, state) => DocumentRemindersScreen(documentId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: Routes.settingsNotifications,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const NotificationSettingsScreen(),
       ),
       GoRoute(
         path: Routes.settingsAbout,

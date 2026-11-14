@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../core/widgets/inactivity_listener.dart';
+import '../core/widgets/notification_bridge.dart';
 import '../core/widgets/privacy_shield.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'router/app_router.dart';
@@ -35,7 +36,9 @@ final class DocuSafeApp extends ConsumerWidget {
       // La bannière « DEBUG » n'apporte rien sur un coffre-fort.
       debugShowCheckedModeBanner: false,
       builder: (context, child) => PrivacyShield(
-        child: InactivityListener(child: child ?? const SizedBox.shrink()),
+        child: NotificationBridge(
+          child: InactivityListener(child: child ?? const SizedBox.shrink()),
+        ),
       ),
     );
   }

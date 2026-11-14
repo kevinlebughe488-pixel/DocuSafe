@@ -10,6 +10,7 @@ import '../../../core/database/daos/categories_dao.dart';
 import '../../../core/database/daos/settings_dao.dart';
 import '../../../core/providers.dart';
 import '../../../core/security/lock/vault_state.dart';
+import '../../../core/utils/date_only.dart';
 import '../../../core/utils/formats.dart';
 import '../../../core/widgets/category_icon.dart';
 import '../../../core/widgets/document_thumbnail.dart';
@@ -18,13 +19,15 @@ import '../../../core/widgets/ds_logo.dart';
 import '../../../core/widgets/info_banner.dart';
 import '../../../core/widgets/secure_label.dart';
 import '../../../core/widgets/state_view.dart';
+import '../../../core/widgets/status_badge.dart';
 import '../../auth/presentation/reauth/reauth_sheet.dart';
 import '../../documents/presentation/import/import_view_model.dart';
 import '../../documents/presentation/list/documents_view_model.dart';
+import '../../reminders/presentation/deadlines_screen.dart';
 
 /// Tableau de bord (écran 5) : compteur, recherche, scanner et importation,
 /// catégories, favoris, ajoutés récemment. Construit comme une liste de
-/// sections indépendantes. « Échéances à venir » arrive au lot c.
+/// sections indépendantes, dont « Échéances à venir ».
 final class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -39,6 +42,11 @@ final class HomeScreen extends ConsumerWidget {
     final recent = ref.watch(_recentProvider).value ?? const [];
     final recoveryConfirmed = ref.watch(_recoveryConfirmedProvider).value ?? true;
     final categoryNames = ref.watch(categoriesByIdProvider).value ?? const {};
+    final today = DateOnly.today();
+    final upcoming = (ref.watch(expiringDocumentsProvider).value ?? const <DocumentRow>[])
+        .where((d) => ExpiryInfo.of(l10n, d.expirationDate!, today).status != ExpiryStatus.later)
+        .take(3)
+        .toList();
 
     Future<void> import() async {
       ref.read(importViewModelProvider.notifier).reset();
@@ -168,6 +176,29 @@ final class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ],
+          if (upcoming.isNotEmpty) ...[
+            _SectionHeader(
+              title: l10n.homeUpcomingDeadlines,
+              action: l10n.homeSeeAll,
+              onAction: () => context.go(Routes.deadlines),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenMargin),
+              child: Card(
+                child: Column(
+                  children: [
+                    for (final d in upcoming)
+                      DocumentTile(
+                        document: d,
+                        subtitle: l10n.expiresOn(Formats.date(d.expirationDate!)),
+                        trailing: StatusBadge.expiry(ExpiryInfo.of(l10n, d.expirationDate!, today)),
+                        onTap: () => context.push(Routes.document(d.id)),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],

@@ -149,7 +149,12 @@ abstract final class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: scheme.surfaceContainer,
         indicatorColor: scheme.secondaryContainer,
-        labelTextStyle: WidgetStatePropertyAll(text.labelMedium),
+        // Cinq onglets sur un écran de 360 points : espacement des lettres
+        // et taille (11 au lieu de 12) réduits pour que les libellés tiennent
+        // sur une ligne sans se toucher.
+        labelTextStyle: WidgetStatePropertyAll(
+          text.labelMedium?.copyWith(letterSpacing: 0, fontSize: 11),
+        ),
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {

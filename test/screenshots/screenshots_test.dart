@@ -361,6 +361,24 @@ void main() {
       });
       unawaited(containerOf(tester).read(routerProvider).push(Routes.scanPreview));
     });
+    await both(tester, '23-echeances', () async {
+      await unlockWithDocuments();
+      containerOf(tester).read(routerProvider).go(Routes.deadlines);
+    });
+    await both(tester, '24-rappels', () async {
+      await unlockWithDocuments();
+      final docs = await tester.runAsync(
+        () => containerOf(tester).read(documentRepositoryProvider).watchExpiring().first,
+      );
+      await tester.runAsync(
+        () => containerOf(tester).read(reminderServiceProvider).syncDocument(docs!.first.id),
+      );
+      unawaited(containerOf(tester).read(routerProvider).push(Routes.documentReminders(docs!.first.id)));
+    });
+    await both(tester, '25-notifications', () async {
+      await unlockWithDocuments();
+      unawaited(containerOf(tester).read(routerProvider).push(Routes.settingsNotifications));
+    });
     await both(tester, '22-recherche', () async {
       await unlockWithDocuments();
       unawaited(containerOf(tester).read(routerProvider).push(Routes.search));

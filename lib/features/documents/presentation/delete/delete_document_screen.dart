@@ -57,6 +57,7 @@ final class _DeleteDocumentScreenState extends ConsumerState<DeleteDocumentScree
     try {
       await ref.read(deleteDocumentProvider)(doc);
       ref.read(thumbnailCacheProvider).evict(doc.id);
+      await ref.read(reminderServiceProvider).rescheduleAll();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l10n.deleteDone)),

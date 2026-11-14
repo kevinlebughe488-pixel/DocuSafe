@@ -2032,6 +2032,270 @@ abstract class AppLocalizations {
   /// **'Tag : {tags}'**
   String searchMatchTag(String tags);
 
+  /// No description provided for @notificationTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =0{Échéance aujourd\'hui} =1{Échéance demain} other{Échéance dans {days} jours}}'**
+  String notificationTitle(int days);
+
+  /// No description provided for @notificationTitleNamed.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =0{{title} expire aujourd\'hui} =1{{title} expire demain} other{{title} expire dans {days} jours}}'**
+  String notificationTitleNamed(String title, int days);
+
+  /// No description provided for @notificationBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un document de votre coffre arrive à échéance.'**
+  String get notificationBody;
+
+  /// No description provided for @navDeadlinesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéances'**
+  String get navDeadlinesTitle;
+
+  /// No description provided for @deadlinesAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes'**
+  String get deadlinesAll;
+
+  /// No description provided for @deadlinesExpiredCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expirés · {count}'**
+  String deadlinesExpiredCount(int count);
+
+  /// No description provided for @deadlinesSoonCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'30 jours · {count}'**
+  String deadlinesSoonCount(int count);
+
+  /// No description provided for @deadlinesGroupExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expirés'**
+  String get deadlinesGroupExpired;
+
+  /// No description provided for @deadlinesGroupSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans les 30 jours'**
+  String get deadlinesGroupSoon;
+
+  /// No description provided for @deadlinesGroupLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get deadlinesGroupLater;
+
+  /// No description provided for @deadlinesExpiredSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =0{Aujourd\'hui} other{Depuis {days} j}}'**
+  String deadlinesExpiredSince(int days);
+
+  /// No description provided for @deadlinesEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune échéance'**
+  String get deadlinesEmptyTitle;
+
+  /// No description provided for @deadlinesEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutez une date d\'expiration à un document pour être prévenu à temps.'**
+  String get deadlinesEmptyBody;
+
+  /// No description provided for @deadlinesNotificationsOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les rappels sont désactivés. Les échéances restent visibles ici.'**
+  String get deadlinesNotificationsOff;
+
+  /// No description provided for @homeUpcomingDeadlines.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéances à venir'**
+  String get homeUpcomingDeadlines;
+
+  /// No description provided for @remindersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappels'**
+  String get remindersTitle;
+
+  /// No description provided for @remindersSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappels'**
+  String get remindersSection;
+
+  /// No description provided for @remindersOffset.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =0{Le jour même} =1{1 jour avant} other{{days} jours avant}}'**
+  String remindersOffset(int days);
+
+  /// No description provided for @remindersPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'{date} · passé'**
+  String remindersPast(String date);
+
+  /// No description provided for @remindersAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'{date}, vers {time}'**
+  String remindersAt(String date, String time);
+
+  /// No description provided for @remindersAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un rappel'**
+  String get remindersAdd;
+
+  /// No description provided for @remindersAddTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau rappel'**
+  String get remindersAddTitle;
+
+  /// No description provided for @remindersAddLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jours avant l\'expiration'**
+  String get remindersAddLabel;
+
+  /// No description provided for @remindersAddInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un nombre de jours entre 0 et 3650.'**
+  String get remindersAddInvalid;
+
+  /// No description provided for @remindersDiscretion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par discrétion, la notification n\'affiche pas le nom du document.'**
+  String get remindersDiscretion;
+
+  /// No description provided for @remindersNoDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutez une date d\'expiration pour programmer des rappels.'**
+  String get remindersNoDate;
+
+  /// No description provided for @remindersDisabledGlobally.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les rappels sont désactivés dans les paramètres.'**
+  String get remindersDisabledGlobally;
+
+  /// No description provided for @permissionTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Être prévenu avant l\'expiration ?'**
+  String get permissionTitle;
+
+  /// No description provided for @permissionBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'DocuSafe vous rappelle l\'échéance 90, 30 et 7 jours avant, puis le jour même. Les rappels restent sur votre téléphone.'**
+  String get permissionBody;
+
+  /// No description provided for @permissionAllow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autoriser les notifications'**
+  String get permissionAllow;
+
+  /// No description provided for @settingsNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notifications'**
+  String get settingsNotifications;
+
+  /// No description provided for @notifSettingsEnabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappels d\'échéance'**
+  String get notifSettingsEnabled;
+
+  /// No description provided for @notifSettingsEnabledSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notifications locales, sans Internet'**
+  String get notifSettingsEnabledSub;
+
+  /// No description provided for @notifSettingsDefaults.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappels par défaut'**
+  String get notifSettingsDefaults;
+
+  /// No description provided for @notifSettingsDefaultsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour les nouvelles dates d\'expiration.'**
+  String get notifSettingsDefaultsHint;
+
+  /// No description provided for @notifSettingsAddOffset.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get notifSettingsAddOffset;
+
+  /// No description provided for @notifSettingsTime.
+  ///
+  /// In fr, this message translates to:
+  /// **'Heure d\'envoi'**
+  String get notifSettingsTime;
+
+  /// No description provided for @notifSettingsShowTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher le nom du document'**
+  String get notifSettingsShowTitle;
+
+  /// No description provided for @notifSettingsShowTitleOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivé : le nom n\'apparaît pas sur l\'écran verrouillé'**
+  String get notifSettingsShowTitleOff;
+
+  /// No description provided for @notifSettingsShowTitleOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activé : le nom apparaît sur l\'écran verrouillé'**
+  String get notifSettingsShowTitleOn;
+
+  /// No description provided for @notifSettingsPreview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu'**
+  String get notifSettingsPreview;
+
+  /// No description provided for @notifSettingsPreviewNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'DocuSafe · maintenant'**
+  String get notifSettingsPreviewNow;
+
+  /// No description provided for @notifSettingsExampleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passeport'**
+  String get notifSettingsExampleTitle;
+
+  /// No description provided for @offsetChip.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =0{Le jour même} =1{1 jour} other{{days} jours}}'**
+  String offsetChip(int days);
+
   /// No description provided for @errorStorage.
   ///
   /// In fr, this message translates to:

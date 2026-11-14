@@ -174,11 +174,18 @@ final class _Detail extends ConsumerWidget {
             ),
           ),
           if (expiration != null)
-            _KeyValueRow(
-              label: l10n.detailExpiration,
-              value: Formats.date(expiration),
-              trailing: StatusBadge.expiry(
-                ExpiryInfo.of(l10n, expiration, DateOnly.today()),
+            InkWell(
+              onTap: () => context.push(Routes.documentReminders(doc.id)),
+              child: _KeyValueRow(
+                label: l10n.detailExpiration,
+                value: Formats.date(expiration),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    StatusBadge.expiry(ExpiryInfo.of(l10n, expiration, DateOnly.today())),
+                    const Icon(Icons.chevron_right_rounded),
+                  ],
+                ),
               ),
             ),
           if (doc.issueDate != null)

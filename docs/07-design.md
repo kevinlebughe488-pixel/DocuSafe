@@ -170,7 +170,7 @@ Norme visée : WCAG niveau AA (4,5 pour un texte, 3 pour un élément graphique)
 | `bodyMedium` | 14 / 20 | normale | Texte courant, seconde ligne d'une liste |
 | `bodySmall` | 12 / 16 | normale | Aides sous les champs |
 | `labelLarge` | 14 / 20 | moyenne | Boutons, puces |
-| `labelMedium` | 12 / 16 | moyenne | Barre de navigation, étiquettes d'état |
+| `labelMedium` | 12 / 16 | moyenne | Étiquettes d'état ; barre de navigation en 11, sans espacement des lettres (révision du 14/11/2026 : cinq libellés sur un écran de 360 points) |
 
 La clé de récupération s'affiche en police à chasse fixe, pour distinguer chaque caractère.
 

@@ -10,7 +10,11 @@ abstract final class Routes {
   static const home = '/home';
   static const documents = '/documents';
   static const scan = '/scan';
+  static const deadlines = '/deadlines';
   static const settings = '/settings';
+
+  /// Rappels d'un document.
+  static String documentReminders(String id) => '/deadlines/$id/reminders';
 
   // Scanner et recherche (plein écran).
   static const scanPreview = '/scan/preview';
@@ -40,6 +44,7 @@ abstract final class Routes {
   static const settingsChangePin = '/settings/security/pin';
   static const settingsRecoveryKey = '/settings/security/recovery-key';
   static const settingsAbout = '/settings/about';
+  static const settingsNotifications = '/settings/notifications';
 
   /// Première prise de note de la clé, depuis le rappel de l'accueil.
   static const recoveryKeyFirstTime = '/settings/security/recovery-key?first=1';

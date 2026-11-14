@@ -7,9 +7,9 @@ import '../../../app/router/routes.dart';
 import '../../../core/widgets/settings_tile.dart';
 import 'about_view_model.dart';
 
-/// Paramètres (écran 18), version du lot a : sécurité, catégories, textes
-/// légaux, à propos. Les autres entrées (notifications, stockage, export,
-/// sauvegarde) arrivent avec leurs fonctions, jamais avant.
+/// Paramètres (écran 18) : sécurité, notifications, catégories, textes
+/// légaux, à propos. Les autres entrées (stockage, export, sauvegarde)
+/// arrivent avec leurs fonctions, jamais avant.
 final class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -25,6 +25,11 @@ final class SettingsScreen extends ConsumerWidget {
             icon: Icons.shield_outlined,
             title: l10n.settingsSecurityTitle,
             onTap: () => context.push(Routes.settingsSecurity),
+          ),
+          SettingsTile(
+            icon: Icons.notifications_none_rounded,
+            title: l10n.settingsNotifications,
+            onTap: () => context.push(Routes.settingsNotifications),
           ),
           SettingsTile(
             icon: Icons.category_outlined,

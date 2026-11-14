@@ -188,6 +188,21 @@ final class VaultController extends Notifier<VaultState> {
     AppLog.event('vault.locked.${reason.name}');
   }
 
+  /// Adresse à ouvrir dès le déverrouillage (notification touchée alors que
+  /// le coffre est verrouillé).
+  void openAfterUnlock(String location) {
+    final current = state;
+    if (current is VaultLocked) {
+      state = VaultLocked(
+        reason: current.reason,
+        biometricEnabled: current.biometricEnabled,
+        returnLocation: location,
+      );
+    } else {
+      _pendingLocation = location;
+    }
+  }
+
   /// Le routeur signale l'adresse courante : elle sera rouverte après un
   /// verrouillage automatique.
   void rememberLocation(String location) => _pendingLocation = location;

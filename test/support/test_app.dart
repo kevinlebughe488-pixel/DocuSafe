@@ -4,6 +4,7 @@ import 'package:cupertino_ui/cupertino_ui.dart' show GlobalCupertinoLocalization
 import 'package:docusafe/app/app.dart';
 import 'package:docusafe/app/l10n/generated/app_localizations.dart';
 import 'package:docusafe/core/database/app_database.dart';
+import 'package:docusafe/core/platform/notification_service.dart';
 import 'package:docusafe/core/providers.dart';
 import 'package:docusafe/core/security/auth/biometric_service.dart';
 import 'package:docusafe/core/security/auth/pin_attempts.dart';
@@ -37,6 +38,9 @@ final class TestEnvironment {
   final InMemorySecureStore store;
   final InMemorySecureStore biometricStore;
 
+  /// Notifications simulées : ce qui serait programmé.
+  final FakeNotificationService notifications = FakeNotificationService();
+
   VaultPaths get paths => VaultPaths.under(root);
 
   List<Override> overrides({BiometricService? biometrics}) => [
@@ -47,6 +51,7 @@ final class TestEnvironment {
       biometrics ?? const NoBiometricService(),
     ),
     screenSecurityProvider.overrideWithValue(const NoopScreenSecurity()),
+    notificationServiceProvider.overrideWithValue(notifications),
     vaultServiceProvider.overrideWith(
       (ref) => VaultService(
         crypto: ref.watch(cryptoEngineProvider),

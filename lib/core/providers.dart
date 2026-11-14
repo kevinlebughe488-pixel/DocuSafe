@@ -9,8 +9,10 @@ import 'documents/document_search.dart';
 import 'documents/ingest_document.dart';
 import 'documents/open_document.dart';
 import 'platform/file_picker_service.dart';
+import 'platform/notification_service.dart';
 import 'platform/scanner_service.dart';
 import 'platform/thumbnail_service.dart';
+import 'reminders/reminder_service.dart';
 import 'security/auth/biometric_service.dart';
 import 'security/auth/pin_attempts.dart';
 import 'security/crypto/crypto_engine.dart';
@@ -101,6 +103,18 @@ final databaseProvider = Provider<AppDatabase>(
 
 final filePickerServiceProvider = Provider<FilePickerService>(
   (ref) => PlatformFilePickerService(),
+);
+
+final notificationServiceProvider = Provider<NotificationService>(
+  (ref) => PlatformNotificationService(),
+);
+
+final reminderServiceProvider = Provider<ReminderService>(
+  (ref) => ReminderService(
+    database: ref.watch(databaseProvider),
+    notifications: ref.watch(notificationServiceProvider),
+    clock: ref.watch(clockProvider),
+  ),
 );
 
 final scannerServiceProvider = Provider<ScannerService>(

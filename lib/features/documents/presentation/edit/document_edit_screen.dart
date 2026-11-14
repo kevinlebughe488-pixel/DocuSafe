@@ -9,6 +9,7 @@ import '../../../../core/database/app_database.dart';
 import '../../../../core/errors/app_exception.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/utils/error_messages.dart';
+import '../../../reminders/presentation/notification_permission.dart';
 import 'document_form.dart';
 
 /// Modification des informations d'un document (écran 7c).
@@ -81,6 +82,10 @@ final class _DocumentEditScreenState extends ConsumerState<DocumentEditScreen> {
         expirationDate: v.expirationDate,
         tags: v.tags,
       );
+      await ref.read(reminderServiceProvider).syncDocument(widget.documentId);
+      if (mounted && v.expirationDate != null) {
+        await maybeAskNotificationPermission(context, ref);
+      }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l10n.editSaved)),

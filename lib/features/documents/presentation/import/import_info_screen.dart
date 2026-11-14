@@ -10,6 +10,7 @@ import '../../../../core/utils/formats.dart';
 import '../../../../core/widgets/bottom_actions.dart';
 import '../../../../core/widgets/category_icon.dart';
 import '../../../../core/widgets/secure_label.dart';
+import '../../../reminders/presentation/notification_permission.dart';
 import '../edit/document_form.dart';
 import 'import_view_model.dart';
 
@@ -47,6 +48,12 @@ final class _ImportInfoScreenState extends ConsumerState<ImportInfoScreen> {
       return;
     }
     final result = ref.read(importViewModelProvider);
+    if (result.savedWithExpiration) {
+      await maybeAskNotificationPermission(context, ref);
+      if (!mounted) {
+        return;
+      }
+    }
     final messenger = ScaffoldMessenger.of(context);
     messenger.showSnackBar(
       SnackBar(

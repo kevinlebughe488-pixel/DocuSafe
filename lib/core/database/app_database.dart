@@ -12,6 +12,7 @@ import '../utils/date_only.dart';
 import '../utils/text_normalizer.dart';
 import 'daos/categories_dao.dart';
 import 'daos/documents_dao.dart';
+import 'daos/reminders_dao.dart';
 import 'daos/settings_dao.dart';
 import 'default_categories.dart';
 import 'tables.dart';
@@ -25,7 +26,7 @@ part 'app_database.g.dart';
 /// (ChaCha20-Poly1305) : chaque page du fichier est chiffrée, journal compris.
 @DriftDatabase(
   tables: [Categories, Documents, Tags, DocumentTags, Reminders, VaultSettings],
-  daos: [CategoriesDao, DocumentsDao, SettingsDao],
+  daos: [CategoriesDao, DocumentsDao, RemindersDao, SettingsDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);

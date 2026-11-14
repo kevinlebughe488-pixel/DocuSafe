@@ -23,8 +23,9 @@ Le document de référence est [docs/cahier-des-charges.md](docs/cahier-des-char
 | 2 – Design (système de design, 46 maquettes) | Validée |
 | 3 – Socle : projet Flutter, chiffrement, base de données, authentification | Validée le 14/11/2026 |
 | 4 – lot a : importation, documents, catégories, navigation, paramètres | Validé le 14/11/2026 |
-| 4 – lot b : scanner, recherche | Terminé en session en ligne, **en attente de validation**. Jamais lancé sur un téléphone. |
-| 4 – lot c (échéances, notifications, partage, export, sauvegarde, stockage), 5, 6 | À venir |
+| 4 – lot b : scanner, recherche | Validé le 14/11/2026 |
+| 4 – lot c : échéances et notifications (fait), partage et export, sauvegarde et stockage | **En cours** |
+| 5, 6 | À venir |
 
 Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session en ligne, lancer d'abord `bash tool/setup_cloud.sh` puis `export PATH="/home/user/sdk/flutter/bin:$PATH"`.
 
@@ -53,7 +54,7 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 - Sauvegarde chiffrée manuelle incluse dans le MVP.
 - Textes en fichiers ARB (français seul) dans `lib/app/l10n/app_fr.arb`, classe générée `AppLocalizations` (régénérée par `flutter pub get`). Identifiants de code en anglais ; commentaires et documentation en français.
 - Après toute modification des tables drift : `dart run build_runner build`.
-- Tests de widgets : utiliser `test/support/test_app.dart` (stockage sécurisé en mémoire, base ouverte dans l'isolate du test, Argon2id léger). Toute entrée-sortie réelle dans le corps d'un test (copie de fichier, création de dossier) doit être faite dans `tester.runAsync`, sinon le test se fige. Ne pas utiliser `pumpAndSettle` (animations sans fin) : utiliser `settle()`.
+- Tests de widgets : utiliser `test/support/test_app.dart` (stockage sécurisé en mémoire, base ouverte dans l'isolate du test, Argon2id léger). Toute entrée-sortie réelle dans le corps d'un test (copie de fichier, création de dossier) doit être faite dans `tester.runAsync`, sinon le test se fige. Ne pas utiliser `pumpAndSettle` (animations sans fin) : utiliser `settle()`. Pour ajouter des documents dans un test de widgets, créer et ouvrir le coffre hors de l'interface (`tester.runAsync` + `unlockWithPin`, voir `test/features/deadlines_flow_test.dart`) : une base ouverte par l'interface du test se bloque avec les isolates. Revenir en arrière avec `routerProvider.pop()` (`pageBack` ne reconnaît pas le bouton de `material_ui`).
 - Tout ajout de document passe par `IngestDocument` (`lib/core/documents/`) : ne jamais écrire un fichier dans le coffre autrement. Le scanner assemble ses pages en PDF (`PdfBuilder`) puis rejoint l'importation (`ImportViewModel.addScannedPdf`) ; ses images sont copiées dans `secure_tmp/` et son dossier est vidé aussitôt (`ScannerService.cleanCache`). Le lecteur PDF et les sélecteurs sont derrière des interfaces (`ThumbnailService`, `FilePickerService`) avec des versions simulées pour les tests.
 - Couleurs : recopier les valeurs de `docs/07-design.md`, ne pas les recalculer.
 - Versions des paquets vérifiées le 13/11/2026 : les revérifier sur pub.dev avant de les ajouter.

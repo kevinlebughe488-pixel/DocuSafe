@@ -2898,6 +2898,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $VaultSettingsTable vaultSettings = $VaultSettingsTable(this);
   late final CategoriesDao categoriesDao = CategoriesDao(this as AppDatabase);
   late final DocumentsDao documentsDao = DocumentsDao(this as AppDatabase);
+  late final RemindersDao remindersDao = RemindersDao(this as AppDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>

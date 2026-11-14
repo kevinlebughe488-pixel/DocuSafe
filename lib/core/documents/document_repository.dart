@@ -177,6 +177,13 @@ final class DocumentRepository {
     );
   }
 
+  /// Change seulement la date d'expiration (écran des rappels).
+  Future<void> setExpiration(String id, DateOnly? date) =>
+      _db.documentsDao.updateDocument(
+        id,
+        DocumentsCompanion(expirationDate: Value(date)),
+      );
+
   Future<void> moveToCategory(String id, String categoryId) =>
       _db.documentsDao.updateDocument(
         id,

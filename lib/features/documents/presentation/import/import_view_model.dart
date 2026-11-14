@@ -95,6 +95,7 @@ final class ImportState {
     this.progress,
     this.savedCount = 0,
     this.failedCount = 0,
+    this.savedWithExpiration = false,
     this.error,
   });
 
@@ -106,6 +107,9 @@ final class ImportState {
   final ImportProgress? progress;
   final int savedCount;
   final int failedCount;
+
+  /// Au moins un document enregistré porte une date d'expiration.
+  final bool savedWithExpiration;
   final Object? error;
 
   List<ImportItem> get selected => items.where((i) => i.isSelected).toList();
@@ -119,6 +123,7 @@ final class ImportState {
     bool clearProgress = false,
     int? savedCount,
     int? failedCount,
+    bool? savedWithExpiration,
     Object? error,
     bool clearError = false,
   }) => ImportState(
@@ -128,6 +133,7 @@ final class ImportState {
     progress: clearProgress ? null : (progress ?? this.progress),
     savedCount: savedCount ?? this.savedCount,
     failedCount: failedCount ?? this.failedCount,
+    savedWithExpiration: savedWithExpiration ?? this.savedWithExpiration,
     error: clearError ? null : (error ?? this.error),
   );
 }
@@ -285,6 +291,7 @@ final class ImportViewModel extends Notifier<ImportState> {
     final ingest = ref.read(ingestDocumentProvider);
     var saved = 0;
     var failed = 0;
+    final withExpiration = <String>[];
     state = state.copyWith(
       phase: ImportPhase.saving,
       progress: ImportProgress(current: 1, total: selected.length),
@@ -294,7 +301,7 @@ final class ImportViewModel extends Notifier<ImportState> {
       final item = selected[i];
       final form = item.form ?? DocumentFormValue(title: item.defaultTitle);
       try {
-        await ingest(
+        final row = await ingest(
           IngestRequest(
             source: item.file,
             fileName: item.displayName,
@@ -316,10 +323,16 @@ final class ImportViewModel extends Notifier<ImportState> {
           ),
         );
         saved++;
+        if (row.expirationDate != null) {
+          withExpiration.add(row.id);
+        }
       } on Object catch (e, s) {
         AppLog.error('import.save', e, s);
         failed++;
       }
+    }
+    for (final id in withExpiration) {
+      await ref.read(reminderServiceProvider).syncDocument(id);
     }
     // Les fichiers non retenus (refusés, doublons ignorés) sont supprimés.
     _cleanupFiles(state.items.where((i) => !i.isSelected));
@@ -327,6 +340,7 @@ final class ImportViewModel extends Notifier<ImportState> {
       phase: ImportPhase.done,
       savedCount: saved,
       failedCount: failed,
+      savedWithExpiration: withExpiration.isNotEmpty,
       clearProgress: true,
     );
   }

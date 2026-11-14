@@ -84,6 +84,9 @@ abstract final class VaultConfigKeys {
   /// Nom du profil local (facultatif).
   static const profileName = 'profile_name';
 
+  /// La demande d'autorisation des notifications a déjà été faite.
+  static const notificationPermissionAsked = 'notification_permission_asked';
+
   /// L'utilisateur a confirmé avoir conservé sa clé de récupération (D6 révisée).
   static const recoveryKeyConfirmed = 'recovery_key_confirmed';
 
