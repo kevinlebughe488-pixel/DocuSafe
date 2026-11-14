@@ -103,6 +103,22 @@ class CategoriesDao extends DatabaseAccessor<AppDatabase>
     await (update(categories)..where((c) => c.id.equals(id))).write(companion);
   }
 
+  /// Nouvel ordre après un glisser-déposer : [orderedIds] est l'ordre actuel,
+  /// l'élément [from] est déplacé en position [to] (indice déjà ajusté,
+  /// convention de `onReorderItem`).
+  Future<void> reorder(List<String> orderedIds, int from, int to) async {
+    final ids = List<String>.from(orderedIds);
+    final moved = ids.removeAt(from);
+    ids.insert(to, moved);
+    await transaction(() async {
+      for (var i = 0; i < ids.length; i++) {
+        await (update(categories)..where((c) => c.id.equals(ids[i]))).write(
+          CategoriesCompanion(sortOrder: Value(i)),
+        );
+      }
+    });
+  }
+
   /// Supprime une catégorie après avoir déplacé ses documents vers
   /// [targetCategoryId] (par défaut « Autres »), dans une seule transaction.
   /// La catégorie système ne peut pas être supprimée.

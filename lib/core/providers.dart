@@ -1,7 +1,14 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'database/app_database.dart';
+import 'documents/delete_document.dart';
+import 'documents/document_repository.dart';
+import 'documents/ingest_document.dart';
+import 'documents/open_document.dart';
+import 'platform/file_picker_service.dart';
+import 'platform/thumbnail_service.dart';
 import 'security/auth/biometric_service.dart';
 import 'security/auth/pin_attempts.dart';
 import 'security/crypto/crypto_engine.dart';
@@ -9,6 +16,7 @@ import 'security/crypto/dart_crypto_engine.dart';
 import 'security/crypto/file_cipher.dart';
 import 'security/keys/secure_store.dart';
 import 'security/lock/vault_controller.dart';
+import 'security/lock/vault_session.dart';
 import 'security/lock/vault_state.dart';
 import 'security/screen/screen_security.dart';
 import 'security/vault_service.dart';
@@ -84,3 +92,110 @@ final vaultControllerProvider = NotifierProvider<VaultController, VaultState>(
 final databaseProvider = Provider<AppDatabase>(
   (ref) => ref.watch(vaultControllerProvider.notifier).requireSession().database,
 );
+
+// ---------------------------------------------------------------------------
+// Documents (phase 4)
+// ---------------------------------------------------------------------------
+
+final filePickerServiceProvider = Provider<FilePickerService>(
+  (ref) => PlatformFilePickerService(),
+);
+
+final thumbnailServiceProvider = Provider<ThumbnailService>(
+  (ref) => const PlatformThumbnailService(),
+);
+
+/// Session déverrouillée courante. Lève [VaultLockedException] sinon.
+final sessionProvider = Provider<VaultSession>(
+  (ref) => ref.watch(vaultControllerProvider.notifier).requireSession(),
+);
+
+final documentRepositoryProvider = Provider<DocumentRepository>(
+  (ref) => DocumentRepository(ref.watch(databaseProvider)),
+);
+
+final ingestDocumentProvider = Provider<IngestDocument>(
+  (ref) => IngestDocument(
+    session: ref.watch(sessionProvider),
+    paths: ref.watch(vaultPathsProvider),
+    thumbnails: ref.watch(thumbnailServiceProvider),
+  ),
+);
+
+final openDocumentProvider = Provider<OpenDocument>(
+  (ref) => OpenDocument(
+    session: ref.watch(sessionProvider),
+    paths: ref.watch(vaultPathsProvider),
+  ),
+);
+
+final deleteDocumentProvider = Provider<DeleteDocument>(
+  (ref) => DeleteDocument(
+    session: ref.watch(sessionProvider),
+    paths: ref.watch(vaultPathsProvider),
+  ),
+);
+
+/// Petit cache des miniatures déchiffrées, vidé au verrouillage
+/// (docs/02-architecture.md §8).
+final thumbnailCacheProvider = Provider<ThumbnailCache>((ref) {
+  final cache = ThumbnailCache();
+  ref.listen(vaultControllerProvider, (_, next) {
+    if (next is! VaultUnlocked) {
+      cache.clear();
+    }
+  });
+  return cache;
+});
+
+/// Miniature déchiffrée d'un document (`null` : pas de miniature).
+final thumbnailProvider = FutureProvider.autoDispose.family<Uint8List?, String>(
+  (ref, documentId) async {
+    final cache = ref.watch(thumbnailCacheProvider);
+    final cached = cache.get(documentId);
+    if (cached != null) {
+      return cached.bytes;
+    }
+    final db = ref.watch(databaseProvider);
+    final row = await db.documentsDao.getById(documentId);
+    if (row == null) {
+      return null;
+    }
+    final bytes = await ref.watch(openDocumentProvider).thumbnail(row);
+    cache.put(documentId, bytes);
+    return bytes;
+  },
+);
+
+/// Entrée du cache : `bytes` vaut `null` quand le document n'a pas de
+/// miniature (on s'en souvient aussi).
+final class CachedThumbnail {
+  const CachedThumbnail(this.bytes);
+
+  final Uint8List? bytes;
+}
+
+final class ThumbnailCache {
+  static const int _capacity = 60;
+  final _entries = <String, CachedThumbnail>{};
+
+  CachedThumbnail? get(String id) {
+    final v = _entries.remove(id);
+    if (v != null) {
+      _entries[id] = v; // le plus récent en dernier
+    }
+    return v;
+  }
+
+  void put(String id, Uint8List? bytes) {
+    _entries.remove(id);
+    _entries[id] = CachedThumbnail(bytes);
+    if (_entries.length > _capacity) {
+      _entries.remove(_entries.keys.first);
+    }
+  }
+
+  void evict(String id) => _entries.remove(id);
+
+  void clear() => _entries.clear();
+}

@@ -5,21 +5,26 @@ import 'package:material_ui/material_ui.dart';
 import '../../../app/l10n/generated/app_localizations.dart';
 import '../../../app/router/routes.dart';
 import '../../../app/theme/app_spacing.dart';
-import '../../../app/theme/ds_colors.dart';
+import '../../../core/database/app_database.dart';
 import '../../../core/database/daos/categories_dao.dart';
 import '../../../core/database/daos/settings_dao.dart';
 import '../../../core/providers.dart';
 import '../../../core/security/lock/vault_state.dart';
+import '../../../core/utils/formats.dart';
+import '../../../core/widgets/category_icon.dart';
+import '../../../core/widgets/document_thumbnail.dart';
+import '../../../core/widgets/document_tile.dart';
 import '../../../core/widgets/ds_logo.dart';
 import '../../../core/widgets/info_banner.dart';
 import '../../../core/widgets/secure_label.dart';
 import '../../../core/widgets/state_view.dart';
 import '../../auth/presentation/reauth/reauth_sheet.dart';
+import '../../documents/presentation/import/import_view_model.dart';
+import '../../documents/presentation/list/documents_view_model.dart';
 
-/// Tableau de bord, version du socle (phase 3) : compteur réel, catégories
-/// réelles, verrouillage, accès aux réglages de sécurité. Les sections
-/// « Scanner », « Importer », échéances et favoris arrivent en phase 4 :
-/// aucun bouton factice d'ici là.
+/// Tableau de bord (écran 5) : compteur, importation, catégories, favoris,
+/// ajoutés récemment. Construit comme une liste de sections indépendantes.
+/// « Scanner » arrive au lot b, « Échéances à venir » au lot c.
 final class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -27,10 +32,18 @@ final class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final db = ref.watch(databaseProvider);
-    final count = ref.watch(_documentCountProvider);
+    final count = ref.watch(_documentCountProvider).value ?? 0;
+    final totalSize = ref.watch(_totalSizeProvider).value ?? 0;
     final categories = ref.watch(_categoriesProvider);
+    final favorites = ref.watch(_favoritesProvider).value ?? const [];
+    final recent = ref.watch(_recentProvider).value ?? const [];
     final recoveryConfirmed = ref.watch(_recoveryConfirmedProvider).value ?? true;
+    final categoryNames = ref.watch(categoriesByIdProvider).value ?? const {};
+
+    Future<void> import() async {
+      ref.read(importViewModelProvider.notifier).reset();
+      await context.push(Routes.documentsImport, extra: ImportSource.files);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -42,11 +55,6 @@ final class HomeScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          IconButton(
-            tooltip: l10n.homeSettings,
-            icon: const Icon(Icons.settings_outlined),
-            onPressed: () => context.push(Routes.settingsSecurity),
-          ),
           IconButton(
             tooltip: l10n.homeLock,
             icon: const Icon(Icons.lock_outline_rounded),
@@ -64,19 +72,22 @@ final class HomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  l10n.homeDocumentCount(count.value ?? 0),
-                  style: theme.textTheme.headlineSmall,
-                ),
+                Text(l10n.homeDocumentCount(count), style: theme.textTheme.headlineSmall),
                 const SizedBox(height: AppSpacing.xs),
-                const SecureLabel(plural: true),
+                SecureLabel(
+                  plural: count != 1,
+                  suffix: count == 0 ? null : Formats.fileSize(totalSize),
+                ),
               ],
             ),
           ),
           if (!recoveryConfirmed)
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.screenMargin,
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screenMargin,
+                0,
+                AppSpacing.screenMargin,
+                AppSpacing.lg,
               ),
               child: InfoBanner(
                 kind: InfoBannerKind.warning,
@@ -87,8 +98,7 @@ final class HomeScreen extends ConsumerWidget {
                     const SizedBox(height: AppSpacing.sm),
                     FilledButton.tonal(
                       onPressed: () async {
-                        if (await requestReauth(context, ref) &&
-                            context.mounted) {
+                        if (await requestReauth(context, ref) && context.mounted) {
                           await context.push(Routes.recoveryKeyFirstTime);
                         }
                       },
@@ -98,127 +108,242 @@ final class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
-          if ((count.value ?? 0) == 0)
-            SizedBox(
-              height: 320,
-              child: StateView(
-                icon: Icons.folder_open_rounded,
-                title: l10n.homeEmptyTitle,
-                body: l10n.homeEmptyBody,
+          if (count == 0)
+            StateView(
+              icon: Icons.inventory_2_outlined,
+              title: l10n.homeEmptyTitle,
+              body: l10n.homeEmptyBodyLotA,
+              actions: [
+                FilledButton.icon(
+                  onPressed: import,
+                  icon: const Icon(Icons.upload_file_rounded),
+                  label: Text(l10n.homeImport),
+                ),
+              ],
+            )
+          else
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenMargin),
+              child: FilledButton.tonalIcon(
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size.fromHeight(AppSpacing.touchTarget),
+                ),
+                onPressed: import,
+                icon: const Icon(Icons.upload_file_rounded),
+                label: Text(l10n.homeImport),
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.screenMargin,
-              AppSpacing.lg,
-              AppSpacing.screenMargin,
-              AppSpacing.sm,
-            ),
-            child: Text(l10n.homeCategories, style: theme.textTheme.titleMedium),
+          _SectionHeader(
+            title: l10n.homeCategories,
+            action: l10n.homeManage,
+            onAction: () => context.push(Routes.categories),
           ),
           switch (categories) {
-            AsyncData(:final value) => _CategoryList(value),
+            AsyncData(:final value) => SizedBox(
+              height: 132,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenMargin),
+                itemCount: value.length,
+                separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
+                itemBuilder: (context, i) => _CategoryCard(item: value[i]),
+              ),
+            ),
             AsyncError() => Padding(
               padding: const EdgeInsets.all(AppSpacing.screenMargin),
               child: Text(l10n.commonErrorBody),
             ),
-            _ => const Padding(
-              padding: EdgeInsets.all(AppSpacing.xl),
-              child: Center(child: CircularProgressIndicator.adaptive()),
-            ),
+            _ => const SizedBox(height: 132),
           },
-          // Le provider de la base est observé pour que l'écran se reconstruise
-          // si la session change ; la valeur elle-même sert aux DAO ci-dessus.
-          if (db.settingsDao != ref.read(databaseProvider).settingsDao)
-            const SizedBox.shrink(),
+          if (favorites.isNotEmpty) ...[
+            _SectionHeader(
+              title: l10n.homeFavorites,
+              action: l10n.homeSeeAll,
+              onAction: () => context.go(Routes.documentsFavorites),
+            ),
+            SizedBox(
+              height: 196,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenMargin),
+                itemCount: favorites.length,
+                separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
+                itemBuilder: (context, i) => _FavoriteCard(
+                  document: favorites[i],
+                  categoryName: categoryNames[favorites[i].categoryId]?.name ?? '',
+                ),
+              ),
+            ),
+          ],
+          if (recent.isNotEmpty) ...[
+            _SectionHeader(
+              title: l10n.homeRecentlyAdded,
+              action: l10n.homeSeeAll,
+              onAction: () => context.go(Routes.documentsRecent),
+            ),
+            for (final d in recent)
+              DocumentTile(
+                document: d,
+                categoryName: categoryNames[d.categoryId]?.name,
+                trailing: Text(Formats.relativeDay(l10n, d.createdAt)),
+                onTap: () => context.push(Routes.document(d.id)),
+              ),
+          ],
         ],
       ),
     );
   }
 }
 
-final class _CategoryList extends StatelessWidget {
-  const _CategoryList(this.items);
+final class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title, this.action, this.onAction});
 
-  final List<CategoryWithCount> items;
+  final String title;
+  final String? action;
+  final VoidCallback? onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screenMargin,
+        AppSpacing.xl,
+        AppSpacing.sm,
+        AppSpacing.sm,
+      ),
+      child: Row(
+        children: [
+          Expanded(child: Text(title, style: theme.textTheme.titleMedium)),
+          if (action != null) TextButton(onPressed: onAction, child: Text(action!)),
+        ],
+      ),
+    );
+  }
+}
+
+final class _CategoryCard extends StatelessWidget {
+  const _CategoryCard({required this.item});
+
+  final CategoryWithCount item;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final ds = context.dsColors;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenMargin),
+    final theme = Theme.of(context);
+    final c = item.category;
+    return SizedBox(
+      width: 140,
       child: Card(
-        child: Column(
-          children: [
-            for (final item in items)
-              ListTile(
-                leading: _CategoryIcon(
-                  icon: _iconFor(item.category.icon),
-                  color: ds.categoryOf(item.category.color),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          onTap: () => context.go(Routes.documentsOfCategory(c.id)),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CategoryIcon(icon: c.icon, color: c.color),
+                const Spacer(),
+                Text(
+                  c.name,
+                  style: theme.textTheme.titleSmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                title: Text(item.category.name),
-                subtitle: Text(l10n.homeCategoryCount(item.documentCount)),
+                Text(
+                  l10n.homeCategoryCount(item.documentCount),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final class _FavoriteCard extends StatelessWidget {
+  const _FavoriteCard({required this.document, required this.categoryName});
+
+  final DocumentRow document;
+  final String categoryName;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return SizedBox(
+      width: 120,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        onTap: () => context.push(Routes.document(document.id)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                DocumentThumbnail(document: document, size: ThumbnailSize.lg),
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: Icon(Icons.star_rounded, color: theme.colorScheme.primary, size: 20),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              document.title,
+              style: theme.textTheme.bodyMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              categoryName,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),
     );
   }
-
-  /// Icônes intégrées à Flutter, version arrondie (docs/07-design.md §6).
-  static IconData _iconFor(String name) => switch (name) {
-    'badge' => Icons.badge_rounded,
-    'school' => Icons.school_rounded,
-    'work' => Icons.work_rounded,
-    'account_balance_wallet' => Icons.account_balance_wallet_rounded,
-    'home_work' => Icons.home_work_rounded,
-    'medical_services' => Icons.medical_services_rounded,
-    _ => Icons.folder_rounded,
-  };
 }
 
-final class _CategoryIcon extends StatelessWidget {
-  const _CategoryIcon({required this.icon, required this.color});
-
-  final IconData icon;
-  final CategoryColor color;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    width: 40,
-    height: 40,
-    decoration: BoxDecoration(
-      color: color.container,
-      borderRadius: BorderRadius.circular(AppRadius.categoryIcon),
-    ),
-    child: Icon(icon, color: color.onContainer, size: 22),
-  );
-}
-
-final _documentCountProvider = StreamProvider<int>((ref) {
+Stream<T> _whenUnlocked<T>(Ref ref, Stream<T> Function(VaultUnlocked s) build) {
   final state = ref.watch(vaultControllerProvider);
-  if (state is! VaultUnlocked) {
-    return const Stream.empty();
-  }
-  return state.session.database.documentsDao.watchCount();
-});
+  return state is VaultUnlocked ? build(state) : const Stream.empty();
+}
+
+final _documentCountProvider = StreamProvider<int>(
+  (ref) => _whenUnlocked(ref, (s) => s.session.database.documentsDao.watchCount()),
+);
+
+final _totalSizeProvider = StreamProvider<int>(
+  (ref) => _whenUnlocked(ref, (s) => s.session.database.documentsDao.watchTotalSize()),
+);
+
+final _categoriesProvider = StreamProvider<List<CategoryWithCount>>(
+  (ref) => _whenUnlocked(ref, (s) => s.session.database.categoriesDao.watchWithCounts()),
+);
+
+final _favoritesProvider = StreamProvider<List<DocumentRow>>(
+  (ref) => _whenUnlocked(ref, (_) => ref.watch(documentRepositoryProvider).watchFavorites(limit: 10)),
+);
+
+final _recentProvider = StreamProvider<List<DocumentRow>>(
+  (ref) => _whenUnlocked(ref, (_) => ref.watch(documentRepositoryProvider).watchRecentlyAdded(limit: 5)),
+);
 
 /// Vrai une fois la clé de récupération notée par l'utilisateur.
-final _recoveryConfirmedProvider = StreamProvider<bool>((ref) {
-  final state = ref.watch(vaultControllerProvider);
-  if (state is! VaultUnlocked) {
-    return const Stream.empty();
-  }
-  return state.session.database.settingsDao.watchFlag(
-    VaultConfigKeys.recoveryKeyConfirmed,
-  );
-});
-
-final _categoriesProvider = StreamProvider<List<CategoryWithCount>>((ref) {
-  final state = ref.watch(vaultControllerProvider);
-  if (state is! VaultUnlocked) {
-    return const Stream.empty();
-  }
-  return state.session.database.categoriesDao.watchWithCounts();
-});
+final _recoveryConfirmedProvider = StreamProvider<bool>(
+  (ref) => _whenUnlocked(
+    ref,
+    (s) => s.session.database.settingsDao.watchFlag(VaultConfigKeys.recoveryKeyConfirmed),
+  ),
+);

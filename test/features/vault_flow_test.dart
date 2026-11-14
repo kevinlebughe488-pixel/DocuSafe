@@ -42,10 +42,8 @@ void main() {
 
     // Pas de biométrie dans les tests : tableau de bord directement, avec le
     // rappel de la clé de récupération (D6 révisée).
-    // Le compteur et les sept catégories vides affichent « Aucun document ».
-    expect(find.text('Aucun document'), findsNWidgets(8));
-    expect(find.text('Identité'), findsOneWidget);
-    expect(find.text('Autres'), findsOneWidget);
+    expect(find.text('Aucun document'), findsWidgets);
+    expect(find.text('Votre coffre est vide'), findsOneWidget);
     expect(find.text('Noter ma clé'), findsOneWidget);
     expect(env.paths.databaseFile.existsSync(), isTrue);
     expect(env.paths.recoverySlotFile.existsSync(), isTrue);
@@ -64,7 +62,7 @@ void main() {
 
     // Verrouillage : la base est fermée et la clé effacée.
     final container = ProviderScope.containerOf(
-      tester.element(find.text('Identité')),
+      tester.element(find.text('Votre coffre est vide')),
     );
     final unlockedSession = (container.read(vaultControllerProvider) as VaultUnlocked).session;
     await tester.tap(find.byTooltip('Verrouiller'));
@@ -81,7 +79,7 @@ void main() {
     await typePin(tester, '204915');
     await tester.tap(find.text('Confirmer'));
     await settle(tester, rounds: 40);
-    expect(find.text('Identité'), findsOneWidget);
+    expect(find.text('Votre coffre est vide'), findsOneWidget);
     await teardownApp(tester);
   });
 

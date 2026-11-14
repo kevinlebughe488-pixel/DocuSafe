@@ -7,7 +7,8 @@ Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera te
 | P1 | Le PC de développement est infecté par un virus (« Expiro ») | **Bloquant** | Ouvert depuis le 13/11/2026 |
 | P2 | Flutter est installé mais ne peut pas s'exécuter | Bloquant (conséquence de P1) | Ouvert depuis le 13/11/2026 |
 | P3 | La session en ligne ne peut pas compiler d'APK Android | Gênant | Ouvert depuis le 13/11/2026 |
-| P4 | La phase 3 n'a jamais été lancée sur un téléphone | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
+| P4 | Les phases 3 et 4 (lot a) n'ont jamais été lancées sur un téléphone | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
+| P5 | Miniatures et lecture des PDF (PDFium) non vérifiées hors des tests | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
 
 ---
 
@@ -81,6 +82,12 @@ Une fois le PC sain : supprimer `D:\dev\flutter`, réinstaller Flutter (15 minut
 - Le socle a été validé par 49 tests automatiques (chiffrement, clés, base chiffrée, écrans) et par des captures d'écran rendues par Flutter (voir `docs/captures/`).
 - Ce qui n'a pas pu être vérifié : la biométrie réelle (Keystore, `flutter_secure_storage`), le canal `FLAG_SECURE`, la vitesse d'Argon2id sur un téléphone d'entrée de gamme (réglage prévu : 0,5 à 1 s), le comportement en arrière-plan, et toute la partie iOS (marquée « à vérifier sur iOS »).
 - À faire au premier lancement : `flutter doctor -v`, `flutter run`, créer un coffre, verrouiller/déverrouiller, mesurer le temps de vérification du code.
+
+## P5 – PDF : miniatures et lecture à vérifier sur téléphone
+
+- Les miniatures des images et tout le chemin d'importation sont couverts par les tests (fichiers de test réels). Le rendu des PDF (première page en miniature, lecteur plein écran) passe par le moteur PDFium du paquet `pdfrx`, qui n'a pas pu être exercé dans la session en ligne : les tests utilisent un service de miniatures « images seulement ».
+- Si le rendu PDF échoue sur le téléphone, le document reste valide (sans miniature) et l'erreur est journalisée sans donnée sensible. À vérifier au premier lancement : miniature d'un PDF importé, ouverture d'un PDF de plusieurs pages, vitesse sur un PDF de 20 Mo.
+- La vitesse du chiffrement dans un isolate (Dart pur, sans accélération native) est aussi à mesurer sur un téléphone d'entrée de gamme ; le plan B est décrit dans `docs/06-dependances.md` §5.
 
 ## P2 – Flutter installé mais inutilisable
 

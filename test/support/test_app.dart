@@ -67,8 +67,11 @@ final class TestEnvironment {
 Widget testApp(TestEnvironment env, {BiometricService? biometrics}) =>
     ProviderScope(
       overrides: env.overrides(biometrics: biometrics),
-      child: const DocuSafeApp(),
+      child: testAppChild(),
     );
+
+/// L'application seule, à placer dans un `ProviderScope` personnalisé.
+Widget testAppChild() => const DocuSafeApp();
 
 /// Un widget seul, dans une MaterialApp avec les textes français.
 Widget wrap(Widget child, {List<Override> overrides = const []}) =>

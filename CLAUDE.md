@@ -21,8 +21,9 @@ Le document de référence est [docs/cahier-des-charges.md](docs/cahier-des-char
 |---|---|
 | 1 – Analyse et conception | Validée |
 | 2 – Design (système de design, 46 maquettes) | Validée |
-| 3 – Socle : projet Flutter, chiffrement, base de données, authentification | Terminée en session en ligne, **en attente de validation**. Jamais lancée sur un téléphone. |
-| 4 à 6 – Fonctionnalités, sécurité et optimisation, publication | À venir (phase 4 en trois lots, voir D18) |
+| 3 – Socle : projet Flutter, chiffrement, base de données, authentification | Validée le 14/11/2026 |
+| 4 – lot a : importation, documents, catégories, navigation, paramètres | Terminé en session en ligne, **en attente de validation**. Jamais lancé sur un téléphone. |
+| 4 – lots b (scanner, recherche) et c (échéances, notifications, partage, export, sauvegarde, stockage), 5, 6 | À venir |
 
 Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session en ligne, lancer d'abord `bash tool/setup_cloud.sh` puis `export PATH="/home/user/sdk/flutter/bin:$PATH"`.
 
@@ -51,7 +52,8 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 - Sauvegarde chiffrée manuelle incluse dans le MVP.
 - Textes en fichiers ARB (français seul) dans `lib/app/l10n/app_fr.arb`, classe générée `AppLocalizations` (régénérée par `flutter pub get`). Identifiants de code en anglais ; commentaires et documentation en français.
 - Après toute modification des tables drift : `dart run build_runner build`.
-- Tests de widgets : utiliser `test/support/test_app.dart` (stockage sécurisé en mémoire, base ouverte dans l'isolate du test, Argon2id léger).
+- Tests de widgets : utiliser `test/support/test_app.dart` (stockage sécurisé en mémoire, base ouverte dans l'isolate du test, Argon2id léger). Toute entrée-sortie réelle dans le corps d'un test (copie de fichier, création de dossier) doit être faite dans `tester.runAsync`, sinon le test se fige. Ne pas utiliser `pumpAndSettle` (animations sans fin) : utiliser `settle()`.
+- Tout ajout de document passe par `IngestDocument` (`lib/core/documents/`) : ne jamais écrire un fichier dans le coffre autrement. Le lecteur PDF et les sélecteurs sont derrière des interfaces (`ThumbnailService`, `FilePickerService`) avec des versions simulées pour les tests.
 - Couleurs : recopier les valeurs de `docs/07-design.md`, ne pas les recalculer.
 - Versions des paquets vérifiées le 13/11/2026 : les revérifier sur pub.dev avant de les ajouter.
 
