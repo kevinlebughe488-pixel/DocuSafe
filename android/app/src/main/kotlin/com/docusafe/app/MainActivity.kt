@@ -15,12 +15,16 @@ import io.flutter.plugin.common.MethodChannel
  * - Pose FLAG_SECURE avant le premier affichage : captures d'écran bloquées et
  *   aperçu masqué dans les applications récentes (docs/04-securite.md §15).
  *   Le côté Dart peut le retirer si l'utilisateur autorise les captures.
+ * - Version « aperçu » (BuildConfig.APERCU) : jamais de FLAG_SECURE, sinon un
+ *   émulateur en ligne n'affiche qu'un écran noir (docs/apercu-telephone.md).
  */
 class MainActivity : FlutterFragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Sécurisé par défaut, avant que quoi que ce soit ne soit dessiné.
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        if (!BuildConfig.APERCU) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
         super.onCreate(savedInstanceState)
     }
 
@@ -32,7 +36,7 @@ class MainActivity : FlutterFragmentActivity() {
                 when (call.method) {
                     "setSecure" -> {
                         val secure = call.argument<Boolean>("secure") ?: true
-                        if (secure) {
+                        if (secure && !BuildConfig.APERCU) {
                             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
                         } else {
                             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)

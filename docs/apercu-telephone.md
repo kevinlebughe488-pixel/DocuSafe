@@ -29,7 +29,23 @@ Refaites les étapes 2 à 5. La nouvelle version s'installe **par-dessus** l'anc
 - Google Play Protect peut afficher un avertissement (« application inconnue ») : c'est normal pour une application installée hors du Play Store. Choisissez « Installer quand même ».
 - Ne transmettez pas l'APK à d'autres personnes.
 
-## Sans téléphone Android
+## Sans téléphone Android : Appetize.io
 
-- **Appetize.io** : site qui fait tourner un téléphone Android dans le navigateur. Créez un compte gratuit, envoyez-y l'APK téléchargé depuis la page Releases, puis utilisez l'application à la souris. L'offre gratuite limite le temps d'utilisation par mois. Le scanner (caméra) et l'empreinte n'y fonctionnent pas.
-- **iPhone** : impossible pour l'instant. Il faut un compte développeur Apple et une compilation sur Mac, prévus en phase 6 (service Codemagic ou GitHub sur machine macOS).
+Appetize.io est un site qui fait tourner un téléphone Android **dans le navigateur**. Rien à installer.
+
+1. Téléchargez l'APK depuis la page Releases (voir plus haut).
+2. Sur https://appetize.io, créez un compte gratuit puis envoyez l'APK (« Upload »).
+3. Le site affiche un téléphone : utilisez l'application à la souris et au clavier.
+
+- L'offre gratuite limite le temps d'utilisation chaque mois et chaque séance.
+- Le scanner (caméra), l'empreinte et les notifications n'y fonctionnent pas. Créez le coffre avec un code, puis importez des documents depuis le téléphone simulé.
+- Dans la version aperçu seulement, l'écran n'est pas protégé contre les captures : sinon le site n'afficherait qu'un écran noir. La version publiée garde la protection.
+- **Tant que le PC est infecté** : ne vous connectez pas à GitHub ni à Appetize depuis ce PC, car le virus peut voler les mots de passe tapés. Utilisez un autre appareil : un autre ordinateur, une tablette, ou même un iPhone (le site marche dans Safari).
+
+## Plus tard, sur le PC nettoyé
+
+L'émulateur d'Android Studio (un téléphone Android simulé sur le PC) affichera l'application sans limite de temps : glissez l'APK sur la fenêtre de l'émulateur pour l'installer.
+
+## iPhone
+
+Impossible pour l'instant d'installer la version iPhone : il faut un compte développeur Apple et une compilation sur Mac, prévus en phase 6 (service Codemagic ou GitHub sur machine macOS).

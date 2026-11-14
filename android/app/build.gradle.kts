@@ -36,6 +36,13 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         manifestPlaceholders["appLabel"] = "DocuSafe"
+        // Version aperçu : écran non protégé, pour qu'un émulateur en ligne
+        // (Appetize) puisse l'afficher. Jamais dans la version publiée.
+        buildConfigField("boolean", "APERCU", apercu.toString())
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     signingConfigs {
