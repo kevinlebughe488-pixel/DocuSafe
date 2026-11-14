@@ -19,6 +19,10 @@ Android en priorité (MVP), puis iPhone avec le même code.
 | 5 – Sécurité et optimisation | Tests, corrections, optimisation | À venir |
 | 6 – Publication | Builds, fiches des magasins, documents légaux | À venir |
 
+## Voir l'application sur un téléphone
+
+À chaque envoi de code, GitHub compile une version de test Android et la publie dans la page **Releases** (étiquette `apercu`). Mode d'emploi : [docs/apercu-telephone.md](docs/apercu-telephone.md).
+
 ## Voir les maquettes
 
 Ouvrir `docs\maquettes\index.html` dans un navigateur, ou dans le terminal :

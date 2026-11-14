@@ -70,7 +70,7 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 
 - **PC du développeur : infecté par un virus (Expiro) depuis le 13/11/2026.** Flutter y est inutilisable tant que le PC n'est pas nettoyé. Ne jamais conseiller de désactiver Microsoft Defender, d'ajouter une exclusion ou de restaurer un fichier signalé. Voir [docs/problemes-connus.md](docs/problemes-connus.md).
 - **Session en ligne (claude.ai/code)** : machine Ubuntu 24.04. Le SDK Flutter n'est pas dans le dépôt : `bash tool/setup_cloud.sh` l'installe dans `/home/user/sdk/flutter` (archive Linux officielle, empreinte SHA-256 vérifiée, environ 2 minutes). `flutter analyze` et `flutter test` y fonctionnent ; l'émulateur et le téléphone, non. L'hôte `dl.google.com` (SDK Android, dépôt Maven de Google) est bloqué par le réseau de l'environnement : aucun APK ne peut y être compilé (voir docs/problemes-connus.md, P3).
-- Les tests sur téléphone se feront sur le PC une fois nettoyé, ou avec un APK compilé dans le cloud.
+- **Aperçu sur téléphone** : `.github/workflows/apercu-android.yml` compile un APK (`DOCUSAFE_APERCU=1` : identifiant `com.docusafe.app.apercu`, clé de test `android/app/apercu.keystore`) à chaque envoi et le publie dans la release `apercu`. Mode d'emploi : docs/apercu-telephone.md. Après un envoi, vérifier que la compilation GitHub réussit.
 
 ## graphify
 

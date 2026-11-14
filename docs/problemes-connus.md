@@ -76,7 +76,8 @@ Une fois le PC sain : supprimer `D:\dev\flutter`, réinstaller Flutter (15 minut
 
 - La machine Ubuntu de la session en ligne accède à `storage.googleapis.com` (Flutter), `pub.dev`, GitHub et aux dépôts Maven publics, mais **pas à `dl.google.com`**. Or le SDK Android, le plugin Android Gradle et les bibliothèques Google y sont hébergés.
 - Conséquence : `flutter analyze`, `flutter test` et la génération de code fonctionnent (c'est ainsi que la phase 3 a été écrite et testée), mais `flutter build apk` est impossible dans cette session.
-- Solutions possibles : (a) élargir l'accès réseau de l'environnement de la session en ligne à `dl.google.com` et `maven.google.com` ; (b) compiler sur le PC une fois nettoyé ; (c) utiliser un service de build dans le cloud (Codemagic, GitHub Actions), prévu de toute façon pour iOS.
+- **Contournement en place depuis le 14/11/2026 :** GitHub compile une version « aperçu » à chaque envoi et la publie dans la page Releases du dépôt (voir docs/apercu-telephone.md).
+- Autres solutions : (a) élargir l'accès réseau de l'environnement de la session en ligne à `dl.google.com` et `maven.google.com` ; (b) compiler sur le PC une fois nettoyé ; (c) utiliser un service de build dans le cloud (Codemagic, GitHub Actions), prévu de toute façon pour iOS.
 
 ## P4 – Phase 3 jamais exécutée sur un téléphone
 

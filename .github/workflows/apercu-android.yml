@@ -1,0 +1,74 @@
+# Compile la version « aperçu » Android à chaque envoi sur GitHub et la
+# publie dans la page « Releases » du dépôt (étiquette « apercu »).
+# Mode d'emploi : docs/apercu-telephone.md
+name: Aperçu Android
+
+on:
+  push:
+    branches: ['**']
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apercu-android
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.50.0'
+          channel: stable
+          cache: true
+
+      - name: Dépendances
+        run: flutter pub get
+
+      - name: Analyse
+        run: flutter analyze
+
+      - name: Tests
+        run: flutter test --exclude-tags screenshots
+
+      - name: Compilation de l'APK
+        env:
+          DOCUSAFE_APERCU: '1'
+        run: flutter build apk --release --build-number=${{ github.run_number }}
+
+      - name: Renommage
+        run: |
+          mkdir -p sortie
+          cp build/app/outputs/flutter-apk/app-release.apk "sortie/DocuSafe-apercu-${{ github.run_number }}.apk"
+
+      - name: Copie téléchargeable (30 jours)
+        uses: actions/upload-artifact@v4
+        with:
+          name: DocuSafe-apercu-${{ github.run_number }}
+          path: sortie/*.apk
+          retention-days: 30
+
+      - name: Publication dans « Releases »
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete apercu --yes --cleanup-tag || true
+          gh release create apercu sortie/*.apk \
+            --prerelease \
+            --target "${{ github.sha }}" \
+            --title "Aperçu n°${{ github.run_number }} (${GITHUB_REF_NAME})" \
+            --notes "Version de test compilée automatiquement depuis la branche ${GITHUB_REF_NAME}, commit ${GITHUB_SHA::7}. À installer sur un téléphone Android (voir docs/apercu-telephone.md). Ne pas diffuser."

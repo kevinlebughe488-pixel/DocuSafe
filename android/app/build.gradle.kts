@@ -4,6 +4,13 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Version « aperçu » compilée par GitHub à chaque envoi (DOCUSAFE_APERCU=1) :
+// identifiant distinct (com.docusafe.app.apercu) et clé de test versionnée,
+// pour l'installer à côté de la vraie application et la mettre à jour sans
+// la désinstaller. Jamais utilisée pour la publication
+// (docs/apercu-telephone.md).
+val apercu = System.getenv("DOCUSAFE_APERCU") == "1"
+
 android {
     namespace = "com.docusafe.app"
     // Versions imposées par docs/01-analyse.md (D1) et docs/06-dependances.md.
@@ -28,6 +35,16 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["appLabel"] = "DocuSafe"
+    }
+
+    signingConfigs {
+        create("apercu") {
+            storeFile = file("apercu.keystore")
+            storePassword = "docusafe-apercu"
+            keyAlias = "apercu"
+            keyPassword = "docusafe-apercu"
+        }
     }
 
     buildTypes {
@@ -35,6 +52,11 @@ android {
             // Signature de publication : configurée en phase 6, jamais sur un
             // PC infecté (docs/problemes-connus.md). Clés de debug en attendant.
             signingConfig = signingConfigs.getByName("debug")
+            if (apercu) {
+                applicationIdSuffix = ".apercu"
+                manifestPlaceholders["appLabel"] = "DocuSafe aperçu"
+                signingConfig = signingConfigs.getByName("apercu")
+            }
         }
     }
 }

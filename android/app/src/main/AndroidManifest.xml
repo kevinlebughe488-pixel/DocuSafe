@@ -20,7 +20,7 @@
          sauvegarde cloud ni dans un transfert d'appareil (§15). tools:replace
          pour l'emporter sur les règles déclarées par des paquets tiers. -->
     <application
-        android:label="DocuSafe"
+        android:label="${appLabel}"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
