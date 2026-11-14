@@ -8,6 +8,7 @@ import 'documents/document_search.dart';
 import 'documents/export_document.dart';
 import 'documents/ingest_document.dart';
 import 'documents/open_document.dart';
+import 'errors/app_exception.dart';
 import 'platform/file_picker_service.dart';
 import 'platform/notification_service.dart';
 import 'platform/scanner_service.dart';
@@ -95,8 +96,7 @@ final vaultControllerProvider = NotifierProvider<VaultController, VaultState>(
 /// Base de données de la session en cours. Lève [VaultLockedException] si le
 /// coffre est verrouillé : aucun écran protégé ne doit l'observer dans cet état.
 final databaseProvider = Provider<AppDatabase>(
-  (ref) =>
-      ref.watch(vaultControllerProvider.notifier).requireSession().database,
+  (ref) => ref.watch(sessionProvider).database,
 );
 
 // ---------------------------------------------------------------------------
@@ -132,9 +132,21 @@ final thumbnailServiceProvider = Provider<ThumbnailService>(
 );
 
 /// Session déverrouillée courante. Lève [VaultLockedException] sinon.
-final sessionProvider = Provider<VaultSession>(
-  (ref) => ref.watch(vaultControllerProvider.notifier).requireSession(),
-);
+///
+/// Recalculée à chaque nouvelle session : après un verrouillage puis un
+/// déverrouillage, la base, les clés et tout ce qui en dépend sont ceux de
+/// la nouvelle session (l'ancienne base est fermée).
+final sessionProvider = Provider<VaultSession>((ref) {
+  ref.watch(
+    vaultControllerProvider.select(
+      (s) => s is VaultUnlocked ? s.session : null,
+    ),
+  );
+  final controller = ref.read(vaultControllerProvider.notifier);
+  return controller.session ??
+      controller.lastSession ??
+      (throw const VaultLockedException());
+});
 
 final documentRepositoryProvider = Provider<DocumentRepository>(
   (ref) => DocumentRepository(ref.watch(databaseProvider)),

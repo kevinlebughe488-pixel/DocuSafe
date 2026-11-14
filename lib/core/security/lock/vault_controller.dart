@@ -74,6 +74,12 @@ final class VaultController extends Notifier<VaultState> {
   VaultSession requireSession() =>
       session ?? (throw const VaultLockedException());
 
+  /// Dernière session ouverte, même refermée depuis. Sert seulement à
+  /// [sessionProvider] : pendant le verrouillage, les écrans encore affichés
+  /// gardent une valeur (sans l'utiliser) au lieu de lever une erreur.
+  VaultSession? get lastSession => _lastSession;
+  VaultSession? _lastSession;
+
   /// L'utilisateur s'est authentifié il y a moins de 30 secondes (§11).
   bool get recentlyAuthenticated {
     final last = _lastAuthentication;
@@ -158,6 +164,7 @@ final class VaultController extends Notifier<VaultState> {
     }
     markAuthenticated();
     _currentSession = session;
+    _lastSession = session;
     state = VaultUnlocked(session, returnLocation: returnLocation);
     _restartInactivityTimer();
   }
@@ -308,6 +315,7 @@ final class VaultController extends Notifier<VaultState> {
     _inactivityTimer?.cancel();
     final current = session;
     _currentSession = null;
+    _lastSession = null;
     state = const VaultInitializing();
     await _service.wipe(current);
     await _screenSecurity.setSecure(true);
