@@ -467,6 +467,560 @@ class AppLocalizationsFr extends AppLocalizations {
       'Version provisoire. Ce texte sera relu avant la publication de l\'application.';
 
   @override
+  String get dateToday => 'Aujourd\'hui';
+
+  @override
+  String get dateYesterday => 'Hier';
+
+  @override
+  String dateTodayAt(String time) {
+    return 'Aujourd\'hui à $time';
+  }
+
+  @override
+  String get expiryExpired => 'Expiré';
+
+  @override
+  String expiryInDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'J-$days',
+      zero: 'Aujourd\'hui',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String expiryInMonths(int months) {
+    String _temp0 = intl.Intl.pluralLogic(
+      months,
+      locale: localeName,
+      other: '$months mois',
+      one: '1 mois',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String expiryInYears(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: '$years ans',
+      one: '1 an',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String expiryInYearsMonths(int years, int months) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: '$years ans',
+      one: '1 an',
+    );
+    return '$_temp0 $months mois';
+  }
+
+  @override
+  String expiresOn(String date) {
+    return 'Expire le $date';
+  }
+
+  @override
+  String expiredOn(String date) {
+    return 'Expiré le $date';
+  }
+
+  @override
+  String pageCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pages',
+      one: '1 page',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get navHome => 'Accueil';
+
+  @override
+  String get navDocuments => 'Documents';
+
+  @override
+  String get navScanner => 'Scanner';
+
+  @override
+  String get navDeadlines => 'Échéances';
+
+  @override
+  String get navSettings => 'Paramètres';
+
+  @override
+  String get homeImport => 'Importer un fichier';
+
+  @override
+  String get homeEmptyBodyLotA =>
+      'Importez votre premier document. Il sera chiffré sur ce téléphone. Le scanner arrive à la prochaine étape du développement.';
+
+  @override
+  String get homeRecentlyAdded => 'Ajoutés récemment';
+
+  @override
+  String get homeFavorites => 'Favoris';
+
+  @override
+  String get homeSeeAll => 'Tout voir';
+
+  @override
+  String get homeManage => 'Gérer';
+
+  @override
+  String get documentsTitle => 'Documents';
+
+  @override
+  String get documentsTabAll => 'Tous';
+
+  @override
+  String get documentsTabFavorites => 'Favoris';
+
+  @override
+  String get documentsTabRecent => 'Récents';
+
+  @override
+  String get documentsAllCategories => 'Toutes';
+
+  @override
+  String get documentsSort => 'Trier';
+
+  @override
+  String get documentsSortNewest => 'Plus récents d\'abord';
+
+  @override
+  String get documentsSortOldest => 'Plus anciens d\'abord';
+
+  @override
+  String get documentsSortTitle => 'Par nom';
+
+  @override
+  String get documentsSortExpiration => 'Par date d\'expiration';
+
+  @override
+  String get documentsRecentAdded => 'Ajoutés';
+
+  @override
+  String get documentsRecentOpened => 'Consultés';
+
+  @override
+  String get documentsEmptyTitle => 'Aucun document pour l\'instant';
+
+  @override
+  String get documentsEmptyBody =>
+      'Importez votre premier document. Il sera chiffré sur ce téléphone.';
+
+  @override
+  String get documentsEmptyFilteredTitle => 'Aucun document ici';
+
+  @override
+  String get documentsEmptyFilteredBody =>
+      'Changez de catégorie ou retirez le filtre.';
+
+  @override
+  String get documentsFavoritesEmptyTitle => 'Aucun favori';
+
+  @override
+  String get documentsFavoritesEmptyBody =>
+      'Touchez l\'étoile d\'un document pour le retrouver ici.';
+
+  @override
+  String get documentsRecentEmptyTitle => 'Rien de récent';
+
+  @override
+  String get documentsRecentEmptyBody =>
+      'Les documents ajoutés ou consultés apparaîtront ici.';
+
+  @override
+  String get documentsAdd => 'Ajouter';
+
+  @override
+  String get documentsAddFile => 'Importer un fichier';
+
+  @override
+  String get documentsAddPhotos => 'Importer des photos';
+
+  @override
+  String documentOpenedAt(String when) {
+    return 'Consulté $when';
+  }
+
+  @override
+  String documentAddedAt(String when) {
+    return 'Ajouté $when';
+  }
+
+  @override
+  String get documentFavoriteAdd => 'Ajouter aux favoris';
+
+  @override
+  String get documentFavoriteRemove => 'Retirer des favoris';
+
+  @override
+  String documentThumbnailSemantics(String title) {
+    return 'Aperçu de $title';
+  }
+
+  @override
+  String get detailOpen => 'Ouvrir';
+
+  @override
+  String get detailEdit => 'Modifier';
+
+  @override
+  String get detailMove => 'Déplacer';
+
+  @override
+  String get detailDelete => 'Supprimer';
+
+  @override
+  String get detailExpiration => 'Expiration';
+
+  @override
+  String get detailIssue => 'Émission';
+
+  @override
+  String get detailType => 'Type';
+
+  @override
+  String get detailTags => 'Tags';
+
+  @override
+  String get detailAddedOn => 'Ajouté le';
+
+  @override
+  String get detailDescription => 'Description';
+
+  @override
+  String get detailFile => 'Fichier';
+
+  @override
+  String get detailIntegrity => 'Chiffré · intégrité vérifiée';
+
+  @override
+  String get detailMoveTitle => 'Déplacer vers';
+
+  @override
+  String get detailNotFound => 'Ce document n\'existe plus.';
+
+  @override
+  String get viewerCorruptTitle => 'Document illisible';
+
+  @override
+  String get viewerCorruptBody =>
+      'Ce fichier a été modifié ou endommagé en dehors de DocuSafe. Par sécurité, il n\'est pas affiché.';
+
+  @override
+  String get viewerMissingBody =>
+      'Le fichier de ce document est introuvable sur le téléphone.';
+
+  @override
+  String get viewerDeleteEntry => 'Supprimer la fiche';
+
+  @override
+  String viewerPage(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get viewerOpening => 'Déchiffrement…';
+
+  @override
+  String get editTitle => 'Modifier';
+
+  @override
+  String get editName => 'Nom';
+
+  @override
+  String get editCategory => 'Catégorie';
+
+  @override
+  String get editDocType => 'Type de document';
+
+  @override
+  String get editDocTypeHint => 'Ex. : passeport, facture';
+
+  @override
+  String get editIssueDate => 'Date d\'émission';
+
+  @override
+  String get editExpirationDate => 'Date d\'expiration';
+
+  @override
+  String get editTags => 'Tags';
+
+  @override
+  String get editTagsHint => 'Ajouter…';
+
+  @override
+  String get editDescription => 'Description';
+
+  @override
+  String get editOptional => 'Facultatif';
+
+  @override
+  String get editNameRequired => 'Donnez un nom au document.';
+
+  @override
+  String get editClearDate => 'Effacer la date';
+
+  @override
+  String get editSaved => 'Modifications enregistrées.';
+
+  @override
+  String get deleteTitle => 'Supprimer';
+
+  @override
+  String get deleteQuestion => 'Supprimer ce document ?';
+
+  @override
+  String get deleteBody =>
+      'Cette action est définitive. Le document sera effacé de votre coffre et ne pourra pas être récupéré.';
+
+  @override
+  String get deleteConfirm => 'Supprimer définitivement';
+
+  @override
+  String get deleteDone => 'Document supprimé.';
+
+  @override
+  String get importTitle => 'Importer';
+
+  @override
+  String get importSourceFiles => 'Fichiers';
+
+  @override
+  String get importSourceFilesSub => 'PDF et images';
+
+  @override
+  String get importSourceGallery => 'Galerie';
+
+  @override
+  String get importSourceGallerySub => 'Photos';
+
+  @override
+  String importSelected(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fichiers sélectionnés',
+      one: '1 fichier sélectionné',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importChecking => 'Vérification…';
+
+  @override
+  String get importDuplicate => 'Déjà dans votre coffre';
+
+  @override
+  String get importUnsupported => 'Format non pris en charge';
+
+  @override
+  String get importTooLarge => 'Fichier trop volumineux (100 Mo maximum)';
+
+  @override
+  String get importUnreadable => 'Fichier illisible';
+
+  @override
+  String get importEmpty => 'Fichier vide';
+
+  @override
+  String get importFormats => 'Formats acceptés : PDF, JPEG et PNG.';
+
+  @override
+  String importContinue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Continuer avec $count fichiers',
+      one: 'Continuer avec 1 fichier',
+      zero: 'Continuer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importIncludeDuplicate => 'Importer quand même';
+
+  @override
+  String get importInfoTitle => 'Informations';
+
+  @override
+  String get importWillBeEncrypted => 'Sera chiffré à l\'enregistrement';
+
+  @override
+  String importCommonCategory(int count) {
+    return 'Catégorie commune aux $count fichiers, modifiable ensuite.';
+  }
+
+  @override
+  String get importSave => 'Enregistrer dans le coffre';
+
+  @override
+  String get importSaving => 'Enregistrement…';
+
+  @override
+  String get importStageEncrypting => 'Chiffrement';
+
+  @override
+  String get importStageVerifying => 'Vérification';
+
+  @override
+  String get importStageThumbnail => 'Miniature';
+
+  @override
+  String get importStageSaving => 'Enregistrement';
+
+  @override
+  String get importStageCleaning => 'Nettoyage';
+
+  @override
+  String get importDontClose => 'Ne fermez pas l\'application.';
+
+  @override
+  String importProgress(int current, int total) {
+    return 'Fichier $current sur $total';
+  }
+
+  @override
+  String importDone(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count documents enregistrés.',
+      one: '1 document enregistré.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importOriginalReminder =>
+      'L\'original se trouve toujours dans votre galerie ou vos fichiers. Supprimez-le si vous voulez le garder uniquement dans DocuSafe.';
+
+  @override
+  String importFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fichiers n\'ont pas pu être enregistrés.',
+      one: '1 fichier n\'a pas pu être enregistré.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importNothingSelected => 'Aucun fichier sélectionné.';
+
+  @override
+  String get categoriesTitle => 'Catégories';
+
+  @override
+  String get categoriesNew => 'Nouvelle catégorie';
+
+  @override
+  String get categoriesDefault => 'par défaut';
+
+  @override
+  String get categoryEditTitle => 'Modifier';
+
+  @override
+  String get categoryNewTitle => 'Nouvelle catégorie';
+
+  @override
+  String get categoryName => 'Nom';
+
+  @override
+  String get categoryNameRequired => 'Donnez un nom à la catégorie.';
+
+  @override
+  String get categoryNameDuplicate => 'Une catégorie porte déjà ce nom.';
+
+  @override
+  String get categoryIcon => 'Icône';
+
+  @override
+  String get categoryColor => 'Couleur';
+
+  @override
+  String get categoryDelete => 'Supprimer la catégorie';
+
+  @override
+  String categoryDeleteTitle(String name) {
+    return 'Supprimer « $name » ?';
+  }
+
+  @override
+  String categoryDeleteBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Ses $count documents ne seront pas supprimés. Choisissez où les déplacer.',
+      one: 'Son document ne sera pas supprimé. Choisissez où le déplacer.',
+      zero: 'Elle ne contient aucun document.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get categoryMoveTo => 'Déplacer vers';
+
+  @override
+  String get categoryDeleteAction => 'Déplacer et supprimer';
+
+  @override
+  String get categoryDeleteOnlyAction => 'Supprimer';
+
+  @override
+  String get categorySaved => 'Catégorie enregistrée.';
+
+  @override
+  String get categoryDeleted => 'Catégorie supprimée.';
+
+  @override
+  String categoryColorName(String name) {
+    return 'Couleur $name';
+  }
+
+  @override
+  String get settingsTitle => 'Paramètres';
+
+  @override
+  String get settingsCategories => 'Catégories';
+
+  @override
+  String get settingsPrivacy => 'Confidentialité';
+
+  @override
+  String get settingsTerms => 'Conditions d\'utilisation';
+
+  @override
+  String get settingsAbout => 'À propos';
+
+  @override
+  String settingsAboutVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get settingsLicenses => 'Licences des composants';
+
+  @override
   String get errorStorage =>
       'Le stockage du téléphone n\'a pas répondu. Vérifiez l\'espace disponible et réessayez.';
 

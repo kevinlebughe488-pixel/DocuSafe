@@ -50,3 +50,22 @@ abstract final class AppConfig {
   static const String databaseFileName = 'docusafe.db';
   static const String recoverySlotFileName = 'recovery.slot';
 }
+
+/// Limites des documents.
+abstract final class DocumentLimits {
+  /// Taille maximale d'un fichier importé.
+  static const int maxFileSizeBytes = 100 * 1000 * 1000;
+
+  /// Au-delà, un document est déchiffré dans un fichier temporaire plutôt
+  /// qu'en mémoire (docs/04-securite.md §12).
+  static const int maxInMemoryBytes = 20 * 1000 * 1000;
+
+  /// Plus grand côté d'une miniature, en pixels.
+  static const int thumbnailMaxSide = 512;
+
+  /// Qualité JPEG des miniatures.
+  static const int thumbnailJpegQuality = 80;
+
+  /// Longueur maximale d'un titre.
+  static const int maxTitleLength = 200;
+}

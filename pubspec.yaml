@@ -37,6 +37,15 @@ dependencies:
   flutter_secure_storage: 11.2.0
   local_auth: 3.0.2
 
+  # Documents
+  file_picker: 13.3.3
+  image_picker: 1.2.4
+  pdfrx: 2.12.1
+  image: 4.13.0
+
+  # Divers
+  package_info_plus: 10.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

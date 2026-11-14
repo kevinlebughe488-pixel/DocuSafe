@@ -37,10 +37,14 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
   Future<DocumentRow?> getById(String id) =>
       (select(documents)..where((d) => d.id.equals(id))).getSingleOrNull();
 
-  /// Un document portant la même empreinte existe-t-il déjà ?
-  Future<DocumentRow?> findByHash(String integrityHash) => (select(
-    documents,
-  )..where((d) => d.integrityHash.equals(integrityHash))).getSingleOrNull();
+  /// Un document portant la même empreinte existe-t-il déjà ? Le plus ancien
+  /// est retourné si plusieurs copies ont été importées volontairement.
+  Future<DocumentRow?> findByHash(String integrityHash) =>
+      (select(documents)
+            ..where((d) => d.integrityHash.equals(integrityHash))
+            ..orderBy([(d) => OrderingTerm.asc(d.createdAt)])
+            ..limit(1))
+          .getSingleOrNull();
 
   Stream<List<DocumentRow>> watchAll({String? categoryId}) {
     final query = select(documents)

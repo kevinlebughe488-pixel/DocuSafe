@@ -850,6 +850,882 @@ abstract class AppLocalizations {
   /// **'Version provisoire. Ce texte sera relu avant la publication de l\'application.'**
   String get legalDraftNotice;
 
+  /// No description provided for @dateToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui'**
+  String get dateToday;
+
+  /// No description provided for @dateYesterday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hier'**
+  String get dateYesterday;
+
+  /// No description provided for @dateTodayAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui à {time}'**
+  String dateTodayAt(String time);
+
+  /// No description provided for @expiryExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expiré'**
+  String get expiryExpired;
+
+  /// No description provided for @expiryInDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =0{Aujourd\'hui} other{J-{days}}}'**
+  String expiryInDays(int days);
+
+  /// No description provided for @expiryInMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'{months, plural, =1{1 mois} other{{months} mois}}'**
+  String expiryInMonths(int months);
+
+  /// No description provided for @expiryInYears.
+  ///
+  /// In fr, this message translates to:
+  /// **'{years, plural, =1{1 an} other{{years} ans}}'**
+  String expiryInYears(int years);
+
+  /// No description provided for @expiryInYearsMonths.
+  ///
+  /// In fr, this message translates to:
+  /// **'{years, plural, =1{1 an} other{{years} ans}} {months} mois'**
+  String expiryInYearsMonths(int years, int months);
+
+  /// No description provided for @expiresOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expire le {date}'**
+  String expiresOn(String date);
+
+  /// No description provided for @expiredOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expiré le {date}'**
+  String expiredOn(String date);
+
+  /// No description provided for @pageCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 page} other{{count} pages}}'**
+  String pageCount(int count);
+
+  /// No description provided for @navHome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accueil'**
+  String get navHome;
+
+  /// No description provided for @navDocuments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Documents'**
+  String get navDocuments;
+
+  /// No description provided for @navScanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner'**
+  String get navScanner;
+
+  /// No description provided for @navDeadlines.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéances'**
+  String get navDeadlines;
+
+  /// No description provided for @navSettings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paramètres'**
+  String get navSettings;
+
+  /// No description provided for @homeImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un fichier'**
+  String get homeImport;
+
+  /// No description provided for @homeEmptyBodyLotA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importez votre premier document. Il sera chiffré sur ce téléphone. Le scanner arrive à la prochaine étape du développement.'**
+  String get homeEmptyBodyLotA;
+
+  /// No description provided for @homeRecentlyAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutés récemment'**
+  String get homeRecentlyAdded;
+
+  /// No description provided for @homeFavorites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Favoris'**
+  String get homeFavorites;
+
+  /// No description provided for @homeSeeAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout voir'**
+  String get homeSeeAll;
+
+  /// No description provided for @homeManage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gérer'**
+  String get homeManage;
+
+  /// No description provided for @documentsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Documents'**
+  String get documentsTitle;
+
+  /// No description provided for @documentsTabAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get documentsTabAll;
+
+  /// No description provided for @documentsTabFavorites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Favoris'**
+  String get documentsTabFavorites;
+
+  /// No description provided for @documentsTabRecent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Récents'**
+  String get documentsTabRecent;
+
+  /// No description provided for @documentsAllCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes'**
+  String get documentsAllCategories;
+
+  /// No description provided for @documentsSort.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trier'**
+  String get documentsSort;
+
+  /// No description provided for @documentsSortNewest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus récents d\'abord'**
+  String get documentsSortNewest;
+
+  /// No description provided for @documentsSortOldest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus anciens d\'abord'**
+  String get documentsSortOldest;
+
+  /// No description provided for @documentsSortTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par nom'**
+  String get documentsSortTitle;
+
+  /// No description provided for @documentsSortExpiration.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par date d\'expiration'**
+  String get documentsSortExpiration;
+
+  /// No description provided for @documentsRecentAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutés'**
+  String get documentsRecentAdded;
+
+  /// No description provided for @documentsRecentOpened.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consultés'**
+  String get documentsRecentOpened;
+
+  /// No description provided for @documentsEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun document pour l\'instant'**
+  String get documentsEmptyTitle;
+
+  /// No description provided for @documentsEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importez votre premier document. Il sera chiffré sur ce téléphone.'**
+  String get documentsEmptyBody;
+
+  /// No description provided for @documentsEmptyFilteredTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun document ici'**
+  String get documentsEmptyFilteredTitle;
+
+  /// No description provided for @documentsEmptyFilteredBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changez de catégorie ou retirez le filtre.'**
+  String get documentsEmptyFilteredBody;
+
+  /// No description provided for @documentsFavoritesEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun favori'**
+  String get documentsFavoritesEmptyTitle;
+
+  /// No description provided for @documentsFavoritesEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez l\'étoile d\'un document pour le retrouver ici.'**
+  String get documentsFavoritesEmptyBody;
+
+  /// No description provided for @documentsRecentEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien de récent'**
+  String get documentsRecentEmptyTitle;
+
+  /// No description provided for @documentsRecentEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les documents ajoutés ou consultés apparaîtront ici.'**
+  String get documentsRecentEmptyBody;
+
+  /// No description provided for @documentsAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get documentsAdd;
+
+  /// No description provided for @documentsAddFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer un fichier'**
+  String get documentsAddFile;
+
+  /// No description provided for @documentsAddPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer des photos'**
+  String get documentsAddPhotos;
+
+  /// No description provided for @documentOpenedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consulté {when}'**
+  String documentOpenedAt(String when);
+
+  /// No description provided for @documentAddedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouté {when}'**
+  String documentAddedAt(String when);
+
+  /// No description provided for @documentFavoriteAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter aux favoris'**
+  String get documentFavoriteAdd;
+
+  /// No description provided for @documentFavoriteRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer des favoris'**
+  String get documentFavoriteRemove;
+
+  /// No description provided for @documentThumbnailSemantics.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu de {title}'**
+  String documentThumbnailSemantics(String title);
+
+  /// No description provided for @detailOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir'**
+  String get detailOpen;
+
+  /// No description provided for @detailEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get detailEdit;
+
+  /// No description provided for @detailMove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déplacer'**
+  String get detailMove;
+
+  /// No description provided for @detailDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get detailDelete;
+
+  /// No description provided for @detailExpiration.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expiration'**
+  String get detailExpiration;
+
+  /// No description provided for @detailIssue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émission'**
+  String get detailIssue;
+
+  /// No description provided for @detailType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type'**
+  String get detailType;
+
+  /// No description provided for @detailTags.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tags'**
+  String get detailTags;
+
+  /// No description provided for @detailAddedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouté le'**
+  String get detailAddedOn;
+
+  /// No description provided for @detailDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description'**
+  String get detailDescription;
+
+  /// No description provided for @detailFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier'**
+  String get detailFile;
+
+  /// No description provided for @detailIntegrity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffré · intégrité vérifiée'**
+  String get detailIntegrity;
+
+  /// No description provided for @detailMoveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déplacer vers'**
+  String get detailMoveTitle;
+
+  /// No description provided for @detailNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce document n\'existe plus.'**
+  String get detailNotFound;
+
+  /// No description provided for @viewerCorruptTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Document illisible'**
+  String get viewerCorruptTitle;
+
+  /// No description provided for @viewerCorruptBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier a été modifié ou endommagé en dehors de DocuSafe. Par sécurité, il n\'est pas affiché.'**
+  String get viewerCorruptBody;
+
+  /// No description provided for @viewerMissingBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier de ce document est introuvable sur le téléphone.'**
+  String get viewerMissingBody;
+
+  /// No description provided for @viewerDeleteEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la fiche'**
+  String get viewerDeleteEntry;
+
+  /// No description provided for @viewerPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'{current} / {total}'**
+  String viewerPage(int current, int total);
+
+  /// No description provided for @viewerOpening.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déchiffrement…'**
+  String get viewerOpening;
+
+  /// No description provided for @editTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get editTitle;
+
+  /// No description provided for @editName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get editName;
+
+  /// No description provided for @editCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get editCategory;
+
+  /// No description provided for @editDocType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de document'**
+  String get editDocType;
+
+  /// No description provided for @editDocTypeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. : passeport, facture'**
+  String get editDocTypeHint;
+
+  /// No description provided for @editIssueDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date d\'émission'**
+  String get editIssueDate;
+
+  /// No description provided for @editExpirationDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date d\'expiration'**
+  String get editExpirationDate;
+
+  /// No description provided for @editTags.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tags'**
+  String get editTags;
+
+  /// No description provided for @editTagsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter…'**
+  String get editTagsHint;
+
+  /// No description provided for @editDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description'**
+  String get editDescription;
+
+  /// No description provided for @editOptional.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultatif'**
+  String get editOptional;
+
+  /// No description provided for @editNameRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donnez un nom au document.'**
+  String get editNameRequired;
+
+  /// No description provided for @editClearDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer la date'**
+  String get editClearDate;
+
+  /// No description provided for @editSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifications enregistrées.'**
+  String get editSaved;
+
+  /// No description provided for @deleteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get deleteTitle;
+
+  /// No description provided for @deleteQuestion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer ce document ?'**
+  String get deleteQuestion;
+
+  /// No description provided for @deleteBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette action est définitive. Le document sera effacé de votre coffre et ne pourra pas être récupéré.'**
+  String get deleteBody;
+
+  /// No description provided for @deleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer définitivement'**
+  String get deleteConfirm;
+
+  /// No description provided for @deleteDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Document supprimé.'**
+  String get deleteDone;
+
+  /// No description provided for @importTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer'**
+  String get importTitle;
+
+  /// No description provided for @importSourceFiles.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichiers'**
+  String get importSourceFiles;
+
+  /// No description provided for @importSourceFilesSub.
+  ///
+  /// In fr, this message translates to:
+  /// **'PDF et images'**
+  String get importSourceFilesSub;
+
+  /// No description provided for @importSourceGallery.
+  ///
+  /// In fr, this message translates to:
+  /// **'Galerie'**
+  String get importSourceGallery;
+
+  /// No description provided for @importSourceGallerySub.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photos'**
+  String get importSourceGallerySub;
+
+  /// No description provided for @importSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 fichier sélectionné} other{{count} fichiers sélectionnés}}'**
+  String importSelected(int count);
+
+  /// No description provided for @importChecking.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification…'**
+  String get importChecking;
+
+  /// No description provided for @importDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà dans votre coffre'**
+  String get importDuplicate;
+
+  /// No description provided for @importUnsupported.
+  ///
+  /// In fr, this message translates to:
+  /// **'Format non pris en charge'**
+  String get importUnsupported;
+
+  /// No description provided for @importTooLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier trop volumineux (100 Mo maximum)'**
+  String get importTooLarge;
+
+  /// No description provided for @importUnreadable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier illisible'**
+  String get importUnreadable;
+
+  /// No description provided for @importEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier vide'**
+  String get importEmpty;
+
+  /// No description provided for @importFormats.
+  ///
+  /// In fr, this message translates to:
+  /// **'Formats acceptés : PDF, JPEG et PNG.'**
+  String get importFormats;
+
+  /// No description provided for @importContinue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Continuer} =1{Continuer avec 1 fichier} other{Continuer avec {count} fichiers}}'**
+  String importContinue(int count);
+
+  /// No description provided for @importIncludeDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer quand même'**
+  String get importIncludeDuplicate;
+
+  /// No description provided for @importInfoTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Informations'**
+  String get importInfoTitle;
+
+  /// No description provided for @importWillBeEncrypted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sera chiffré à l\'enregistrement'**
+  String get importWillBeEncrypted;
+
+  /// No description provided for @importCommonCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie commune aux {count} fichiers, modifiable ensuite.'**
+  String importCommonCategory(int count);
+
+  /// No description provided for @importSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer dans le coffre'**
+  String get importSave;
+
+  /// No description provided for @importSaving.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrement…'**
+  String get importSaving;
+
+  /// No description provided for @importStageEncrypting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffrement'**
+  String get importStageEncrypting;
+
+  /// No description provided for @importStageVerifying.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification'**
+  String get importStageVerifying;
+
+  /// No description provided for @importStageThumbnail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Miniature'**
+  String get importStageThumbnail;
+
+  /// No description provided for @importStageSaving.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrement'**
+  String get importStageSaving;
+
+  /// No description provided for @importStageCleaning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nettoyage'**
+  String get importStageCleaning;
+
+  /// No description provided for @importDontClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ne fermez pas l\'application.'**
+  String get importDontClose;
+
+  /// No description provided for @importProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier {current} sur {total}'**
+  String importProgress(int current, int total);
+
+  /// No description provided for @importDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 document enregistré.} other{{count} documents enregistrés.}}'**
+  String importDone(int count);
+
+  /// No description provided for @importOriginalReminder.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'original se trouve toujours dans votre galerie ou vos fichiers. Supprimez-le si vous voulez le garder uniquement dans DocuSafe.'**
+  String get importOriginalReminder;
+
+  /// No description provided for @importFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 fichier n\'a pas pu être enregistré.} other{{count} fichiers n\'ont pas pu être enregistrés.}}'**
+  String importFailed(int count);
+
+  /// No description provided for @importNothingSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun fichier sélectionné.'**
+  String get importNothingSelected;
+
+  /// No description provided for @categoriesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories'**
+  String get categoriesTitle;
+
+  /// No description provided for @categoriesNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle catégorie'**
+  String get categoriesNew;
+
+  /// No description provided for @categoriesDefault.
+  ///
+  /// In fr, this message translates to:
+  /// **'par défaut'**
+  String get categoriesDefault;
+
+  /// No description provided for @categoryEditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get categoryEditTitle;
+
+  /// No description provided for @categoryNewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle catégorie'**
+  String get categoryNewTitle;
+
+  /// No description provided for @categoryName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get categoryName;
+
+  /// No description provided for @categoryNameRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donnez un nom à la catégorie.'**
+  String get categoryNameRequired;
+
+  /// No description provided for @categoryNameDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une catégorie porte déjà ce nom.'**
+  String get categoryNameDuplicate;
+
+  /// No description provided for @categoryIcon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Icône'**
+  String get categoryIcon;
+
+  /// No description provided for @categoryColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleur'**
+  String get categoryColor;
+
+  /// No description provided for @categoryDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la catégorie'**
+  String get categoryDelete;
+
+  /// No description provided for @categoryDeleteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer « {name} » ?'**
+  String categoryDeleteTitle(String name);
+
+  /// No description provided for @categoryDeleteBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Elle ne contient aucun document.} =1{Son document ne sera pas supprimé. Choisissez où le déplacer.} other{Ses {count} documents ne seront pas supprimés. Choisissez où les déplacer.}}'**
+  String categoryDeleteBody(int count);
+
+  /// No description provided for @categoryMoveTo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déplacer vers'**
+  String get categoryMoveTo;
+
+  /// No description provided for @categoryDeleteAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déplacer et supprimer'**
+  String get categoryDeleteAction;
+
+  /// No description provided for @categoryDeleteOnlyAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get categoryDeleteOnlyAction;
+
+  /// No description provided for @categorySaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie enregistrée.'**
+  String get categorySaved;
+
+  /// No description provided for @categoryDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie supprimée.'**
+  String get categoryDeleted;
+
+  /// No description provided for @categoryColorName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleur {name}'**
+  String categoryColorName(String name);
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paramètres'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories'**
+  String get settingsCategories;
+
+  /// No description provided for @settingsPrivacy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confidentialité'**
+  String get settingsPrivacy;
+
+  /// No description provided for @settingsTerms.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conditions d\'utilisation'**
+  String get settingsTerms;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos'**
+  String get settingsAbout;
+
+  /// No description provided for @settingsAboutVersion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version {version}'**
+  String settingsAboutVersion(String version);
+
+  /// No description provided for @settingsLicenses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Licences des composants'**
+  String get settingsLicenses;
+
   /// No description provided for @errorStorage.
   ///
   /// In fr, this message translates to:
