@@ -122,8 +122,8 @@ Le paquet `local_auth` sert à savoir si une biométrie est disponible, et à co
 |---|---|
 | Forme | 32 caractères en 8 groupes de 4 (`XXXX-XXXX-…`), sans caractères ambigus (pas de I, L, O, U) |
 | Solidité | 160 bits aléatoires : impossible à deviner |
-| Création | Automatique, à la création du coffre |
-| Affichage | **Une seule fois.** L'utilisateur confirme l'avoir conservée avant de continuer. |
+| Création | Automatique, à la création du coffre, en silence (D6 révisée le 14/11/2026) |
+| Affichage | **Une seule fois**, quand l'utilisateur touche « Noter ma clé » (rappel sur l'accueil et dans les réglages jusqu'à sa confirmation). Comme la clé n'est jamais stockée, « Noter ma clé » en génère une nouvelle au moment de l'afficher. L'utilisateur confirme l'avoir conservée. |
 | Copie | Bouton « Copier » : le presse-papiers est marqué sensible et vidé après 60 secondes |
 | Stockage sur le téléphone | **Aucun** |
 | Utilisation | « Code oublié ? » → saisie de la clé → choix d'un nouveau PIN |

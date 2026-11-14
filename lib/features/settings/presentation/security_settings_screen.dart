@@ -73,10 +73,16 @@ final class SecuritySettingsScreen extends ConsumerWidget {
           SettingsTile(
             icon: Icons.key_rounded,
             title: l10n.settingsRecoveryKey,
-            subtitle: l10n.settingsRecoveryKeySubtitle,
+            subtitle: state.recoveryKeyConfirmed
+                ? l10n.settingsRecoveryKeySubtitle
+                : l10n.settingsRecoveryKeyTodo,
             onTap: () async {
               if (await requestReauth(context, ref) && context.mounted) {
-                await context.push(Routes.settingsRecoveryKey);
+                await context.push(
+                  state.recoveryKeyConfirmed
+                      ? Routes.settingsRecoveryKey
+                      : Routes.recoveryKeyFirstTime,
+                );
               }
             },
           ),

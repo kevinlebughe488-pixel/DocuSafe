@@ -46,7 +46,7 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 - Riverpod sans génération de code, go_router, drift.
 - Base entièrement chiffrée avec **SQLite3MultipleCiphers**, activé par les hooks du paquet `sqlite3` dans `pubspec.yaml` (`hooks` → `user_defines` → `sqlite3` → `source: sqlite3mc`). Ne pas utiliser `sqlcipher_flutter_libs`, `sqlite3_flutter_libs` ni `drift_flutter`.
 - Scanner : `cunning_document_scanner` (ML Kit sur Android, VisionKit sur iOS, repli intégré).
-- Fichiers chiffrés en AES-256-GCM par blocs de 1 Mo (format `DSF1`). Code PIN de 6 chiffres minimum dérivé avec Argon2id. Clé de récupération. Biométrie liée au Keystore à partir d'Android 9.
+- Fichiers chiffrés en AES-256-GCM par blocs de 1 Mo (format `DSF1`). Code PIN de 6 chiffres minimum dérivé avec Argon2id. Clé de récupération créée en silence, proposée par un rappel sur l'accueil (D6 révisée le 14/11/2026). Biométrie liée au Keystore à partir d'Android 9 ; mots « Face ID » / « Touch ID » sur iPhone.
 - Aucune permission `INTERNET` dans l'application publiée. Notifications au texte générique, alarmes inexactes.
 - Sauvegarde chiffrée manuelle incluse dans le MVP.
 - Textes en fichiers ARB (français seul) dans `lib/app/l10n/app_fr.arb`, classe générée `AppLocalizations` (régénérée par `flutter pub get`). Identifiants de code en anglais ; commentaires et documentation en français.

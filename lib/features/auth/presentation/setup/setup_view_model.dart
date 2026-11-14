@@ -1,53 +1,43 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/l10n/generated/app_localizations.dart';
 import '../../../../core/errors/app_exception.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/security/auth/biometric_service.dart';
-import '../../../../core/security/vault_service.dart';
 import '../../../../core/utils/app_log.dart';
 import '../../../../core/utils/error_messages.dart';
 
-enum SetupStage {
-  pin,
-  preparing,
-  recoveryKey,
-  committing,
-  biometric,
-  enablingBiometric,
-  done,
-}
+/// Étapes de la création du coffre (D6 révisée le 14/11/2026) : le code,
+/// puis la biométrie si le téléphone la propose. La clé de récupération est
+/// créée en silence ; un rappel sur l'accueil invite à la noter.
+enum SetupStage { pin, creating, biometric, enablingBiometric, done }
 
 final class SetupState {
   const SetupState({
     this.stage = SetupStage.pin,
-    this.pending,
-    this.recoveryKeyConfirmed = false,
     this.biometricKind = BiometricKind.none,
     this.error,
   });
 
   final SetupStage stage;
-  final PendingVaultSetup? pending;
-  final bool recoveryKeyConfirmed;
   final BiometricKind biometricKind;
   final Object? error;
+
+  /// Nombre d'étapes affichées : 2 si la biométrie est disponible, sinon 1.
+  int get totalSteps => biometricKind == BiometricKind.none ? 1 : 2;
 
   String? errorMessage(AppLocalizations l10n) =>
       error == null ? null : ErrorMessages.of(l10n, error!);
 
   SetupState copyWith({
     SetupStage? stage,
-    PendingVaultSetup? pending,
-    bool clearPending = false,
-    bool? recoveryKeyConfirmed,
     BiometricKind? biometricKind,
     Object? error,
     bool clearError = true,
   }) => SetupState(
     stage: stage ?? this.stage,
-    pending: clearPending ? null : (pending ?? this.pending),
-    recoveryKeyConfirmed: recoveryKeyConfirmed ?? this.recoveryKeyConfirmed,
     biometricKind: biometricKind ?? this.biometricKind,
     error: clearError ? error : (error ?? this.error),
   );
@@ -55,60 +45,36 @@ final class SetupState {
 
 /// ViewModel de la création du coffre.
 base class SetupViewModel extends Notifier<SetupState> {
-  /// Copie du coffre en préparation, pour l'effacer si l'écran disparaît.
-  PendingVaultSetup? _pending;
-
   @override
   SetupState build() {
-    ref.onDispose(() => _pending?.discard());
+    unawaited(_detectBiometrics());
     return const SetupState();
   }
 
+  Future<void> _detectBiometrics() async {
+    final kind = await ref.read(biometricServiceProvider).availableKind();
+    if (ref.mounted) {
+      state = state.copyWith(biometricKind: kind, clearError: false);
+    }
+  }
+
+  /// Code choisi et confirmé : le coffre est créé et ouvert aussitôt.
   Future<void> choosePin(String pin) async {
-    state = state.copyWith(stage: SetupStage.preparing);
+    state = state.copyWith(stage: SetupStage.creating);
     try {
-      final pending = await ref
-          .read(vaultControllerProvider.notifier)
-          .prepareSetup(pin);
-      _pending = pending;
-      state = state.copyWith(stage: SetupStage.recoveryKey, pending: pending);
-    } on AppException catch (e) {
-      state = state.copyWith(stage: SetupStage.pin, error: e);
-    }
-  }
-
-  void setRecoveryConfirmed(bool value) =>
-      state = state.copyWith(recoveryKeyConfirmed: value);
-
-  /// Retour en arrière depuis la clé : rien n'a été écrit, on recommence.
-  void discard() {
-    _pending?.discard();
-    _pending = null;
-    state = const SetupState();
-  }
-
-  Future<void> commit() async {
-    final pending = state.pending;
-    if (pending == null || !state.recoveryKeyConfirmed) {
-      return;
-    }
-    state = state.copyWith(stage: SetupStage.committing);
-    try {
-      await ref.read(vaultControllerProvider.notifier).commitSetup(pending);
-      _pending = null;
+      final controller = ref.read(vaultControllerProvider.notifier);
+      final pending = await controller.prepareSetup(pin);
+      await controller.commitSetup(pending);
       final kind = await ref.read(biometricServiceProvider).availableKind();
-      if (kind == BiometricKind.none) {
-        state = state.copyWith(stage: SetupStage.done, clearPending: true);
-      } else {
-        state = state.copyWith(
-          stage: SetupStage.biometric,
-          biometricKind: kind,
-          clearPending: true,
-        );
-      }
+      state = state.copyWith(
+        stage: kind == BiometricKind.none
+            ? SetupStage.done
+            : SetupStage.biometric,
+        biometricKind: kind,
+      );
     } on AppException catch (e, s) {
-      AppLog.error('setup.commit', e, s);
-      state = state.copyWith(stage: SetupStage.recoveryKey, error: e);
+      AppLog.error('setup.create', e, s);
+      state = state.copyWith(stage: SetupStage.pin, error: e);
     }
   }
 

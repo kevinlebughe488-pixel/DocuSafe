@@ -9,21 +9,23 @@ Les numéros entre parenthèses renvoient à la liste des écrans du cahier des 
 ## 1. Première ouverture : création du coffre
 
 ```
-Splash (1) → Onboarding (2) → Création du PIN (3) → Clé de récupération (3)
-          → Biométrie, facultatif (3) → Tableau de bord vide (5)
+Splash (1) → Onboarding (2) → Création du PIN (3) → Biométrie, facultatif (3)
+          → Tableau de bord vide (5), avec le rappel « Noter ma clé »
 ```
+
+Parcours révisé le 14/11/2026 (D6 révisée) : la clé de récupération n'est plus une étape de l'inscription.
 
 | Étape | Ce que voit l'utilisateur |
 |---|---|
 | Onboarding, 4 pages courtes | 1. Bienvenue dans DocuSafe. 2. Vos documents restent sur votre téléphone : pas de compte, pas d'Internet. 3. Tout est chiffré et protégé par votre code. 4. Confidentialité : lien vers la politique et les conditions. Bouton « Créer mon coffre-fort ». |
-| Création du PIN | Saisie de 6 chiffres ou plus, puis confirmation. Un code trop simple est refusé avec une explication. |
-| Clé de récupération | La clé s'affiche. Texte clair : « Sans votre code et sans cette clé, vos documents seront définitivement perdus. Personne ne pourra les récupérer. » Bouton « Copier ». Case à cocher « J'ai conservé ma clé en lieu sûr » obligatoire pour continuer. |
-| Biométrie | Proposée seulement si le téléphone la permet. « Activer » ou « Plus tard ». |
-| Fin | Tableau de bord vide avec deux actions bien visibles : « Scanner un document » et « Importer un fichier ». |
+| Création du PIN | Saisie de 6 chiffres ou plus, puis confirmation. Un code trop simple est refusé avec une explication. Le coffre est créé dès la confirmation ; la clé de récupération est générée en silence. |
+| Biométrie | Proposée seulement si le téléphone la permet : « Activer Face ID » / « Activer l'empreinte », ou « Plus tard ». |
+| Fin | Tableau de bord vide avec deux actions bien visibles : « Scanner un document » et « Importer un fichier ». Un bandeau « Votre clé de récupération n'est pas encore notée… » avec le bouton « Noter ma clé » reste affiché tant que la clé n'a pas été notée. |
+| Noter ma clé | La clé s'affiche une seule fois. Texte clair : « Sans votre code et sans cette clé, vos documents seront définitivement perdus. Personne ne pourra les récupérer. » Bouton « Copier ». Case à cocher « J'ai conservé ma clé en lieu sûr » obligatoire pour terminer. Le bandeau disparaît ensuite. |
 
 Cas particuliers :
 
-- **L'utilisateur quitte avant la fin :** rien n'est créé. Il recommencera au prochain lancement.
+- **L'utilisateur quitte avant d'avoir confirmé son code :** rien n'est créé. Il recommencera au prochain lancement. S'il quitte pendant l'étape biométrie, le coffre existe et s'ouvre avec le code.
 - **Pas de biométrie sur le téléphone :** l'étape n'apparaît pas.
 - **Aucun compte, aucune connexion** à aucun moment.
 

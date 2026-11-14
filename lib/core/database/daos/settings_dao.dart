@@ -31,6 +31,10 @@ class SettingsDao extends DatabaseAccessor<AppDatabase> with _$SettingsDaoMixin 
     VaultSettingsCompanion(notificationsEnabled: Value(enabled)),
   );
 
+  /// Observe un indicateur booléen du JSON `vault_configuration`.
+  Stream<bool> watchFlag(String key) =>
+      watch().map((row) => _decode(row.vaultConfiguration)[key] == true);
+
   /// Lit un réglage du JSON `vault_configuration`.
   Future<Object?> readConfig(String key) async {
     final row = await get();
@@ -79,6 +83,9 @@ abstract final class VaultConfigKeys {
 
   /// Nom du profil local (facultatif).
   static const profileName = 'profile_name';
+
+  /// L'utilisateur a confirmé avoir conservé sa clé de récupération (D6 révisée).
+  static const recoveryKeyConfirmed = 'recovery_key_confirmed';
 
   static Duration autoLockOf(VaultSettingsRow row) =>
       Duration(seconds: row.autoLockDuration > 0

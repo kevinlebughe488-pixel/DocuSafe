@@ -29,32 +29,38 @@ void main() {
     await tester.tap(find.text('Passer'));
     await settle(tester, rounds: 5);
 
-    // Étape 1 : code, puis confirmation.
+    // Étape 1 : code, puis confirmation. Rien n'est écrit avant la confirmation.
     expect(find.text('Choisissez votre code'), findsOneWidget);
     await typePin(tester, '204915');
     await tester.tap(find.text('Continuer'));
     await tester.pump();
     expect(find.text('Confirmez votre code'), findsOneWidget);
+    expect(env.store.values, isEmpty);
     await typePin(tester, '204915');
     await tester.tap(find.text('Continuer'));
-    await settle(tester);
-
-    // Étape 2 : clé de récupération, case obligatoire.
-    expect(find.text('Votre clé de récupération'), findsOneWidget);
-    expect(env.store.values, isEmpty, reason: 'rien n\'est écrit avant Continuer');
-    final continueButton = find.widgetWithText(FilledButton, 'Continuer');
-    expect(tester.widget<FilledButton>(continueButton).onPressed, isNull);
-    await tester.tap(find.text('J\'ai conservé ma clé en lieu sûr'));
-    await tester.pump();
-    await tester.tap(continueButton);
     await settle(tester, rounds: 40);
 
-    // Pas de biométrie dans les tests : tableau de bord directement.
+    // Pas de biométrie dans les tests : tableau de bord directement, avec le
+    // rappel de la clé de récupération (D6 révisée).
     // Le compteur et les sept catégories vides affichent « Aucun document ».
     expect(find.text('Aucun document'), findsNWidgets(8));
     expect(find.text('Identité'), findsOneWidget);
     expect(find.text('Autres'), findsOneWidget);
+    expect(find.text('Noter ma clé'), findsOneWidget);
     expect(env.paths.databaseFile.existsSync(), isTrue);
+    expect(env.paths.recoverySlotFile.existsSync(), isTrue);
+
+    // Noter la clé : affichage unique, confirmation, le rappel disparaît.
+    await tester.tap(find.text('Noter ma clé'));
+    await settle(tester, rounds: 10);
+    expect(find.text('Votre clé de récupération'), findsOneWidget);
+    final done = find.widgetWithText(FilledButton, 'Terminé');
+    expect(tester.widget<FilledButton>(done).onPressed, isNull);
+    await tester.tap(find.text('J\'ai conservé ma clé en lieu sûr'));
+    await tester.pump();
+    await tester.tap(done);
+    await settle(tester, rounds: 10);
+    expect(find.text('Noter ma clé'), findsNothing);
 
     // Verrouillage : la base est fermée et la clé effacée.
     final container = ProviderScope.containerOf(

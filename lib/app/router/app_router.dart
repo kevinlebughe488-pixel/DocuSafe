@@ -68,7 +68,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'recovery-key',
-            builder: (_, _) => const RecoveryKeyScreen(),
+            builder: (_, state) => RecoveryKeyScreen(
+              firstTime: state.uri.queryParameters['first'] == '1',
+            ),
           ),
         ],
       ),

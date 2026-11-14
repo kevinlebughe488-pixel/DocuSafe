@@ -149,6 +149,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get setupPreparing => 'Préparation de votre coffre…';
 
   @override
+  String get homeRecoveryBanner =>
+      'Votre clé de récupération n\'est pas encore notée. Sans elle, un code oublié signifie des documents perdus.';
+
+  @override
+  String get homeRecoveryAction => 'Noter ma clé';
+
+  @override
+  String get settingsRecoveryKeyTodo => 'À noter dès maintenant';
+
+  @override
   String get setupRecoveryTitle => 'Votre clé de récupération';
 
   @override

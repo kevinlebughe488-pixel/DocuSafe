@@ -331,6 +331,7 @@ Les maquettes HTML ne sont pas réutilisées dans l'application : elles servent 
 | M5 | Lecture d'un document toujours sur fond sombre | Met le document en valeur, repose les yeux |
 | M6 | Symbole : document à serrure | Proposition. Icône définitive en phase 6. |
 | M7 | Écran dédié pour confirmer une suppression | Demandé par le cahier des charges (écran n° 20) ; « Annuler » y est mis en avant |
+| M8 | **Révision du 14/11/2026 :** la maquette 3b (clé de récupération) n'est plus une étape de la création du coffre. Elle devient l'écran « Noter ma clé », ouvert depuis un bandeau d'avertissement sur l'accueil et depuis Sécurité. L'étape biométrie passe de « 3 sur 3 » à « 2 sur 2 ». Sur iPhone, les mots « Face ID » et « Touch ID » remplacent « empreinte ». | Inscription plus légère (D6 révisée), sans retirer la porte de secours. Les captures réelles sont dans `captures/`. |
 
 ---
 

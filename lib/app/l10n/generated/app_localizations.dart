@@ -346,6 +346,24 @@ abstract class AppLocalizations {
   /// **'Préparation de votre coffre…'**
   String get setupPreparing;
 
+  /// No description provided for @homeRecoveryBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre clé de récupération n\'est pas encore notée. Sans elle, un code oublié signifie des documents perdus.'**
+  String get homeRecoveryBanner;
+
+  /// No description provided for @homeRecoveryAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Noter ma clé'**
+  String get homeRecoveryAction;
+
+  /// No description provided for @settingsRecoveryKeyTodo.
+  ///
+  /// In fr, this message translates to:
+  /// **'À noter dès maintenant'**
+  String get settingsRecoveryKeyTodo;
+
   /// No description provided for @setupRecoveryTitle.
   ///
   /// In fr, this message translates to:

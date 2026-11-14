@@ -31,6 +31,7 @@ final class SecuritySettingsState {
     this.biometricEnabled = false,
     this.autoLock = AppConfig.defaultAutoLock,
     this.screenSecure = true,
+    this.recoveryKeyConfirmed = true,
     this.busy = false,
     this.message,
   });
@@ -39,6 +40,9 @@ final class SecuritySettingsState {
   final bool biometricEnabled;
   final Duration autoLock;
   final bool screenSecure;
+
+  /// L'utilisateur a confirmé avoir noté sa clé de récupération.
+  final bool recoveryKeyConfirmed;
   final bool busy;
   final SettingsMessage? message;
 
@@ -47,6 +51,7 @@ final class SecuritySettingsState {
     bool? biometricEnabled,
     Duration? autoLock,
     bool? screenSecure,
+    bool? recoveryKeyConfirmed,
     bool? busy,
     SettingsMessage? message,
     bool clearMessage = false,
@@ -55,6 +60,7 @@ final class SecuritySettingsState {
     biometricEnabled: biometricEnabled ?? this.biometricEnabled,
     autoLock: autoLock ?? this.autoLock,
     screenSecure: screenSecure ?? this.screenSecure,
+    recoveryKeyConfirmed: recoveryKeyConfirmed ?? this.recoveryKeyConfirmed,
     busy: busy ?? this.busy,
     message: clearMessage ? null : (message ?? this.message),
   );
@@ -64,6 +70,13 @@ final class SecuritySettingsViewModel extends Notifier<SecuritySettingsState> {
   @override
   SecuritySettingsState build() {
     unawaited(_load());
+    final vault = ref.watch(vaultControllerProvider);
+    if (vault is VaultUnlocked) {
+      final sub = vault.session.database.settingsDao
+          .watchFlag(VaultConfigKeys.recoveryKeyConfirmed)
+          .listen((v) => state = state.copyWith(recoveryKeyConfirmed: v));
+      ref.onDispose(sub.cancel);
+    }
     return const SecuritySettingsState();
   }
 

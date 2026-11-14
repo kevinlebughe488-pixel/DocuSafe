@@ -9,7 +9,6 @@ import 'package:docusafe/app/router/app_router.dart';
 import 'package:docusafe/app/router/routes.dart';
 import 'package:docusafe/core/providers.dart';
 import 'package:docusafe/core/security/auth/biometric_service.dart';
-import 'package:docusafe/core/security/vault_service.dart';
 import 'package:docusafe/features/auth/presentation/setup/setup_view_model.dart';
 import 'package:docusafe/features/auth/presentation/unlock/unlock_view_model.dart';
 import 'package:flutter/foundation.dart';
@@ -158,27 +157,6 @@ void main() {
       await typePin(tester, '204');
     });
 
-    // Clé de récupération : coffre préparé mais pas enregistré.
-    PendingVaultSetup? pending;
-    await tester.runAsync(() async {
-      final service = ProviderContainer(
-        overrides: env.overrides(),
-      ).read(vaultServiceProvider);
-      pending = await service.prepareSetup(pin);
-    });
-    await both(tester, '04-cle-de-recuperation', () async {
-      await pumpApp(
-        tester,
-        extra: [
-          setupViewModelProvider.overrideWith(
-            () => _FixedSetup(
-              SetupState(stage: SetupStage.recoveryKey, pending: pending),
-            ),
-          ),
-        ],
-      );
-      containerOf(tester).read(routerProvider).go(Routes.setup);
-    });
     await both(tester, '05-biometrie', () async {
       await pumpApp(
         tester,
@@ -254,6 +232,12 @@ void main() {
     }
 
     await both(tester, '09-accueil', unlock);
+    await both(tester, '04-cle-de-recuperation', () async {
+      await unlock();
+      unawaited(
+        containerOf(tester).read(routerProvider).push(Routes.recoveryKeyFirstTime),
+      );
+    });
     await both(tester, '10-securite', () async {
       await unlock();
       containerOf(tester).read(routerProvider).go(Routes.settingsSecurity);

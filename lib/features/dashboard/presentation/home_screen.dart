@@ -7,11 +7,14 @@ import '../../../app/router/routes.dart';
 import '../../../app/theme/app_spacing.dart';
 import '../../../app/theme/ds_colors.dart';
 import '../../../core/database/daos/categories_dao.dart';
+import '../../../core/database/daos/settings_dao.dart';
 import '../../../core/providers.dart';
 import '../../../core/security/lock/vault_state.dart';
 import '../../../core/widgets/ds_logo.dart';
+import '../../../core/widgets/info_banner.dart';
 import '../../../core/widgets/secure_label.dart';
 import '../../../core/widgets/state_view.dart';
+import '../../auth/presentation/reauth/reauth_sheet.dart';
 
 /// Tableau de bord, version du socle (phase 3) : compteur réel, catégories
 /// réelles, verrouillage, accès aux réglages de sécurité. Les sections
@@ -27,6 +30,7 @@ final class HomeScreen extends ConsumerWidget {
     final db = ref.watch(databaseProvider);
     final count = ref.watch(_documentCountProvider);
     final categories = ref.watch(_categoriesProvider);
+    final recoveryConfirmed = ref.watch(_recoveryConfirmedProvider).value ?? true;
 
     return Scaffold(
       appBar: AppBar(
@@ -69,6 +73,31 @@ final class HomeScreen extends ConsumerWidget {
               ],
             ),
           ),
+          if (!recoveryConfirmed)
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.screenMargin,
+              ),
+              child: InfoBanner(
+                kind: InfoBannerKind.warning,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.homeRecoveryBanner),
+                    const SizedBox(height: AppSpacing.sm),
+                    FilledButton.tonal(
+                      onPressed: () async {
+                        if (await requestReauth(context, ref) &&
+                            context.mounted) {
+                          await context.push(Routes.recoveryKeyFirstTime);
+                        }
+                      },
+                      child: Text(l10n.homeRecoveryAction),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           if ((count.value ?? 0) == 0)
             SizedBox(
               height: 320,
@@ -173,6 +202,17 @@ final _documentCountProvider = StreamProvider<int>((ref) {
     return const Stream.empty();
   }
   return state.session.database.documentsDao.watchCount();
+});
+
+/// Vrai une fois la clé de récupération notée par l'utilisateur.
+final _recoveryConfirmedProvider = StreamProvider<bool>((ref) {
+  final state = ref.watch(vaultControllerProvider);
+  if (state is! VaultUnlocked) {
+    return const Stream.empty();
+  }
+  return state.session.database.settingsDao.watchFlag(
+    VaultConfigKeys.recoveryKeyConfirmed,
+  );
 });
 
 final _categoriesProvider = StreamProvider<List<CategoryWithCount>>((ref) {
