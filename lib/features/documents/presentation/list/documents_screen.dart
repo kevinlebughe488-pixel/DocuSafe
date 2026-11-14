@@ -63,12 +63,20 @@ final class _DocumentsScreenState extends ConsumerState<DocumentsScreen>
 
   Future<void> _add() async {
     final l10n = AppLocalizations.of(context);
-    final source = await showModalBottomSheet<ImportSource>(
+    final source = await showModalBottomSheet<ImportSource?>(
       context: context,
       builder: (ctx) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            ListTile(
+              leading: const Icon(Icons.document_scanner_outlined),
+              title: Text(l10n.documentsAddScan),
+              onTap: () {
+                Navigator.of(ctx).pop();
+                context.go(Routes.scan);
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.file_open_outlined),
               title: Text(l10n.documentsAddFile),
@@ -100,6 +108,11 @@ final class _DocumentsScreenState extends ConsumerState<DocumentsScreen>
       appBar: AppBar(
         title: Text(l10n.documentsTitle),
         actions: [
+          IconButton(
+            tooltip: l10n.searchHint,
+            icon: const Icon(Icons.search_rounded),
+            onPressed: () => context.push(Routes.search),
+          ),
           PopupMenuButton<DocumentSort>(
             tooltip: l10n.documentsSort,
             icon: const Icon(Icons.swap_vert_rounded),

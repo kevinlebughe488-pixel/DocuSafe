@@ -9,6 +9,7 @@ import '../../../../core/database/default_categories.dart';
 import '../../../../core/documents/ingest_document.dart';
 import '../../../../core/errors/app_exception.dart';
 import '../../../../core/platform/file_picker_service.dart';
+import '../../../../core/platform/thumbnail_service.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/utils/app_log.dart';
 import '../../../../core/utils/secure_random.dart';
@@ -22,6 +23,7 @@ final class ImportItem {
     required this.id,
     required this.displayName,
     required this.file,
+    this.title,
     this.check,
     this.includeDuplicate = false,
     this.form,
@@ -32,6 +34,9 @@ final class ImportItem {
 
   /// Copie dans le dossier temporaire privé.
   final File file;
+
+  /// Titre proposé (scan : « Scan du 14/11/2026 »), sinon le nom du fichier.
+  final String? title;
   final FileCheck? check;
 
   /// Doublon que l'utilisateur veut importer quand même.
@@ -50,7 +55,7 @@ final class ImportItem {
     return a != null && (!a.isDuplicate || includeDuplicate);
   }
 
-  String get defaultTitle => p.basenameWithoutExtension(displayName);
+  String get defaultTitle => title ?? p.basenameWithoutExtension(displayName);
 
   ImportItem copyWith({
     FileCheck? check,
@@ -60,6 +65,7 @@ final class ImportItem {
     id: id,
     displayName: displayName,
     file: file,
+    title: title,
     check: check ?? this.check,
     includeDuplicate: includeDuplicate ?? this.includeDuplicate,
     form: form ?? this.form,
@@ -185,6 +191,33 @@ final class ImportViewModel extends Notifier<ImportState> {
       _replace(item.copyWith(check: check));
     }
     state = state.copyWith(phase: ImportPhase.ready);
+  }
+
+  /// PDF issu du scanner : même suite que l'importation (vérification,
+  /// informations, enregistrement). [preview] remplace l'aperçu calculé
+  /// (miniature de la première page, nombre de pages).
+  Future<bool> addScannedPdf({
+    required File pdf,
+    required String displayName,
+    required String title,
+    FilePreview? preview,
+  }) async {
+    _cleanupFiles(state.items);
+    final item = ImportItem(
+      id: SecureRandom.uuid(),
+      displayName: displayName,
+      file: pdf,
+      title: title,
+    );
+    state = ImportState(phase: ImportPhase.checking, items: [item]);
+    var check = await ref.read(ingestDocumentProvider).check(pdf);
+    if (check is FileAccepted && preview != null) {
+      check = check.withPreview(preview);
+    }
+    _replace(item.copyWith(check: check, includeDuplicate: true));
+    state = state.copyWith(phase: ImportPhase.ready);
+    prepareForms();
+    return check is FileAccepted;
   }
 
   void setIncludeDuplicate(String id, bool include) {

@@ -4,9 +4,9 @@ import 'package:material_ui/material_ui.dart';
 import '../l10n/generated/app_localizations.dart';
 
 /// Coque des onglets principaux : barre de navigation du bas
-/// (docs/07-design.md §8). Lot a : Accueil, Documents, Paramètres.
-/// Scanner (lot b) et Échéances (lot c) seront ajoutés avec leurs écrans :
-/// aucun onglet sans contenu réel.
+/// (docs/07-design.md §8). Scanner sur une pastille bleue permanente.
+/// Échéances (lot c) sera ajouté avec son écran : aucun onglet sans contenu
+/// réel.
 final class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.navigationShell});
 
@@ -15,6 +15,16 @@ final class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    final scanPill = Container(
+      width: 56,
+      height: 32,
+      decoration: BoxDecoration(
+        color: scheme.primary,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Icon(Icons.document_scanner_rounded, color: scheme.onPrimary),
+    );
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
@@ -34,6 +44,11 @@ final class AppShell extends StatelessWidget {
             icon: const Icon(Icons.folder_outlined),
             selectedIcon: const Icon(Icons.folder_rounded),
             label: l10n.navDocuments,
+          ),
+          NavigationDestination(
+            icon: scanPill,
+            selectedIcon: scanPill,
+            label: l10n.navScanner,
           ),
           NavigationDestination(
             icon: const Icon(Icons.settings_outlined),

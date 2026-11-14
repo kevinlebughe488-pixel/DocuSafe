@@ -9,7 +9,12 @@ abstract final class Routes {
   // Onglets principaux (coque avec barre du bas).
   static const home = '/home';
   static const documents = '/documents';
+  static const scan = '/scan';
   static const settings = '/settings';
+
+  // Scanner et recherche (plein écran).
+  static const scanPreview = '/scan/preview';
+  static const search = '/search';
 
   // Documents (plein écran).
   static const documentsImport = '/documents/import';

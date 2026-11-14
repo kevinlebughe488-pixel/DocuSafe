@@ -13,8 +13,9 @@ Android en priorité (MVP), puis iPhone avec le même code.
 | 1 – Analyse et conception | Architecture, modèle de données, parcours, règles de sécurité | Validée le 13/11/2026 |
 | 2 – Design | Système de design, maquettes, navigation | Validée le 13/11/2026 |
 | 3 – Socle | Projet Flutter, chiffrement, base de données, authentification | Validée le 14/11/2026 |
-| 4 – Fonctionnel, lot a | Importation, documents (liste, fiche, lecture, modification, favoris, suppression), catégories, navigation, paramètres | Terminé le 14/11/2026 (session en ligne), **en attente de validation** |
-| 4 – Fonctionnel, lots b et c | Scanner, recherche · échéances, notifications, partage, export, sauvegarde, stockage | À venir |
+| 4 – Fonctionnel, lot a | Importation, documents (liste, fiche, lecture, modification, favoris, suppression), catégories, navigation, paramètres | Validé le 14/11/2026 |
+| 4 – Fonctionnel, lot b | Scanner (aperçu, pages, PDF), recherche avec filtres | Terminé le 14/11/2026 (session en ligne), **en attente de validation** |
+| 4 – Fonctionnel, lot c | Échéances, notifications, partage, export, sauvegarde, stockage | À venir |
 | 5 – Sécurité et optimisation | Tests, corrections, optimisation | À venir |
 | 6 – Publication | Builds, fiches des magasins, documents légaux | À venir |
 
@@ -77,8 +78,8 @@ Le script installe Flutter 3.50.0 (empreinte vérifiée), récupère les paquets
 | `lib/core/storage/` | Emplacements des fichiers sur le téléphone |
 | `lib/core/widgets/` | Composants réutilisables du système de design |
 | `lib/core/documents/` | Formats acceptés, ingestion (`IngestDocument`), ouverture, suppression, dépôt des documents |
-| `lib/core/platform/` | Sélecteurs de fichiers et photos, miniatures (interfaces + versions simulées) |
-| `lib/features/` | Écrans par module : onboarding, auth, dashboard, documents (liste, fiche, lecture, modification, importation, suppression), categories, settings, legal |
+| `lib/core/platform/` | Scanner, sélecteurs de fichiers et photos, miniatures (interfaces + versions simulées) |
+| `lib/features/` | Écrans par module : onboarding, auth, dashboard, documents (liste, fiche, lecture, modification, importation, suppression), scanner, search, categories, settings, legal |
 | `test/fixtures/` | Fichiers de test (PDF, PNG, texte) |
 | `test/` | Tests unitaires et tests de widgets |
 | `tool/` | Scripts d'installation |

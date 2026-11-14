@@ -42,6 +42,16 @@ final class FileAccepted extends FileCheck {
   final DocumentRow? duplicateOf;
 
   bool get isDuplicate => duplicateOf != null;
+
+  /// Même vérification avec un autre aperçu (scan : miniature tirée de la
+  /// première page, nombre de pages connu).
+  FileAccepted withPreview(FilePreview preview) => FileAccepted(
+    format: format,
+    size: size,
+    sha256Hex: sha256Hex,
+    preview: preview,
+    duplicateOf: duplicateOf,
+  );
 }
 
 /// Fichier refusé, avec la raison.

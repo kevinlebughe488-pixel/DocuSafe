@@ -7,8 +7,8 @@ Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera te
 | P1 | Le PC de développement est infecté par un virus (« Expiro ») | **Bloquant** | Ouvert depuis le 13/11/2026 |
 | P2 | Flutter est installé mais ne peut pas s'exécuter | Bloquant (conséquence de P1) | Ouvert depuis le 13/11/2026 |
 | P3 | La session en ligne ne peut pas compiler d'APK Android | Gênant | Ouvert depuis le 13/11/2026 |
-| P4 | Les phases 3 et 4 (lot a) n'ont jamais été lancées sur un téléphone | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
-| P5 | Miniatures et lecture des PDF (PDFium) non vérifiées hors des tests | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
+| P4 | Les phases 3 et 4 (lots a et b) n'ont jamais été lancées sur un téléphone | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
+| P5 | Miniatures et lecture des PDF (PDFium), scanner du système (ML Kit, VisionKit) non vérifiés hors des tests | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
 
 ---
 
@@ -87,6 +87,7 @@ Une fois le PC sain : supprimer `D:\dev\flutter`, réinstaller Flutter (15 minut
 
 - Les miniatures des images et tout le chemin d'importation sont couverts par les tests (fichiers de test réels). Le rendu des PDF (première page en miniature, lecteur plein écran) passe par le moteur PDFium du paquet `pdfrx`, qui n'a pas pu être exercé dans la session en ligne : les tests utilisent un service de miniatures « images seulement ».
 - Si le rendu PDF échoue sur le téléphone, le document reste valide (sans miniature) et l'erreur est journalisée sans donnée sensible. À vérifier au premier lancement : miniature d'un PDF importé, ouverture d'un PDF de plusieurs pages, vitesse sur un PDF de 20 Mo.
+- **Scanner (lot b)** : l'écran du système (ML Kit sur Android, VisionKit sur iOS, repli à recadrage manuel sans services Google Play) ne peut pas s'ouvrir hors d'un téléphone. Les tests utilisent un scanner simulé qui rend de vraies images ; l'aperçu, l'assemblage en PDF, l'enregistrement chiffré et l'effacement des images en clair sont couverts. À vérifier au premier lancement : scan d'une page puis de plusieurs, refus de la caméra (message affiché), dossier du scanner vide après le scan, téléphone sans services Google Play.
 - La vitesse du chiffrement dans un isolate (Dart pur, sans accélération native) est aussi à mesurer sur un téléphone d'entrée de gamme ; le plan B est décrit dans `docs/06-dependances.md` §5.
 
 ## P2 – Flutter installé mais inutilisable

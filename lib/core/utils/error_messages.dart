@@ -23,6 +23,7 @@ abstract final class ErrorMessages {
     CryptoException() => l10n.errorIntegrity,
     StorageException() => l10n.errorStorage,
     VaultLockedException() => l10n.errorVaultLocked,
+    ScannerException() => l10n.errorScanner,
     _ => l10n.errorUnexpected,
   };
 }

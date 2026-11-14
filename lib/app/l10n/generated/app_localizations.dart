@@ -1726,6 +1726,312 @@ abstract class AppLocalizations {
   /// **'Licences des composants'**
   String get settingsLicenses;
 
+  /// No description provided for @scanTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner'**
+  String get scanTitle;
+
+  /// No description provided for @scanHeadline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numériser un document'**
+  String get scanHeadline;
+
+  /// No description provided for @scanBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les contours sont détectés automatiquement. Vous pourrez recadrer et ajouter plusieurs pages.'**
+  String get scanBody;
+
+  /// No description provided for @scanStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numériser'**
+  String get scanStart;
+
+  /// No description provided for @scanImportPhotos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer des photos'**
+  String get scanImportPhotos;
+
+  /// No description provided for @scanTipsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour un bon résultat'**
+  String get scanTipsTitle;
+
+  /// No description provided for @scanTipLight.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonne lumière, sans reflet'**
+  String get scanTipLight;
+
+  /// No description provided for @scanTipFlat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Document bien à plat'**
+  String get scanTipFlat;
+
+  /// No description provided for @scanTipContrast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fond d\'une couleur différente'**
+  String get scanTipContrast;
+
+  /// No description provided for @scanFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le scanner n\'a pas pu s\'ouvrir. Vérifiez que DocuSafe a accès à l\'appareil photo dans les réglages du téléphone.'**
+  String get scanFailed;
+
+  /// No description provided for @scanPreviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu du scan'**
+  String get scanPreviewTitle;
+
+  /// No description provided for @scanPreviewHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 page.} other{{count} pages. Maintenez une page pour la déplacer.}}'**
+  String scanPreviewHint(int count);
+
+  /// No description provided for @scanPageLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page {number}'**
+  String scanPageLabel(int number);
+
+  /// No description provided for @scanRemovePage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer la page {number}'**
+  String scanRemovePage(int number);
+
+  /// No description provided for @scanAddPages.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter des pages'**
+  String get scanAddPages;
+
+  /// No description provided for @scanRestart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recommencer'**
+  String get scanRestart;
+
+  /// No description provided for @scanContinue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get scanContinue;
+
+  /// No description provided for @scanBuilding.
+  ///
+  /// In fr, this message translates to:
+  /// **'Création du PDF…'**
+  String get scanBuilding;
+
+  /// No description provided for @scanDiscardTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abandonner ce scan ?'**
+  String get scanDiscardTitle;
+
+  /// No description provided for @scanDiscardBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les pages numérisées seront effacées.'**
+  String get scanDiscardBody;
+
+  /// No description provided for @scanDiscard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abandonner'**
+  String get scanDiscard;
+
+  /// No description provided for @scanDefaultTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scan du {date}'**
+  String scanDefaultTitle(String date);
+
+  /// No description provided for @documentsAddScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner un document'**
+  String get documentsAddScan;
+
+  /// No description provided for @homeScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner'**
+  String get homeScan;
+
+  /// No description provided for @homeScanDocument.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner un document'**
+  String get homeScanDocument;
+
+  /// No description provided for @homeEmptyBodyFinal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numérisez ou importez votre premier document. Il sera chiffré sur ce téléphone.'**
+  String get homeEmptyBodyFinal;
+
+  /// No description provided for @homeSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un document'**
+  String get homeSearchHint;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un document'**
+  String get searchHint;
+
+  /// No description provided for @searchClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer'**
+  String get searchClear;
+
+  /// No description provided for @searchResults.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 résultat} other{{count} résultats}}'**
+  String searchResults(int count);
+
+  /// No description provided for @searchNoResultTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun résultat'**
+  String get searchNoResultTitle;
+
+  /// No description provided for @searchNoResultBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Essayez un autre mot ou retirez un filtre.'**
+  String get searchNoResultBody;
+
+  /// No description provided for @searchClearFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer les filtres'**
+  String get searchClearFilters;
+
+  /// No description provided for @searchStartTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher dans le coffre'**
+  String get searchStartTitle;
+
+  /// No description provided for @searchStartBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom, type, description, tags ou nom du fichier. Majuscules et accents sont ignorés.'**
+  String get searchStartBody;
+
+  /// No description provided for @searchFilterCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get searchFilterCategory;
+
+  /// No description provided for @searchFilterTag.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tag'**
+  String get searchFilterTag;
+
+  /// No description provided for @searchFilterFavorites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Favoris'**
+  String get searchFilterFavorites;
+
+  /// No description provided for @searchFilterFormat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Format'**
+  String get searchFilterFormat;
+
+  /// No description provided for @searchFilterAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouté'**
+  String get searchFilterAdded;
+
+  /// No description provided for @searchFilterExpiry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expiration'**
+  String get searchFilterExpiry;
+
+  /// No description provided for @searchAddedWeek.
+  ///
+  /// In fr, this message translates to:
+  /// **'7 derniers jours'**
+  String get searchAddedWeek;
+
+  /// No description provided for @searchAddedMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'30 derniers jours'**
+  String get searchAddedMonth;
+
+  /// No description provided for @searchAddedYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'12 derniers mois'**
+  String get searchAddedYear;
+
+  /// No description provided for @searchExpiryExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expirés'**
+  String get searchExpiryExpired;
+
+  /// No description provided for @searchExpiry30.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans les 30 jours'**
+  String get searchExpiry30;
+
+  /// No description provided for @searchExpiry365.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans l\'année'**
+  String get searchExpiry365;
+
+  /// No description provided for @searchExpiryNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans date'**
+  String get searchExpiryNone;
+
+  /// No description provided for @searchAny.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get searchAny;
+
+  /// No description provided for @searchNoTags.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun tag pour l\'instant.'**
+  String get searchNoTags;
+
+  /// No description provided for @searchMatchTag.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tag : {tags}'**
+  String searchMatchTag(String tags);
+
   /// No description provided for @errorStorage.
   ///
   /// In fr, this message translates to:
@@ -1749,6 +2055,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le coffre est verrouillé. Déverrouillez-le pour continuer.'**
   String get errorVaultLocked;
+
+  /// No description provided for @errorScanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le scanner n\'a pas pu s\'ouvrir. Vérifiez l\'accès à l\'appareil photo dans les réglages du téléphone.'**
+  String get errorScanner;
 
   /// No description provided for @errorUnexpected.
   ///

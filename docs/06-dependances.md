@@ -50,12 +50,12 @@ Les versions seront figées dans `pubspec.lock` au moment de l'installation (pha
 
 | Paquet | Version | Rôle | Licence | Éditeur |
 |---|---|---|---|---|
-| `cunning_document_scanner` | 3.1.0 | Scanner : ML Kit (Android), VisionKit (iOS), repli à recadrage manuel | MIT | victorcarreras.dev |
+| `cunning_document_scanner` | 3.1.0 (vérifié le 14/11/2026) | Scanner : ML Kit (Android), VisionKit (iOS), repli à recadrage manuel. API `scanDocuments()` ; `cleanCache()` vide son dossier après chaque scan. | MIT | victorcarreras.dev |
 | `file_picker` | 13.3.3 | Choix d'un fichier (PDF, images), enregistrement d'un export | MIT | victorcarreras.dev |
 | `image_picker` | 1.2.4 | Choix de photos dans la galerie, sans permission | Apache-2.0 / BSD-3 | flutter.dev |
 | `receive_sharing_intent` | 1.9.0 | « Partager vers DocuSafe » | Apache-2.0 | kasem.dev |
 | `share_plus` | 13.3.1 | Feuille de partage du système | BSD-3 | fluttercommunity.dev |
-| `pdf` | 3.13.1 | Création du PDF à partir des pages scannées | Apache-2.0 | nfet.net |
+| `pdf` | 3.13.1 (vérifié le 14/11/2026) | Création du PDF à partir des pages scannées (dans un isolate) | Apache-2.0 | nfet.net |
 | `pdfrx` | 2.12.1 | Affichage des PDF, rendu de la première page pour la miniature. Télécharge PDFium depuis GitHub à la compilation (empreinte contrôlée par le paquet). Non exercé en session en ligne : voir P5. | MIT | espresso3389.jp |
 | `image` | 4.13.0 (vérifié le 14/11/2026) | Miniatures : décodage, rotation EXIF, réduction, JPEG | MIT | taosengine.com |
 

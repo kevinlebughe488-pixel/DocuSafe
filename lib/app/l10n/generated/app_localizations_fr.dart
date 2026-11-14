@@ -1021,6 +1021,187 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsLicenses => 'Licences des composants';
 
   @override
+  String get scanTitle => 'Scanner';
+
+  @override
+  String get scanHeadline => 'Numériser un document';
+
+  @override
+  String get scanBody =>
+      'Les contours sont détectés automatiquement. Vous pourrez recadrer et ajouter plusieurs pages.';
+
+  @override
+  String get scanStart => 'Numériser';
+
+  @override
+  String get scanImportPhotos => 'Importer des photos';
+
+  @override
+  String get scanTipsTitle => 'Pour un bon résultat';
+
+  @override
+  String get scanTipLight => 'Bonne lumière, sans reflet';
+
+  @override
+  String get scanTipFlat => 'Document bien à plat';
+
+  @override
+  String get scanTipContrast => 'Fond d\'une couleur différente';
+
+  @override
+  String get scanFailed =>
+      'Le scanner n\'a pas pu s\'ouvrir. Vérifiez que DocuSafe a accès à l\'appareil photo dans les réglages du téléphone.';
+
+  @override
+  String get scanPreviewTitle => 'Aperçu du scan';
+
+  @override
+  String scanPreviewHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pages. Maintenez une page pour la déplacer.',
+      one: '1 page.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String scanPageLabel(int number) {
+    return 'Page $number';
+  }
+
+  @override
+  String scanRemovePage(int number) {
+    return 'Retirer la page $number';
+  }
+
+  @override
+  String get scanAddPages => 'Ajouter des pages';
+
+  @override
+  String get scanRestart => 'Recommencer';
+
+  @override
+  String get scanContinue => 'Continuer';
+
+  @override
+  String get scanBuilding => 'Création du PDF…';
+
+  @override
+  String get scanDiscardTitle => 'Abandonner ce scan ?';
+
+  @override
+  String get scanDiscardBody => 'Les pages numérisées seront effacées.';
+
+  @override
+  String get scanDiscard => 'Abandonner';
+
+  @override
+  String scanDefaultTitle(String date) {
+    return 'Scan du $date';
+  }
+
+  @override
+  String get documentsAddScan => 'Scanner un document';
+
+  @override
+  String get homeScan => 'Scanner';
+
+  @override
+  String get homeScanDocument => 'Scanner un document';
+
+  @override
+  String get homeEmptyBodyFinal =>
+      'Numérisez ou importez votre premier document. Il sera chiffré sur ce téléphone.';
+
+  @override
+  String get homeSearchHint => 'Rechercher un document';
+
+  @override
+  String get searchHint => 'Rechercher un document';
+
+  @override
+  String get searchClear => 'Effacer';
+
+  @override
+  String searchResults(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count résultats',
+      one: '1 résultat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchNoResultTitle => 'Aucun résultat';
+
+  @override
+  String get searchNoResultBody => 'Essayez un autre mot ou retirez un filtre.';
+
+  @override
+  String get searchClearFilters => 'Effacer les filtres';
+
+  @override
+  String get searchStartTitle => 'Rechercher dans le coffre';
+
+  @override
+  String get searchStartBody =>
+      'Nom, type, description, tags ou nom du fichier. Majuscules et accents sont ignorés.';
+
+  @override
+  String get searchFilterCategory => 'Catégorie';
+
+  @override
+  String get searchFilterTag => 'Tag';
+
+  @override
+  String get searchFilterFavorites => 'Favoris';
+
+  @override
+  String get searchFilterFormat => 'Format';
+
+  @override
+  String get searchFilterAdded => 'Ajouté';
+
+  @override
+  String get searchFilterExpiry => 'Expiration';
+
+  @override
+  String get searchAddedWeek => '7 derniers jours';
+
+  @override
+  String get searchAddedMonth => '30 derniers jours';
+
+  @override
+  String get searchAddedYear => '12 derniers mois';
+
+  @override
+  String get searchExpiryExpired => 'Expirés';
+
+  @override
+  String get searchExpiry30 => 'Dans les 30 jours';
+
+  @override
+  String get searchExpiry365 => 'Dans l\'année';
+
+  @override
+  String get searchExpiryNone => 'Sans date';
+
+  @override
+  String get searchAny => 'Tous';
+
+  @override
+  String get searchNoTags => 'Aucun tag pour l\'instant.';
+
+  @override
+  String searchMatchTag(String tags) {
+    return 'Tag : $tags';
+  }
+
+  @override
   String get errorStorage =>
       'Le stockage du téléphone n\'a pas répondu. Vérifiez l\'espace disponible et réessayez.';
 
@@ -1035,6 +1216,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get errorVaultLocked =>
       'Le coffre est verrouillé. Déverrouillez-le pour continuer.';
+
+  @override
+  String get errorScanner =>
+      'Le scanner n\'a pas pu s\'ouvrir. Vérifiez l\'accès à l\'appareil photo dans les réglages du téléphone.';
 
   @override
   String get errorUnexpected =>

@@ -22,6 +22,9 @@ import '../../features/documents/presentation/list/documents_view_model.dart';
 import '../../features/documents/presentation/viewer/document_viewer_screen.dart';
 import '../../features/legal/presentation/legal_text_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/scanner/presentation/scan_preview_screen.dart';
+import '../../features/scanner/presentation/scan_screen.dart';
+import '../../features/search/presentation/search_screen.dart';
 import '../../features/settings/presentation/about_screen.dart';
 import '../../features/settings/presentation/change_pin_screen.dart';
 import '../../features/settings/presentation/recovery_key_screen.dart';
@@ -85,12 +88,25 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
           StatefulShellBranch(
+            routes: [GoRoute(path: Routes.scan, builder: (_, _) => const ScanScreen())],
+          ),
+          StatefulShellBranch(
             routes: [GoRoute(path: Routes.settings, builder: (_, _) => const SettingsScreen())],
           ),
         ],
       ),
 
       // Écrans plein écran (sans barre du bas).
+      GoRoute(
+        path: Routes.scanPreview,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const ScanPreviewScreen(),
+      ),
+      GoRoute(
+        path: Routes.search,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const SearchScreen(),
+      ),
       GoRoute(
         path: Routes.documentsImport,
         parentNavigatorKey: _rootKey,
@@ -201,8 +217,10 @@ String? _redirect(Ref ref, String location) {
             target != Routes.onboarding &&
             !target.startsWith(Routes.lock) &&
             target != Routes.setup &&
-            // Une importation interrompue par un verrouillage recommence.
-            !target.startsWith(Routes.documentsImport);
+            // Une importation ou un scan interrompu par un verrouillage
+            // recommence (les fichiers temporaires ont été purgés).
+            !target.startsWith(Routes.documentsImport) &&
+            target != Routes.scanPreview;
         return valid ? target : Routes.home;
       }
       if (location != Routes.setup) {

@@ -3,6 +3,23 @@ abstract final class TextNormalizer {
   static const _accents = 'àâäáãåçéèêëíìîïñóòôöõúùûüýÿœæß';
   static const _plain = 'aaaaaaceeeeiiiinooooouuuuyyoas';
 
+  /// Minuscules et sans accents, **caractère pour caractère** (même longueur
+  /// que l'entrée) : sert à retrouver la position d'un mot dans le texte
+  /// d'origine pour le mettre en évidence.
+  static String foldSameLength(String input) {
+    final lower = input.toLowerCase();
+    if (lower.length != input.length) {
+      return input;
+    }
+    final sb = StringBuffer();
+    for (var i = 0; i < lower.length; i++) {
+      final ch = lower[i];
+      final idx = _accents.indexOf(ch);
+      sb.write(idx >= 0 ? _plain[idx] : ch);
+    }
+    return sb.toString();
+  }
+
   /// Clé de comparaison : minuscules, sans accents, espaces réduits.
   ///
   /// « Santé » et « sante » donnent la même clé (docs/03-modele-de-donnees.md).

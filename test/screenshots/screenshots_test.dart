@@ -9,6 +9,7 @@ import 'package:docusafe/app/router/app_router.dart';
 import 'package:docusafe/app/router/routes.dart';
 import 'package:docusafe/core/documents/ingest_document.dart';
 import 'package:docusafe/core/platform/file_picker_service.dart';
+import 'package:docusafe/core/platform/scanner_service.dart';
 import 'package:docusafe/core/platform/thumbnail_service.dart';
 import 'package:docusafe/core/providers.dart';
 import 'package:docusafe/core/security/auth/biometric_service.dart';
@@ -16,6 +17,7 @@ import 'package:docusafe/core/utils/date_only.dart';
 import 'package:docusafe/features/auth/presentation/setup/setup_view_model.dart';
 import 'package:docusafe/features/auth/presentation/unlock/unlock_view_model.dart';
 import 'package:docusafe/features/documents/presentation/import/import_view_model.dart';
+import 'package:docusafe/features/scanner/presentation/scan_view_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -262,8 +264,10 @@ void main() {
   testWidgets('05 documents, importation, catégories, paramètres', (tester) async {
     await tester.runAsync(createVault);
     final picker = FakeFilePickerService();
+    final scanner = FakeScannerService();
     final extra = [
       filePickerServiceProvider.overrideWithValue(picker),
+      scannerServiceProvider.overrideWithValue(scanner),
       thumbnailServiceProvider.overrideWithValue(const ImageOnlyThumbnailService()),
     ];
 
@@ -340,6 +344,29 @@ void main() {
     await both(tester, '19-parametres', () async {
       await unlockWithDocuments();
       containerOf(tester).read(routerProvider).go(Routes.settings);
+    });
+    await both(tester, '20-scanner', () async {
+      await unlockWithDocuments();
+      containerOf(tester).read(routerProvider).go(Routes.scan);
+    });
+    await both(tester, '21-apercu-scan', () async {
+      await unlockWithDocuments();
+      await tester.runAsync(() async {
+        final dir = await Directory('${env.root.path}/scanner_cache').create();
+        scanner.pages = [
+          for (var i = 0; i < 3; i++)
+            await File('test/fixtures/rouge.png').copy('${dir.path}/p${DateTime.now().microsecondsSinceEpoch}$i.png'),
+        ];
+        await containerOf(tester).read(scanViewModelProvider.notifier).scan();
+      });
+      unawaited(containerOf(tester).read(routerProvider).push(Routes.scanPreview));
+    });
+    await both(tester, '22-recherche', () async {
+      await unlockWithDocuments();
+      unawaited(containerOf(tester).read(routerProvider).push(Routes.search));
+      await settle(tester, rounds: 5);
+      await tester.enterText(find.byType(TextField).last, 'pass');
+      await settle(tester, rounds: 10);
     });
   }, skip: !enabled, timeout: const Timeout(Duration(minutes: 5)));
 }

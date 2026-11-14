@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'database/app_database.dart';
 import 'documents/delete_document.dart';
 import 'documents/document_repository.dart';
+import 'documents/document_search.dart';
 import 'documents/ingest_document.dart';
 import 'documents/open_document.dart';
 import 'platform/file_picker_service.dart';
+import 'platform/scanner_service.dart';
 import 'platform/thumbnail_service.dart';
 import 'security/auth/biometric_service.dart';
 import 'security/auth/pin_attempts.dart';
@@ -99,6 +101,14 @@ final databaseProvider = Provider<AppDatabase>(
 
 final filePickerServiceProvider = Provider<FilePickerService>(
   (ref) => PlatformFilePickerService(),
+);
+
+final scannerServiceProvider = Provider<ScannerService>(
+  (ref) => const PlatformScannerService(),
+);
+
+final documentSearchProvider = Provider<DocumentSearch>(
+  (ref) => DocumentSearch(ref.watch(databaseProvider)),
 );
 
 final thumbnailServiceProvider = Provider<ThumbnailService>(

@@ -22,9 +22,9 @@ import '../../auth/presentation/reauth/reauth_sheet.dart';
 import '../../documents/presentation/import/import_view_model.dart';
 import '../../documents/presentation/list/documents_view_model.dart';
 
-/// Tableau de bord (écran 5) : compteur, importation, catégories, favoris,
-/// ajoutés récemment. Construit comme une liste de sections indépendantes.
-/// « Scanner » arrive au lot b, « Échéances à venir » au lot c.
+/// Tableau de bord (écran 5) : compteur, recherche, scanner et importation,
+/// catégories, favoris, ajoutés récemment. Construit comme une liste de
+/// sections indépendantes. « Échéances à venir » arrive au lot c.
 final class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -44,6 +44,8 @@ final class HomeScreen extends ConsumerWidget {
       ref.read(importViewModelProvider.notifier).reset();
       await context.push(Routes.documentsImport, extra: ImportSource.files);
     }
+
+    void scan() => context.go(Routes.scan);
 
     return Scaffold(
       appBar: AppBar(
@@ -112,27 +114,63 @@ final class HomeScreen extends ConsumerWidget {
             StateView(
               icon: Icons.inventory_2_outlined,
               title: l10n.homeEmptyTitle,
-              body: l10n.homeEmptyBodyLotA,
+              body: l10n.homeEmptyBodyFinal,
               actions: [
                 FilledButton.icon(
+                  onPressed: scan,
+                  icon: const Icon(Icons.document_scanner_rounded),
+                  label: Text(l10n.homeScanDocument),
+                ),
+                FilledButton.tonalIcon(
                   onPressed: import,
                   icon: const Icon(Icons.upload_file_rounded),
                   label: Text(l10n.homeImport),
                 ),
               ],
             )
-          else
+          else ...[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenMargin),
-              child: FilledButton.tonalIcon(
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(AppSpacing.touchTarget),
-                ),
-                onPressed: import,
-                icon: const Icon(Icons.upload_file_rounded),
-                label: Text(l10n.homeImport),
+              child: SearchBar(
+                hintText: l10n.homeSearchHint,
+                leading: const Icon(Icons.search_rounded),
+                elevation: const WidgetStatePropertyAll(0),
+                backgroundColor: WidgetStatePropertyAll(theme.colorScheme.surfaceContainerHigh),
+                // Barre de lancement : la saisie se fait dans l'écran Recherche.
+                onTap: () => context.push(Routes.search),
+                keyboardType: TextInputType.none,
               ),
             ),
+            const SizedBox(height: AppSpacing.lg),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenMargin),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: FilledButton.icon(
+                      style: FilledButton.styleFrom(
+                        minimumSize: const Size.fromHeight(AppSpacing.touchTarget),
+                      ),
+                      onPressed: scan,
+                      icon: const Icon(Icons.document_scanner_rounded),
+                      label: Text(l10n.homeScan),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: FilledButton.tonalIcon(
+                      style: FilledButton.styleFrom(
+                        minimumSize: const Size.fromHeight(AppSpacing.touchTarget),
+                      ),
+                      onPressed: import,
+                      icon: const Icon(Icons.upload_file_rounded),
+                      label: Text(l10n.documentsAdd),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           _SectionHeader(
             title: l10n.homeCategories,
             action: l10n.homeManage,

@@ -22,6 +22,7 @@ final class DocumentTile extends ConsumerWidget {
     this.trailing,
     this.onTap,
     this.showFavorite = true,
+    this.titleSpan,
   });
 
   final DocumentRow document;
@@ -34,6 +35,9 @@ final class DocumentTile extends ConsumerWidget {
   final Widget? trailing;
   final VoidCallback? onTap;
   final bool showFavorite;
+
+  /// Titre enrichi (recherche : mots trouvés mis en évidence).
+  final InlineSpan? titleSpan;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,7 +62,9 @@ final class DocumentTile extends ConsumerWidget {
     }
     return ListTile(
       leading: DocumentThumbnail(document: document),
-      title: Text(document.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+      title: titleSpan == null
+          ? Text(document.title, maxLines: 1, overflow: TextOverflow.ellipsis)
+          : Text.rich(titleSpan!, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(
         subtitle ?? parts.join(' · '),
         maxLines: 1,

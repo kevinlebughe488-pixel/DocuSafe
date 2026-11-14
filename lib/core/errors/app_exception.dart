@@ -105,6 +105,11 @@ final class VaultLockedException extends AppException {
   const VaultLockedException() : super('vault.locked');
 }
 
+/// Le scanner n'a pas pu s'ouvrir (caméra refusée, service indisponible).
+final class ScannerException extends AppException {
+  const ScannerException() : super('scanner.failed');
+}
+
 /// L'utilisateur a annulé l'opération en cours.
 final class CancelledException extends AppException {
   const CancelledException() : super('cancelled');
