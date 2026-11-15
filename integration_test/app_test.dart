@@ -9,7 +9,9 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// Lancement : flutter test integration_test (appareil ou émulateur branché).
 /// Dans GitHub : recette « Tests d'intégration ». Le téléphone doit partir
-/// d'une installation neuve (aucun coffre).
+/// d'une installation neuve (aucun coffre). Sur un vrai téléphone, désinstaller
+/// DocSafe après le test : l'outil Flutter tente de désinstaller l'identifiant
+/// interne (com.docusafe.app) au lieu de com.docsafe.app, et échoue.
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -45,7 +47,12 @@ void main() {
   }
 
   testWidgets('créer le coffre, verrouiller, rouvrir, profil, aide', (tester) async {
+    // L'application installe son propre gestionnaire d'erreurs : le test remet
+    // celui de flutter_test, pour qu'une erreur fasse échouer le test au lieu
+    // de bloquer la recette jusqu'à son délai maximal.
+    final testErrorHandler = FlutterError.onError;
     await app.main();
+    FlutterError.onError = testErrorHandler;
     await waitFor(tester, find.text('Bienvenue dans DocSafe'));
 
     // Création du coffre : code choisi puis confirmé.

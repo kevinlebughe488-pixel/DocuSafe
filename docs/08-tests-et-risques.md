@@ -13,7 +13,7 @@
 
 Le test sur téléphone simulé installe la vraie application (version « aperçu »), crée un coffre, le verrouille, le rouvre avec le code, arrête puis relance l'application et rouvre encore le coffre. C'est le seul test qui exerce le vrai stockage sécurisé d'Android et la vraie base chiffrée. Il tourne sur un **petit écran** (320 × 640 points) pour représenter un téléphone d'entrée de gamme.
 
-Les tests d'intégration du paquet `integration_test` (`integration_test/app_test.dart`) font tourner la vraie application sur un émulateur Android dans la recette « Tests d'intégration » : création du coffre, mauvais code refusé, réouverture, profil, aide. Le scanner, les sélecteurs du système et les notifications restent à vérifier sur un vrai téléphone (plan d'essais).
+Les tests d'intégration du paquet `integration_test` (`integration_test/app_test.dart`) font tourner la vraie application sur un émulateur Android dans la recette « Tests d'intégration » : création du coffre, mauvais code refusé, réouverture, profil, aide. Réussis le 15/11/2026 (parcours complet en 12 secondes). Le test remet le gestionnaire d'erreurs de `flutter_test` après le lancement de l'application : sans cela, un échec bloquait la recette au lieu de l'arrêter. Le scanner, les sélecteurs du système et les notifications restent à vérifier sur un vrai téléphone (plan d'essais).
 
 Couverture des tests : [rapport-couverture.md](rapport-couverture.md) (79 % des lignes au 15/11/2026), recalculée à chaque compilation de l'aperçu.
 

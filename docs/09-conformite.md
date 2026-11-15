@@ -47,7 +47,7 @@
 
 ## Tests (§10)
 
-Matrice détaillée : [08-tests-et-risques.md](08-tests-et-risques.md). Tests unitaires, tests d'écrans, tests de sécurité : faits (108 tests). Tests d'intégration : `integration_test/`, exécutés sur un émulateur Android par la recette « Tests d'intégration ». Couverture : [rapport-couverture.md](rapport-couverture.md).
+Matrice détaillée : [08-tests-et-risques.md](08-tests-et-risques.md). Tests unitaires, tests d'écrans, tests de sécurité : faits (108 tests). Tests d'intégration : `integration_test/`, exécutés sur un émulateur Android par la recette « Tests d'intégration » (réussis le 15/11/2026). Couverture : [rapport-couverture.md](rapport-couverture.md).
 
 ## Critères d'acceptation (§11)
 
