@@ -110,12 +110,24 @@ jobs:
 
           ${NOTES}"
           fi
-          gh release delete apercu --yes --cleanup-tag || true
-          gh release create apercu sortie/*.apk \
-            --prerelease \
-            --target "${{ github.sha }}" \
-            --title "Aperçu n°${{ github.run_number }} (${GITHUB_REF_NAME})" \
-            --notes "$NOTES"
+          TITLE="Aperçu n°${{ github.run_number }} (${GITHUB_REF_NAME})"
+          # La page et son étiquette sont gardées ; seul le fichier change.
+          # (Le jeton de GitHub n'a pas le droit de créer une étiquette sur un
+          # envoi qui modifie les recettes : la recréer à chaque fois échouait.)
+          if gh release view apercu > /dev/null 2>&1; then
+            for asset in $(gh release view apercu --json assets -q '.assets[].name'); do
+              gh release delete-asset apercu "$asset" --yes
+            done
+            gh release upload apercu sortie/*.apk
+            gh release edit apercu --prerelease --title "$TITLE" --notes "$NOTES"
+          else
+            # Première fois : étiquette posée sur la branche principale.
+            gh release create apercu sortie/*.apk \
+              --prerelease \
+              --target "${{ github.event.repository.default_branch }}" \
+              --title "$TITLE" \
+              --notes "$NOTES"
+          fi
 
   # Test de fumée : un émulateur Android installe l'APK et crée un coffre.
   # Le journal de cette étape montre chaque écran et les erreurs éventuelles.
