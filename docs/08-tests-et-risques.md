@@ -87,7 +87,7 @@ Les tests d'intégration du paquet `integration_test` (scanner réel, sélecteur
 | N° | Risque | État au 15/11/2026 |
 |---|---|---|
 | R1 | Flutter n'est pas installé sur le PC | Toujours bloqué par le virus (P1). Contourné : session en ligne et compilation par GitHub. |
-| R2 | iOS ne peut pas être testé | Inchangé. Le code propre à iOS est marqué « à vérifier sur iOS » (trousseau, notifications, enregistrement d'un fichier par la feuille de partage, espace libre non lu). |
+| R2 | iOS ne peut pas être testé | Réduit : l'application iPhone **compile** sur un Mac de GitHub (15/11/2026). Elle n'a pas encore tourné sur un iPhone : le code propre à iOS reste marqué « à vérifier sur iOS » (docs/publication/app-store.md). |
 | R3 | `cryptography_flutter` évolue lentement | **Réalisé puis traité** : son code natif faisait échouer la création du coffre sur Android. Paquet retiré le 15/11/2026, chiffrement en Dart pur derrière `CryptoEngine`. |
 | R4 | Téléphones lents | Mesures dans la session en ligne (machine rapide) : code vérifié en 0,35 s ; fichier de 20 Mo chiffré en 3 s. Sur un téléphone d'entrée de gamme, compter 4 à 8 fois plus. **À mesurer en phase 6.** Si c'est trop lent : chiffrement natif dans l'isolate (plan B de 06-dependances.md §5). |
 | R5 | Scanner ML Kit indisponible | Non vérifiable hors d'un téléphone (P5). |
