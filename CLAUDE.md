@@ -25,7 +25,7 @@ Le document de référence est [docs/cahier-des-charges.md](docs/cahier-des-char
 | 4 – lot a : importation, documents, catégories, navigation, paramètres | Validé le 14/11/2026 |
 | 4 – lot b : scanner, recherche | Validé le 14/11/2026 |
 | 4 – lot c : échéances et notifications, partage et export, sauvegarde et stockage, profil local | Terminé le 15/11/2026 (le développeur a demandé d'enchaîner) |
-| 5 – Sécurité et optimisation : tests de sécurité, corrections, analyse des risques | **En cours** |
+| 5 – Sécurité et optimisation : tests de sécurité, corrections, analyse des risques | Terminée le 15/11/2026, **en attente de validation** |
 | 6 | À venir |
 
 Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session en ligne, lancer d'abord `bash tool/setup_cloud.sh` puis `export PATH="/home/user/sdk/flutter/bin:$PATH"`.
@@ -59,6 +59,7 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 - Après toute modification des tables drift : `dart run build_runner build`.
 - Tests de widgets : utiliser `test/support/test_app.dart` (stockage sécurisé en mémoire, base ouverte dans l'isolate du test, Argon2id léger). Toute entrée-sortie réelle dans le corps d'un test (copie de fichier, création de dossier) doit être faite dans `tester.runAsync`, sinon le test se fige. Ne pas utiliser `pumpAndSettle` (animations sans fin) : utiliser `settle()`. Pour ajouter des documents dans un test de widgets, créer et ouvrir le coffre hors de l'interface (`tester.runAsync` + `unlockWithPin`, voir `test/features/deadlines_flow_test.dart`) : une base ouverte par l'interface du test se bloque avec les isolates. Dans le code appelé depuis l'interface, lire la base avec des requêtes simples (`get()`) et non `watch(...).first`, qui se fige dans les tests. Revenir en arrière avec `routerProvider.pop()` (`pageBack` ne reconnaît pas le bouton de `material_ui`).
 - Écrans avec le clavier du code : tester aussi en petit écran (`useSmallPhoneSize`, 320 × 640 points). Ne jamais utiliser `ref` dans `dispose()` : lire le service dans un champ `late final` avant.
+- Dans un `ref.listen(vaultControllerProvider, …)`, ne pas lire un fournisseur lié à la session (base, rappels…) : il peut encore renvoyer la session précédente. Utiliser `next.session`.
 - Une fermeture envoyée à `Isolate.run` depuis une méthode qui a la base ou la session à portée doit être créée dans une fonction de premier niveau (sinon la base est capturée et l'envoi échoue).
 - Tout ajout de document passe par `IngestDocument` (`lib/core/documents/`) : ne jamais écrire un fichier dans le coffre autrement. Le scanner assemble ses pages en PDF (`PdfBuilder`) puis rejoint l'importation (`ImportViewModel.addScannedPdf`) ; ses images sont copiées dans `secure_tmp/` et son dossier est vidé aussitôt (`ScannerService.cleanCache`). Le lecteur PDF, les sélecteurs et le partage sont derrière des interfaces (`ThumbnailService`, `FilePickerService`, `ShareService`) avec des versions simulées pour les tests.
 - Couleurs : recopier les valeurs de `docs/07-design.md`, ne pas les recalculer.

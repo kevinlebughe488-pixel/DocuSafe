@@ -156,12 +156,14 @@ def main():
     print("=== Écrans traversés ===")
     for step, labels in SCREENS:
         print(f"[{step}] {' | '.join(labels)[:400]}")
+    errors = [line for line in log.splitlines() if "[docusafe] ERREUR" in line]
     steps = [
         ("saisie du code", ok),
         ("coffre créé", created),
         ("verrouillage", relocked),
         ("réouverture avec le code", reopened),
         ("réouverture après arrêt de l'application", restarted),
+        (f"aucune erreur de l'application ({len(errors)} trouvée(s))", not errors),
     ]
     for name, passed in steps:
         print(f"=== {'RÉUSSI' if passed else 'ÉCHEC '} : {name}")

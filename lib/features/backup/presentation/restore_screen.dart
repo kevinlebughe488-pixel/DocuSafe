@@ -11,6 +11,7 @@ import '../../../app/theme/app_spacing.dart';
 import '../../../core/backup/backup_service.dart';
 import '../../../core/errors/app_exception.dart';
 import '../../../core/providers.dart';
+import '../../../core/reminders/reminder_service.dart';
 import '../../../core/security/keys/recovery_key.dart';
 import '../../../core/security/lock/vault_state.dart';
 import '../../../core/utils/app_log.dart';
@@ -122,7 +123,16 @@ final class _RestoreScreenState extends ConsumerState<RestoreScreen> {
           .read(vaultControllerProvider.notifier)
           .restoreVault(vaultKey: _vaultKey!, pin: pin);
       _done = true;
-      unawaited(ref.read(reminderServiceProvider).rescheduleAll());
+      final session = ref.read(vaultControllerProvider.notifier).session;
+      if (session != null) {
+        unawaited(
+          ReminderService(
+            database: session.database,
+            notifications: ref.read(notificationServiceProvider),
+            clock: ref.read(clockProvider),
+          ).rescheduleAll(),
+        );
+      }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l10n.restoreDone)),

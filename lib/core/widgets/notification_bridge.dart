@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../app/router/app_router.dart';
 import '../../app/router/routes.dart';
 import '../providers.dart';
+import '../reminders/reminder_service.dart';
 import '../security/lock/vault_state.dart';
 import '../utils/app_log.dart';
 
@@ -57,7 +58,15 @@ final class _NotificationBridgeState extends ConsumerState<NotificationBridge> {
   Widget build(BuildContext context) {
     ref.listen(vaultControllerProvider, (previous, next) {
       if (next is VaultUnlocked && previous is! VaultUnlocked) {
-        unawaited(ref.read(reminderServiceProvider).rescheduleAll());
+        // Service construit sur la session qui vient de s'ouvrir : à cet
+        // instant, `reminderServiceProvider` peut encore renvoyer celui de la
+        // session précédente, dont la base est fermée.
+        final service = ReminderService(
+          database: next.session.database,
+          notifications: ref.read(notificationServiceProvider),
+          clock: ref.read(clockProvider),
+        );
+        unawaited(service.rescheduleAll());
       }
     });
     return widget.child;

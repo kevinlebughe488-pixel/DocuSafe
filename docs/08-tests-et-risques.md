@@ -48,7 +48,7 @@ Les tests d'intégration du paquet `integration_test` (scanner réel, sélecteur
 |---|---|
 | Accès sans authentification | `test/features/access_control_test.dart` : sans coffre ou coffre verrouillé, aucune adresse protégée ne s'affiche |
 | Mauvaise saisie du PIN | `vault_service_test.dart` (refus, compteur, attentes de 30 s à 60 min) |
-| Verrouillage automatique | `access_control_test.dart` : inactivité, arrière-plan, tolérance de cinq minutes pour les fenêtres ouvertes par DocuSafe ; `session_providers_test.dart` : après un verrouillage, la base est bien celle de la nouvelle session |
+| Verrouillage automatique | `access_control_test.dart` : inactivité, arrière-plan, tolérance de cinq minutes pour les fenêtres ouvertes par DocuSafe ; `session_providers_test.dart` : après un verrouillage, la base est bien celle de la nouvelle session ; `deadlines_flow_test.dart` : les rappels sont reprogrammés à la réouverture ; téléphone simulé : verrouillage, réouverture, relance |
 | Vérification du chiffrement des fichiers | `file_cipher_test.dart`, `documents_test.dart` (aucun octet en clair sur le disque), `vault_service_test.dart` (base illisible sans la clé), `backup_test.dart` (rien en clair dans une sauvegarde) |
 | Vérification des journaux | `test/core/logging_test.dart` : aucun `print`, codes fixes seulement, une erreur est journalisée par son type et jamais par son message |
 | Gestion des fichiers temporaires | `documents_test.dart`, `export_test.dart`, `scan_search_flow_test.dart` (abandon d'un scan), `storage_backup_flow_test.dart` (nettoyage), `share_export_flow_test.dart` (purge au verrouillage) |
@@ -78,6 +78,7 @@ Les tests d'intégration du paquet `integration_test` (scanner réel, sélecteur
 | **Le coffre ne pouvait pas être créé sur Android** : le paquet `cryptography_flutter` remplaçait le calcul HMAC (utilisé pour dériver les clés) par du code natif qui échouait | Bloquant | Essai du développeur sur Appetize, cause trouvée par le journal du téléphone simulé | Paquet retiré ; chiffrement entièrement en Dart pur, identique dans les tests et sur le téléphone |
 | Une erreur imprévue pendant la création du coffre laissait la roue tourner sans fin | Majeur | Même essai | Toute erreur est affichée ; la vérification de la biométrie ne peut plus bloquer l'entrée |
 | Le contrôle de cohérence décrit dans la documentation n'était pas écrit | Mineur | Relecture | Fichiers orphelins supprimés au déverrouillage |
+| À la réouverture du coffre, la reprogrammation des rappels lisait encore la base fermée de la session précédente (rappels non reprogrammés) | Majeur | Journal du téléphone simulé, puis test de régression | Le service des rappels est construit sur la session qui vient de s'ouvrir |
 | Quitter l'écran de restauration sans restaurer provoquait une erreur interne | Mineur | Captures d'écran | Corrigé |
 | La barre de répartition de l'écran Stockage ne s'affichait pas | Mineur | Captures d'écran | Corrigé |
 

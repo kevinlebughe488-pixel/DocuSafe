@@ -109,4 +109,55 @@ void main() {
     expect(env.notifications.scheduled, isEmpty);
     await teardownApp(tester);
   });
+
+  testWidgets('après un verrouillage, les rappels sont reprogrammés avec la nouvelle session', (
+    tester,
+  ) async {
+    // Régression (15/11/2026, téléphone simulé) : à la réouverture, la
+    // reprogrammation lisait encore la base fermée de la session précédente.
+    usePhoneSize(tester);
+    await tester.runAsync(() async {
+      final service = ProviderContainer(overrides: env.overrides()).read(vaultServiceProvider);
+      final session = await service.commitSetup(await service.prepareSetup('204915'));
+      await session.close();
+    });
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          ...env.overrides(),
+          thumbnailServiceProvider.overrideWithValue(const ImageOnlyThumbnailService()),
+        ],
+        child: testAppChild(),
+      ),
+    );
+    await settle(tester, rounds: 8);
+    final container = ProviderScope.containerOf(tester.element(find.byType(Scaffold).first));
+    final controller = container.read(vaultControllerProvider.notifier);
+    await tester.runAsync(() async {
+      await controller.unlockWithPin('204915');
+      final temp = env.paths.secureTempDir..createSync(recursive: true);
+      final f = await File('test/fixtures/simple.pdf').copy('${temp.path}/visa.pdf');
+      final ingest = container.read(ingestDocumentProvider);
+      final check = await ingest.check(f) as FileAccepted;
+      final row = await ingest(IngestRequest(
+        source: f,
+        fileName: 'visa.pdf',
+        check: check,
+        title: 'Visa',
+        categoryId: DefaultCategory.othersId,
+        expirationDate: DateOnly.today().addDays(12),
+      ));
+      await container.read(reminderServiceProvider).syncDocument(row.id);
+    });
+    await settle(tester, rounds: 8);
+    expect(env.notifications.scheduled.length, 2);
+
+    await tester.runAsync(controller.lock);
+    await settle(tester, rounds: 6);
+    env.notifications.scheduled = [];
+    await tester.runAsync(() => controller.unlockWithPin('204915'));
+    await settle(tester, rounds: 10);
+    expect(env.notifications.scheduled.length, 2);
+    await teardownApp(tester);
+  });
 }
