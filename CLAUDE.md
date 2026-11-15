@@ -25,8 +25,8 @@ Le document de référence est [docs/cahier-des-charges.md](docs/cahier-des-char
 | 4 – lot a : importation, documents, catégories, navigation, paramètres | Validé le 14/11/2026 |
 | 4 – lot b : scanner, recherche | Validé le 14/11/2026 |
 | 4 – lot c : échéances et notifications, partage et export, sauvegarde et stockage, profil local | Terminé le 15/11/2026 (le développeur a demandé d'enchaîner) |
-| 5 – Sécurité et optimisation : tests de sécurité, corrections, analyse des risques | Terminée le 15/11/2026, **en attente de validation** |
-| 6 | À venir |
+| 5 – Sécurité et optimisation : tests de sécurité, corrections, analyse des risques | Terminée le 15/11/2026 (le développeur a demandé d'enchaîner) |
+| 6 – Publication : icône, contrôles, AAB, iOS, dossier de soumission, essais sur téléphones | **En cours** |
 
 Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session en ligne, lancer d'abord `bash tool/setup_cloud.sh` puis `export PATH="/home/user/sdk/flutter/bin:$PATH"`.
 
@@ -42,6 +42,7 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 | Paquets retenus et versions | [docs/06-dependances.md](docs/06-dependances.md) |
 | Couleurs exactes, typographie, composants | [docs/07-design.md](docs/07-design.md) et [docs/maquettes/index.html](docs/maquettes/index.html) |
 | Matrice de tests, défauts corrigés, risques à jour | [docs/08-tests-et-risques.md](docs/08-tests-et-risques.md) |
+| Publication : signature, fiches des magasins, essais sur téléphones | [docs/publication/README.md](docs/publication/README.md) |
 
 ## Choix structurants
 
@@ -76,7 +77,7 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 
 - **PC du développeur : infecté par un virus (Expiro) depuis le 13/11/2026.** Flutter y est inutilisable tant que le PC n'est pas nettoyé. Ne jamais conseiller de désactiver Microsoft Defender, d'ajouter une exclusion ou de restaurer un fichier signalé. Voir [docs/problemes-connus.md](docs/problemes-connus.md).
 - **Session en ligne (claude.ai/code)** : machine Ubuntu 24.04. Le SDK Flutter n'est pas dans le dépôt : `bash tool/setup_cloud.sh` l'installe dans `/home/user/sdk/flutter` (archive Linux officielle, empreinte SHA-256 vérifiée, environ 2 minutes). `flutter analyze` et `flutter test` y fonctionnent ; l'émulateur et le téléphone, non. L'hôte `dl.google.com` (SDK Android, dépôt Maven de Google) est bloqué par le réseau de l'environnement : aucun APK ne peut y être compilé (voir docs/problemes-connus.md, P3).
-- **Aperçu sur téléphone** : `.github/workflows/apercu-android.yml` compile un APK (`DOCUSAFE_APERCU=1` : identifiant `com.docusafe.app.apercu`, clé de test `android/app/apercu.keystore`) à chaque envoi et le publie dans la release `apercu`. Mode d'emploi : docs/apercu-telephone.md. Le job « emulateur » lance ensuite `tool/smoke_test.py` sur un émulateur Android à petit écran (création du coffre, verrouillage, réouverture, relance) : son verdict est à la fin du journal du job. Après un envoi, vérifier que la compilation **et** ce test réussissent. Les journaux GitHub ne sont pas téléchargeables depuis la session (hôte bloqué) : les lire avec l'outil `get_job_logs` (`return_content`, grand `tail_lines`), qui les enregistre dans un fichier à fouiller.
+- **Aperçu sur téléphone** : `.github/workflows/apercu-android.yml` compile un APK (`DOCUSAFE_APERCU=1` : identifiant `com.docusafe.app.apercu`, clé de test `android/app/apercu.keystore`) à chaque envoi et le publie dans la release `apercu`. Mode d'emploi : docs/apercu-telephone.md. Le job « emulateur » lance ensuite `tool/smoke_test.py` sur un émulateur Android à petit écran (création du coffre, verrouillage, réouverture, relance) : son verdict est à la fin du journal du job. Après un envoi, vérifier que la compilation **et** ce test réussissent. Recettes de phase 6 : « Publication Android » (AAB, `tool/check_apk.py` bloquant : aucune permission réseau, 16 Ko…) et « Compilation iOS » (Mac de GitHub, sans signature ; minutes de Mac comptées dix fois). Icônes : `tool/generate_icons.py` (ne pas retoucher les PNG à la main). Signature : clé d'envoi dans les secrets GitHub ou `android/key.properties`, jamais sur le PC infecté. Les journaux GitHub ne sont pas téléchargeables depuis la session (hôte bloqué) : les lire avec l'outil `get_job_logs` (`return_content`, grand `tail_lines`), qui les enregistre dans un fichier à fouiller.
 
 ## graphify
 

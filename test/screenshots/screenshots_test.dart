@@ -32,6 +32,10 @@ import '../support/test_app.dart';
 ///
 /// ```bash
 /// DOCUSAFE_SCREENSHOTS=1 flutter test test/screenshots --update-goldens
+///
+/// Pour les magasins : ajouter DOCUSAFE_STORE=1 (thème clair, tailles
+/// exigées, dossier docs/publication/captures/). Seules huit captures y sont
+/// gardées (voir docs/publication/README.md) : supprimer les autres.
 /// ```
 ///
 /// Les polices Roboto et Material Icons sont chargées depuis le SDK Flutter,
@@ -45,7 +49,15 @@ import '../support/test_app.dart';
 void main() {
   final enabled = Platform.environment['DOCUSAFE_SCREENSHOTS'] == '1';
   final ios = Platform.environment['DOCUSAFE_PLATFORM'] == 'ios';
-  final outputDir = ios ? '../../docs/captures/ios' : '../../docs/captures';
+  // Captures pour les magasins (DOCUSAFE_STORE=1) : thème clair seulement,
+  // tailles exigées par Google Play (1080 × 2160, rapport 1:2 au plus) et par
+  // l'App Store (iPhone 6,9 pouces, 1290 × 2796).
+  final store = Platform.environment['DOCUSAFE_STORE'] == '1';
+  final outputDir = store
+      ? '../../docs/publication/captures/${ios ? 'ios' : 'android'}'
+      : ios
+      ? '../../docs/captures/ios'
+      : '../../docs/captures';
   const pin = '204915';
 
   setUpAll(() async {
@@ -98,7 +110,7 @@ void main() {
     String name,
     Future<void> Function() prepare,
   ) async {
-    for (final dark in [false, true]) {
+    for (final dark in store ? [false] : [false, true]) {
       tester.platformDispatcher.platformBrightnessTestValue =
           dark ? Brightness.dark : Brightness.light;
       await prepare();
@@ -132,9 +144,9 @@ void main() {
     );
     if (ios) {
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-      useIphoneSize(tester);
+      store ? useStoreSize(tester, const Size(1290, 2796)) : useIphoneSize(tester);
     } else {
-      usePhoneSize(tester);
+      store ? useStoreSize(tester, const Size(1080, 2160)) : usePhoneSize(tester);
     }
     // Sur un téléphone, aucun cadre de focus clavier n'est dessiné.
     tester.binding.focusManager.highlightStrategy = FocusHighlightStrategy.alwaysTouch;
@@ -399,6 +411,13 @@ void main() {
       unawaited(containerOf(tester).read(routerProvider).push(Routes.restore));
     });
   }, skip: !enabled, timeout: const Timeout(Duration(minutes: 8)));
+}
+
+/// Taille exacte demandée par un magasin d'applications (3 pixels par point).
+void useStoreSize(WidgetTester tester, Size pixels) {
+  tester.view.physicalSize = pixels;
+  tester.view.devicePixelRatio = 3;
+  addTearDown(tester.view.reset);
 }
 
 /// Biométrie simulée : disponible, jamais reconnue.
