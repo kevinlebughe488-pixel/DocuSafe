@@ -1,3 +1,6 @@
+// Import explicite : dans un script Gradle, « java » désigne l'extension Java.
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -19,7 +22,8 @@ val apercu = System.getenv("DOCUSAFE_APERCU") == "1"
 val uploadKey: Map<String, String>? = run {
     val file = rootProject.file("key.properties")
     if (file.exists()) {
-        val props = java.util.Properties().apply { file.inputStream().use { load(it) } }
+        val props = Properties()
+        file.inputStream().use { stream -> props.load(stream) }
         mapOf(
             "storeFile" to props.getProperty("storeFile"),
             "storePassword" to props.getProperty("storePassword"),
@@ -82,12 +86,12 @@ android {
             keyAlias = "apercu"
             keyPassword = "docusafe-apercu"
         }
-        if (uploadKey != null) {
+        uploadKey?.let { key ->
             create("upload") {
-                storeFile = file(uploadKey.getValue("storeFile"))
-                storePassword = uploadKey.getValue("storePassword")
-                keyAlias = uploadKey.getValue("keyAlias")
-                keyPassword = uploadKey.getValue("keyPassword")
+                storeFile = file(key.getValue("storeFile"))
+                storePassword = key.getValue("storePassword")
+                keyAlias = key.getValue("keyAlias")
+                keyPassword = key.getValue("keyPassword")
             }
         }
     }
