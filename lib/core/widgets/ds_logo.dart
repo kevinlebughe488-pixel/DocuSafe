@@ -4,7 +4,8 @@ import '../../app/theme/app_colors.dart';
 
 /// Symbole de DocuSafe (docs/07-design.md §2) : un document blanc à coin
 /// replié, percé d'une serrure, sur un carré bleu aux angles arrondis.
-/// Dessiné en vectoriel ; l'icône définitive sera produite en phase 6.
+/// Dessiné en vectoriel. Les icônes de l'application (Android, iOS, Google
+/// Play) reprennent cette géométrie : tool/generate_icons.py.
 final class DsLogo extends StatelessWidget {
   const DsLogo({super.key, this.size = 96});
 

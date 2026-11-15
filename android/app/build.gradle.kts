@@ -11,6 +11,36 @@ plugins {
 // (docs/apercu-telephone.md).
 val apercu = System.getenv("DOCUSAFE_APERCU") == "1"
 
+// Clé d'envoi Google Play (« upload key », docs/publication/signature.md) :
+// lue dans android/key.properties (poste sain, fichier jamais versionné) ou
+// dans les variables d'environnement remplies par les secrets GitHub. Jamais
+// créée ni utilisée sur un PC infecté. Google Play signe ensuite l'application
+// avec sa propre clé (« Play App Signing »).
+val uploadKey: Map<String, String>? = run {
+    val file = rootProject.file("key.properties")
+    if (file.exists()) {
+        val props = java.util.Properties().apply { file.inputStream().use { load(it) } }
+        mapOf(
+            "storeFile" to props.getProperty("storeFile"),
+            "storePassword" to props.getProperty("storePassword"),
+            "keyAlias" to props.getProperty("keyAlias"),
+            "keyPassword" to props.getProperty("keyPassword"),
+        )
+    } else {
+        val path = System.getenv("DOCUSAFE_UPLOAD_KEYSTORE")
+        if (path.isNullOrEmpty()) {
+            null
+        } else {
+            mapOf(
+                "storeFile" to path,
+                "storePassword" to (System.getenv("DOCUSAFE_UPLOAD_STORE_PASSWORD") ?: ""),
+                "keyAlias" to (System.getenv("DOCUSAFE_UPLOAD_KEY_ALIAS") ?: ""),
+                "keyPassword" to (System.getenv("DOCUSAFE_UPLOAD_KEY_PASSWORD") ?: ""),
+            )
+        }
+    }
+}
+
 android {
     namespace = "com.docusafe.app"
     // Versions imposées par docs/01-analyse.md (D1) et docs/06-dependances.md.
@@ -52,13 +82,26 @@ android {
             keyAlias = "apercu"
             keyPassword = "docusafe-apercu"
         }
+        if (uploadKey != null) {
+            create("upload") {
+                storeFile = file(uploadKey.getValue("storeFile"))
+                storePassword = uploadKey.getValue("storePassword")
+                keyAlias = uploadKey.getValue("keyAlias")
+                keyPassword = uploadKey.getValue("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
-            // Signature de publication : configurée en phase 6, jamais sur un
-            // PC infecté (docs/problemes-connus.md). Clés de debug en attendant.
-            signingConfig = signingConfigs.getByName("debug")
+            // Publication : clé d'envoi si elle est fournie ; sinon clé de
+            // débogage (fichier utilisable pour les vérifications, refusé par
+            // Google Play).
+            signingConfig = if (uploadKey != null) {
+                signingConfigs.getByName("upload")
+            } else {
+                signingConfigs.getByName("debug")
+            }
             if (apercu) {
                 applicationIdSuffix = ".apercu"
                 manifestPlaceholders["appLabel"] = "DocuSafe aperçu"

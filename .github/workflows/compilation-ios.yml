@@ -1,0 +1,51 @@
+# Compilation iPhone sans signature sur un Mac de GitHub (phase 6) : vérifie
+# que le projet iOS est prêt à être compilé (critère 18 du cahier des
+# charges). Aucune installation possible : il faut un compte développeur
+# Apple pour signer (docs/publication/ios.md).
+# Déclenchement manuel, ou modification de la configuration iPhone ou des
+# paquets : une minute de Mac compte pour dix minutes dans le quota gratuit
+# de GitHub.
+name: Compilation iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['**']
+    # Seulement quand la configuration iPhone ou les paquets changent.
+    paths:
+      - 'ios/**'
+      - 'pubspec.yaml'
+      - '.github/workflows/compilation-ios.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.50.0'
+          channel: stable
+          cache: true
+
+      - name: Versions
+        run: |
+          xcodebuild -version
+          flutter --version
+
+      - name: Dépendances
+        run: flutter pub get
+
+      - name: Compilation (sans signature)
+        run: flutter build ios --release --no-codesign --build-number=${{ github.run_number }}
+
+      - name: Résumé
+        run: |
+          du -sh build/ios/iphoneos/Runner.app
+          /usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" build/ios/iphoneos/Runner.app/Info.plist
+          /usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" build/ios/iphoneos/Runner.app/Info.plist

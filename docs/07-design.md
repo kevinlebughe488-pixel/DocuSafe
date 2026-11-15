@@ -32,7 +32,7 @@ La page contient 46 écrans, avec un bouton **Clair / Sombre**.
 | Couleur de marque | Bleu DocuSafe `#205DB0` |
 | Couleur d'accent | Sarcelle `#246867`, réservée à tout ce qui évoque la protection |
 
-Le symbole est une proposition, dessinée en vectoriel dans les maquettes. L'icône définitive (toutes tailles Android et iOS) sera produite en phase 6.
+Le symbole est dessiné en vectoriel (`DsLogo`). Les icônes de l'application sont produites à partir de la même géométrie par `tool/generate_icons.py` (phase 6) : icônes Android classiques, icône adaptative et monochrome (Android 13), toutes les tailles iOS (carrées, opaques), icône 512 × 512 et bannière 1024 × 500 pour Google Play (`docs/publication/images/`).
 
 ### Ton des textes
 

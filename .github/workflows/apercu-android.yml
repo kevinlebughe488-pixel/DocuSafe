@@ -52,6 +52,14 @@ jobs:
           DOCUSAFE_APERCU: '1'
         run: flutter build apk --release --build-number=${{ github.run_number }} --dart-define=DOCUSAFE_APERCU=true
 
+      # Informatif sur l'aperçu (la version publiée est contrôlée de façon
+      # bloquante par « Publication Android »).
+      - name: Vérifications de publication
+        continue-on-error: true
+        run: |
+          BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -n 1)"
+          python3 tool/check_apk.py build/app/outputs/flutter-apk/app-release.apk "$BT"
+
       - name: Renommage
         run: |
           mkdir -p sortie
