@@ -253,6 +253,11 @@ final class _Detail extends ConsumerWidget {
             label: l10n.detailAddedOn,
             value: Formats.dateTime(doc.createdAt),
           ),
+          if (doc.updatedAt.difference(doc.createdAt).inMinutes.abs() >= 1)
+            _KeyValueRow(
+              label: l10n.detailUpdatedOn,
+              value: Formats.dateTime(doc.updatedAt),
+            ),
           _KeyValueRow(label: l10n.detailFile, value: doc.fileName),
           if (doc.description != null)
             _KeyValueRow(

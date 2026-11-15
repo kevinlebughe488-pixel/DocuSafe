@@ -44,8 +44,23 @@ jobs:
       - name: Analyse
         run: flutter analyze
 
-      - name: Tests
-        run: flutter test --exclude-tags screenshots
+      - name: Tests (avec couverture)
+        run: flutter test --exclude-tags screenshots --coverage
+
+      # Rapport de couverture (cahier des charges §12) : résumé sur la page de
+      # la compilation et fichier complet téléchargeable.
+      - name: Rapport de couverture
+        run: |
+          python3 tool/coverage_report.py coverage/lcov.info > rapport-couverture.md
+          cat rapport-couverture.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: couverture-${{ github.run_number }}
+          path: |
+            rapport-couverture.md
+            coverage/lcov.info
+          retention-days: 30
 
       - name: Compilation de l'APK
         env:

@@ -52,3 +52,4 @@ graphify-out/
 
 # Clé de test « aperçu » : versionnée volontairement, jamais pour la publication.
 !android/app/apercu.keystore
+coverage/

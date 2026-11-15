@@ -3,6 +3,11 @@
 /// Les valeurs viennent de docs/04-securite.md et docs/01-analyse.md.
 abstract final class AppConfig {
   /// Longueur du code : 6 à 12 chiffres (D5).
+  /// Adresse de l'assistance, affichée dans « Aide et assistance ».
+  /// `null` tant que le développeur ne l'a pas choisie : aucune adresse
+  /// fictive n'est affichée (docs/publication/README.md).
+  static const String? supportEmail = null;
+
   static const int pinMinLength = 6;
   static const int pinMaxLength = 12;
 

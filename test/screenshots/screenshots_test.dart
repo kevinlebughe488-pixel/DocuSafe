@@ -410,6 +410,10 @@ void main() {
       await unlockWithDocuments();
       unawaited(containerOf(tester).read(routerProvider).push(Routes.restore));
     });
+    await both(tester, '29-aide', () async {
+      await unlockWithDocuments();
+      unawaited(containerOf(tester).read(routerProvider).push(Routes.settingsHelp));
+    });
   }, skip: !enabled, timeout: const Timeout(Duration(minutes: 8)));
 }
 

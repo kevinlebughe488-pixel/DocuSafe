@@ -37,4 +37,5 @@ Code écrit selon la documentation mais jamais exécuté sur un iPhone :
 | Scanner VisionKit | `lib/core/platform/scanner_service.dart` |
 | Enregistrer une sauvegarde ou une archive (« Enregistrer dans Fichiers ») | `lib/core/platform/share_service.dart` |
 | Textes des permissions | `ios/Runner/Info.plist` |
-| Espace libre (non affiché sur iPhone pour l'instant) | `lib/core/platform/share_service.dart` |
+| Espace libre (canal natif `freeBytes`) | `ios/Runner/AppDelegate.swift`, `lib/core/platform/share_service.dart` |
+| Exclusion du coffre de la sauvegarde iCloud | `ios/Runner/AppDelegate.swift`, `lib/core/platform/backup_exclusion.dart` |

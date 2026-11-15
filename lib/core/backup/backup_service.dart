@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 
 import '../config/app_config.dart';
 import '../errors/app_exception.dart';
+import '../platform/backup_exclusion.dart';
 import '../security/lock/vault_session.dart';
 import '../storage/vault_paths.dart';
 import '../utils/app_log.dart';
@@ -113,6 +114,7 @@ final class BackupService {
     final dir = restoreDir;
     await _deleteQuietly(dir);
     await dir.create(recursive: true);
+    await BackupExclusion.exclude(dir);
     try {
       final header = await _runUnpackIsolate(backup.path, dir.path);
       return BackupInfo(

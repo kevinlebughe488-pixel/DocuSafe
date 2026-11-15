@@ -8,6 +8,7 @@ import 'package:material_ui/material_ui.dart';
 import '../core/widgets/inactivity_listener.dart';
 import '../core/widgets/notification_bridge.dart';
 import '../core/widgets/privacy_shield.dart';
+import '../features/documents/presentation/import/share_intake_bridge.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'router/app_router.dart';
 import 'theme/app_theme.dart';
@@ -37,7 +38,9 @@ final class DocSafeApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       builder: (context, child) => PrivacyShield(
         child: NotificationBridge(
-          child: InactivityListener(child: child ?? const SizedBox.shrink()),
+          child: ShareIntakeBridge(
+            child: InactivityListener(child: child ?? const SizedBox.shrink()),
+          ),
         ),
       ),
     );

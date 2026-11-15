@@ -31,6 +31,7 @@ import '../../features/scanner/presentation/scan_screen.dart';
 import '../../features/search/presentation/search_screen.dart';
 import '../../features/settings/presentation/about_screen.dart';
 import '../../features/settings/presentation/change_pin_screen.dart';
+import '../../features/settings/presentation/help/help_screen.dart';
 import '../../features/settings/presentation/notification_settings_screen.dart';
 import '../../features/settings/presentation/recovery_key_screen.dart';
 import '../../features/settings/presentation/security_settings_screen.dart';
@@ -197,6 +198,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const BackupScreen(),
       ),
       GoRoute(
+        path: Routes.settingsHelp,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const HelpScreen(),
+      ),
+      GoRoute(
         path: Routes.restore,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const RestoreScreen(),
@@ -241,10 +247,12 @@ String? _redirect(Ref ref, String location) {
       return Routes.lock;
 
     case VaultUnlocked(:final returnLocation):
+      // « Code oublié » : la clé de récupération ouvre le coffre, puis
+      // l'écran reste affiché pour choisir un nouveau code.
       final leaving =
           location == Routes.splash ||
           location == Routes.onboarding ||
-          location.startsWith(Routes.lock);
+          (location.startsWith(Routes.lock) && location != Routes.lockRecovery);
       if (leaving) {
         final target = returnLocation;
         final valid =

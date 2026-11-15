@@ -107,7 +107,7 @@ final class _UnlockScreenState extends ConsumerState<UnlockScreen> {
                 ),
                 below: Center(
                   child: TextButton(
-                    onPressed: () => context.push(Routes.lockRecovery),
+                    onPressed: () => context.go(Routes.lockRecovery),
                     child: Text(
                       lockout != null
                           ? l10n.unlockUseRecoveryKey

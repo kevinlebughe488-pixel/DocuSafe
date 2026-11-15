@@ -9,10 +9,12 @@ import 'documents/document_search.dart';
 import 'documents/export_document.dart';
 import 'documents/ingest_document.dart';
 import 'documents/open_document.dart';
+import 'entitlements/entitlement_service.dart';
 import 'errors/app_exception.dart';
 import 'platform/file_picker_service.dart';
 import 'platform/notification_service.dart';
 import 'platform/scanner_service.dart';
+import 'platform/share_intake_service.dart';
 import 'platform/share_service.dart';
 import 'platform/thumbnail_service.dart';
 import 'reminders/reminder_service.dart';
@@ -171,6 +173,34 @@ final openDocumentProvider = Provider<OpenDocument>(
 final backupServiceProvider = Provider<BackupService>(
   (ref) => BackupService(paths: ref.watch(vaultPathsProvider)),
 );
+
+/// Droits d'utilisation : gratuit seulement dans le MVP (§8).
+final entitlementServiceProvider = Provider<EntitlementService>(
+  (ref) => const FreeEntitlementService(),
+);
+
+final shareIntakeServiceProvider = Provider<ShareIntakeService>(
+  (ref) => const PlatformShareIntakeService(),
+);
+
+/// Fichiers reçus par « Partager vers DocSafe », en attente d'importation.
+final pendingSharesProvider = NotifierProvider<PendingShares, List<PickedFile>>(
+  PendingShares.new,
+);
+
+final class PendingShares extends Notifier<List<PickedFile>> {
+  @override
+  List<PickedFile> build() => const [];
+
+  void add(List<PickedFile> files) => state = [...state, ...files];
+
+  /// Reprend les fichiers en attente (pour l'importation) et vide la liste.
+  List<PickedFile> take() {
+    final files = state;
+    state = const [];
+    return files;
+  }
+}
 
 final shareServiceProvider = Provider<ShareService>(
   (ref) => const PlatformShareService(),

@@ -15,7 +15,9 @@ import '../../../../core/utils/app_log.dart';
 import '../../../../core/utils/secure_random.dart';
 import '../edit/document_form.dart';
 
-enum ImportSource { files, gallery }
+/// Origine des fichiers : sélecteur de fichiers, galerie, ou partage depuis
+/// une autre application (« Partager vers DocSafe »).
+enum ImportSource { files, gallery, shared }
 
 /// Un fichier choisi, en cours de vérification ou vérifié.
 final class ImportItem {
@@ -157,6 +159,7 @@ final class ImportViewModel extends Notifier<ImportState> {
       picked = switch (source) {
         ImportSource.files => await picker.pickDocuments(),
         ImportSource.gallery => await picker.pickPhotos(),
+        ImportSource.shared => ref.read(pendingSharesProvider.notifier).take(),
       };
     } on AppException catch (e) {
       state = state.copyWith(error: e);

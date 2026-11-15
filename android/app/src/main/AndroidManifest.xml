@@ -55,6 +55,25 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- « Partager vers DocSafe » (cahier des charges §3.4) : PDF, JPEG
+                 et PNG reçus d'une autre application. Les fichiers sont
+                 vérifiés puis chiffrés par l'importation habituelle, après
+                 déverrouillage du coffre. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/pdf"/>
+                <data android:mimeType="image/jpeg"/>
+                <data android:mimeType="image/png"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/pdf"/>
+                <data android:mimeType="image/jpeg"/>
+                <data android:mimeType="image/png"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
         </activity>
         <!-- Notifications programmées (flutter_local_notifications). -->
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />

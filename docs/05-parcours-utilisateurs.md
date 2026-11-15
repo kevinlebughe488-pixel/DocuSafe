@@ -64,6 +64,8 @@ Cas particuliers : annulation à tout moment (rien n'est conservé) ; permission
 
 ## 4. Importer un fichier
 
+**Depuis une autre application (« Partager vers DocSafe », Android)** : dans la galerie, l'application Fichiers ou une messagerie, Partager → DocSafe. Si le coffre est verrouillé, le code est demandé d'abord ; l'écran d'importation s'ouvre ensuite avec les fichiers reçus, puis la suite est la même que ci-dessous. (Sur iPhone, l'extension de partage viendra après le MVP.)
+
 ```
 Importation (10) → sélecteur du système → Vérification → Informations → Liste (6)
 ```
@@ -176,6 +178,7 @@ L'écran de confirmation affiche le nom du document et indique que la suppressio
 | Notifications | Voir §9 |
 | Stockage (19) | Espace occupé, nombre de documents, répartition par catégorie, nettoyage des fichiers temporaires |
 | Exportation des données | Exporter tous les documents en clair vers un dossier choisi (authentification et avertissement) |
+| Aide et assistance | Réponses aux questions courantes, lisibles sans Internet (code oublié, changement de téléphone, rappels, scanner, biométrie, partage, effacement). Contact de l'assistance affiché seulement quand une adresse est configurée. |
 | Sauvegarde et synchronisation | Explication : les documents sont uniquement sur ce téléphone. Créer une sauvegarde chiffrée (fichier `.docsafe`, clé de récupération notée au préalable) ou en restaurer une (le contenu actuel est remplacé). La synchronisation est annoncée comme indisponible, sans bouton. Restauration aussi possible depuis l'accueil : « J'ai une sauvegarde » → fichier → clé de récupération → nouveau code. |
 | Confidentialité, Conditions d'utilisation | Textes consultables hors ligne |
 | À propos | Version, licences des composants |

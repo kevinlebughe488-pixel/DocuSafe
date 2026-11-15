@@ -691,6 +691,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get detailOpen => 'Ouvrir';
 
   @override
+  String get detailUpdatedOn => 'Modifié le';
+
+  @override
   String get detailShare => 'Partager';
 
   @override
@@ -856,6 +859,78 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get onboardingRestore => 'J\'ai une sauvegarde';
+
+  @override
+  String get helpTitle => 'Aide et assistance';
+
+  @override
+  String get helpIntro =>
+      'Les réponses aux questions les plus courantes. Elles sont lisibles sans Internet.';
+
+  @override
+  String get helpForgotPinQ => 'J\'ai oublié mon code';
+
+  @override
+  String get helpForgotPinA =>
+      'Sur l\'écran de déverrouillage, touchez « Code oublié ? » puis saisissez votre clé de récupération : vous choisirez un nouveau code. Sans le code ni la clé de récupération, personne ne peut ouvrir le coffre, pas même l\'éditeur de DocSafe. Pensez à noter votre clé (Paramètres → Sécurité).';
+
+  @override
+  String get helpWhereQ => 'Où sont mes documents ?';
+
+  @override
+  String get helpWhereA =>
+      'Uniquement sur ce téléphone, chiffrés. DocSafe n\'a pas accès à Internet et n\'envoie rien. Les sauvegardes automatiques du téléphone ne les emportent pas.';
+
+  @override
+  String get helpNewPhoneQ => 'Je change de téléphone';
+
+  @override
+  String get helpNewPhoneA =>
+      'Paramètres → Sauvegarde et synchronisation → Créer une sauvegarde. Copiez le fichier .docsafe sur le nouveau téléphone, puis, à l\'accueil de DocSafe, touchez « J\'ai une sauvegarde ». Il vous faudra votre clé de récupération.';
+
+  @override
+  String get helpRemindersQ => 'Je ne reçois pas les rappels';
+
+  @override
+  String get helpRemindersA =>
+      'Vérifiez que les notifications de DocSafe sont autorisées dans les réglages du téléphone. Sur certaines marques, l\'économie de batterie bloque les rappels : retirez DocSafe des applications optimisées. L\'onglet Échéances reste toujours à jour.';
+
+  @override
+  String get helpScannerQ => 'Le scanner ne s\'ouvre pas';
+
+  @override
+  String get helpScannerA =>
+      'Autorisez l\'appareil photo pour DocSafe dans les réglages du téléphone. Sans les services Google Play, le scanner passe en mode simple : prise de photo puis recadrage à la main.';
+
+  @override
+  String get helpBiometricQ => 'L\'empreinte ou le visage ne fonctionne plus';
+
+  @override
+  String get helpBiometricA =>
+      'Si une empreinte ou un visage a été ajouté au téléphone, DocSafe désactive la biométrie par sécurité et demande le code. Réactivez-la dans Paramètres → Sécurité.';
+
+  @override
+  String get helpShareQ => 'Partager un document sans risque';
+
+  @override
+  String get helpShareA =>
+      'Un document partagé ou exporté n\'est plus protégé par DocSafe. Envoyez-le seulement à une personne de confiance, et supprimez la copie quand vous n\'en avez plus besoin.';
+
+  @override
+  String get helpEraseQ => 'Effacer toutes mes données';
+
+  @override
+  String get helpEraseA =>
+      'Paramètres → Sécurité → Effacer le coffre. Les clés, les documents et les réglages sont détruits. Cette action est définitive.';
+
+  @override
+  String get helpContactTitle => 'Écrire à l\'assistance';
+
+  @override
+  String get helpContactCopy => 'Copier l\'adresse';
+
+  @override
+  String get helpContactCopied => 'Adresse copiée.';
 
   @override
   String get exportAllTitle => 'Exporter mes données';

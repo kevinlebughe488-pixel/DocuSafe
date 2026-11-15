@@ -282,7 +282,13 @@ Code : `lib/core/backup/backup_service.dart`, `VaultService.restore`, écrans da
 **Sauvegardes du système**
 
 - Android : `allowBackup="false"` et règles d'extraction qui excluent tout (sauvegarde cloud et transfert d'appareil).
-- iOS (à vérifier sur iOS) : dossier du coffre exclu de la sauvegarde iCloud ; éléments du trousseau limités à cet appareil.
+- iOS (à vérifier sur iOS) : dossier du coffre exclu de la sauvegarde iCloud et de la sauvegarde de l'ordinateur (`BackupExclusion`, attribut `isExcludedFromBackup` posé à chaque ouverture du coffre et sur le dossier d'une restauration) ; éléments du trousseau limités à cet appareil.
+
+**Fichiers reçus d'une autre application (« Partager vers DocSafe », Android)**
+
+- Seuls les contenus `content://` sont acceptés : jamais un chemin `file://`, qui pourrait désigner un fichier privé de DocSafe.
+- Chaque fichier est copié dans `cache/shared_in`, au plus 100 Mo + 1 octet (un fichier plus gros est refusé par la vérification, sans remplir le téléphone) ; un nom de fichier venu d'ailleurs perd tout séparateur de dossier.
+- Les fichiers attendent le déverrouillage, puis suivent l'importation habituelle (signature du format vérifiée, chiffrement, copie en clair supprimée). Coffre effacé : les fichiers en attente sont supprimés.
 
 **Journaux techniques**
 

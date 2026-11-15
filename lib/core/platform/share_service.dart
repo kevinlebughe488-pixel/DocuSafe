@@ -67,13 +67,16 @@ final class PlatformShareService implements ShareService {
 
   @override
   Future<int?> freeBytes() async {
-    if (!Platform.isAndroid) {
-      return null; // à faire pour iOS (phase 6)
+    // Android : MainActivity ; iPhone : AppDelegate (à vérifier sur iOS).
+    if (!Platform.isAndroid && !Platform.isIOS) {
+      return null;
     }
     try {
       return await _channel.invokeMethod<int>('freeBytes');
     } on PlatformException catch (e, s) {
       AppLog.error('platform.free_bytes', e, s);
+      return null;
+    } on MissingPluginException {
       return null;
     }
   }

@@ -4,8 +4,10 @@ import 'package:cupertino_ui/cupertino_ui.dart'
     show GlobalCupertinoLocalizations;
 import 'package:docusafe/app/app.dart';
 import 'package:docusafe/app/l10n/generated/app_localizations.dart';
+import 'package:docusafe/app/theme/app_theme.dart';
 import 'package:docusafe/core/database/app_database.dart';
 import 'package:docusafe/core/platform/notification_service.dart';
+import 'package:docusafe/core/platform/share_intake_service.dart';
 import 'package:docusafe/core/platform/share_service.dart';
 import 'package:docusafe/core/providers.dart';
 import 'package:docusafe/core/security/auth/biometric_service.dart';
@@ -46,6 +48,9 @@ final class TestEnvironment {
   /// Partage et « Enregistrer sous » simulés : ce qui serait sorti.
   final FakeShareService shares = FakeShareService();
 
+  /// « Partager vers DocSafe » simulé : fichiers reçus d'une autre application.
+  final FakeShareIntakeService shareIntake = FakeShareIntakeService();
+
   VaultPaths get paths => VaultPaths.under(root);
 
   List<Override> overrides({BiometricService? biometrics}) => [
@@ -58,6 +63,7 @@ final class TestEnvironment {
     screenSecurityProvider.overrideWithValue(const NoopScreenSecurity()),
     notificationServiceProvider.overrideWithValue(notifications),
     shareServiceProvider.overrideWithValue(shares),
+    shareIntakeServiceProvider.overrideWithValue(shareIntake),
     vaultServiceProvider.overrideWith(
       (ref) => VaultService(
         crypto: ref.watch(cryptoEngineProvider),
@@ -89,6 +95,8 @@ Widget wrap(Widget child, {List<Override> overrides = const []}) =>
     ProviderScope(
       overrides: overrides,
       child: MaterialApp(
+        // Thème de l'application (couleurs DocSafe, extension DsColors).
+        theme: AppTheme.light(),
         locale: const Locale('fr'),
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: const [

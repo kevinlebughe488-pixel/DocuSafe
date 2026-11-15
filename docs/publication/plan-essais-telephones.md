@@ -62,6 +62,8 @@ Pour chaque ligne, noter **OK** ou décrire le problème (capture d'écran, mod�
 | 23 | Exporter toutes les données | Fichier ZIP rangé par catégorie |
 | 24 | Créer une sauvegarde, la copier sur un deuxième téléphone, l'y restaurer avec la clé de récupération | Tous les documents présents et lisibles |
 | 25 | Paramètres → Stockage → Nettoyer | « Aucun fichier en attente » |
+| 25 bis | Depuis la galerie ou l'application Fichiers : Partager → DocSafe, coffre verrouillé, puis coffre ouvert | Le code est demandé si besoin, puis l'écran d'importation s'ouvre avec le fichier |
+| 25 ter | « Code oublié ? » sur l'écran de déverrouillage, saisir la clé de récupération | Choix d'un nouveau code, puis accueil |
 
 ### Affichage
 

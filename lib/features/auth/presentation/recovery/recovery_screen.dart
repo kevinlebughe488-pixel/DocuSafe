@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../../app/l10n/generated/app_localizations.dart';
+import '../../../../app/router/routes.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/errors/app_exception.dart';
 import '../../../../core/providers.dart';
@@ -58,7 +60,9 @@ final class _RecoveryScreenState extends ConsumerState<RecoveryScreen> {
     setState(() => _busy = true);
     try {
       await ref.read(vaultControllerProvider.notifier).changePin(pin);
-      // Le coffre est ouvert : le routeur quitte cet écran de lui-même.
+      if (mounted) {
+        context.go(Routes.home);
+      }
     } on AppException catch (e) {
       setState(() {
         _busy = false;

@@ -83,6 +83,18 @@ final class _PinEntryState extends State<PinEntry> {
     final theme = Theme.of(context);
     final canSubmit =
         widget.enabled && !widget.busy && _pin.length >= AppConfig.pinMinLength;
+    // Très grande police (accessibilité, §6.3) : tout l'écran défile plutôt
+    // que de déborder ; les touches gardent leur taille normale.
+    final largeText = MediaQuery.textScalerOf(context).scale(10) > 13;
+    if (largeText) {
+      return SingleChildScrollView(
+        child: _layout(context, theme, canSubmit, (
+          keySize: AppSpacing.keypadKeySize,
+          rowGap: 7,
+          compact: false,
+        ), scrollable: true),
+      );
+    }
     return LayoutBuilder(
       builder: (context, constraints) => _layout(
         context,
@@ -133,61 +145,24 @@ final class _PinEntryState extends State<PinEntry> {
     BuildContext context,
     ThemeData theme,
     bool canSubmit,
-    ({double keySize, double rowGap, bool compact}) keypad,
-  ) {
+    ({double keySize, double rowGap, bool compact}) keypad, {
+    bool scrollable = false,
+  }) {
     final compact = keypad.compact;
+    final top = _top(theme, canSubmit, compact);
     return Column(
+      mainAxisSize: scrollable ? MainAxisSize.min : MainAxisSize.max,
       children: [
-        Expanded(
-          // Défilable en dernier recours : rien ne déborde sur le clavier.
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  PinDots(filled: _pin.length, hasError: widget.messageIsError),
-                  SizedBox(height: compact ? AppSpacing.sm : AppSpacing.lg),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: compact ? 28 : 40),
-                    child: widget.busy
-                        ? const Center(
-                            child: SizedBox.square(
-                              dimension: 20,
-                              child: CircularProgressIndicator.adaptive(
-                                strokeWidth: 2,
-                              ),
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacing.xxl,
-                            ),
-                            child: Text(
-                              widget.message ?? '',
-                              textAlign: TextAlign.center,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: widget.messageIsError
-                                    ? theme.colorScheme.error
-                                    : theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ),
-                  ),
-                  SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
-                  FilledButton.tonal(
-                    style: compact
-                        ? FilledButton.styleFrom(
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          )
-                        : null,
-                    onPressed: canSubmit ? _submit : null,
-                    child: Text(widget.submitLabel),
-                  ),
-                ],
-              ),
-            ),
+        if (scrollable)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+            child: top,
+          )
+        else
+          Expanded(
+            // Défilable en dernier recours : rien ne déborde sur le clavier.
+            child: Center(child: SingleChildScrollView(child: top)),
           ),
-        ),
         PinKeypad(
           keySize: keypad.keySize,
           rowGap: keypad.rowGap,
@@ -211,6 +186,51 @@ final class _PinEntryState extends State<PinEntry> {
           ),
         if (widget.below != null) widget.below!,
         const SizedBox(height: AppSpacing.sm),
+      ],
+    );
+  }
+
+  /// Points, message et bouton de validation.
+  Widget _top(ThemeData theme, bool canSubmit, bool compact) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        PinDots(filled: _pin.length, hasError: widget.messageIsError),
+        SizedBox(height: compact ? AppSpacing.sm : AppSpacing.lg),
+        ConstrainedBox(
+          constraints: BoxConstraints(minHeight: compact ? 28 : 40),
+          child: widget.busy
+              ? const Center(
+                  child: SizedBox.square(
+                    dimension: 20,
+                    child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xxl,
+                  ),
+                  child: Text(
+                    widget.message ?? '',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: widget.messageIsError
+                          ? theme.colorScheme.error
+                          : theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+        ),
+        SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
+        FilledButton.tonal(
+          style: compact
+              ? FilledButton.styleFrom(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                )
+              : null,
+          onPressed: canSubmit ? _submit : null,
+          child: Text(widget.submitLabel),
+        ),
       ],
     );
   }

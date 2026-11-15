@@ -13,7 +13,9 @@
 
 Le test sur téléphone simulé installe la vraie application (version « aperçu »), crée un coffre, le verrouille, le rouvre avec le code, arrête puis relance l'application et rouvre encore le coffre. C'est le seul test qui exerce le vrai stockage sécurisé d'Android et la vraie base chiffrée. Il tourne sur un **petit écran** (320 × 640 points) pour représenter un téléphone d'entrée de gamme.
 
-Les tests d'intégration du paquet `integration_test` (scanner réel, sélecteur de fichiers réel, notifications réelles) demandent un téléphone ou un émulateur piloté depuis un poste de développement : ils sont prévus en phase 6, avec les essais sur téléphones réels.
+Les tests d'intégration du paquet `integration_test` (`integration_test/app_test.dart`) font tourner la vraie application sur un émulateur Android dans la recette « Tests d'intégration » : création du coffre, mauvais code refusé, réouverture, profil, aide. Le scanner, les sélecteurs du système et les notifications restent à vérifier sur un vrai téléphone (plan d'essais).
+
+Couverture des tests : [rapport-couverture.md](rapport-couverture.md) (79 % des lignes au 15/11/2026), recalculée à chaque compilation de l'aperçu.
 
 ## 2. Correspondance avec le cahier des charges (§10)
 
@@ -59,7 +61,10 @@ Les tests d'intégration du paquet `integration_test` (scanner réel, sélecteur
 
 | Exigence | Tests |
 |---|---|
-| Navigation complète | `access_control_test.dart`, les tests de parcours de `test/features/`, captures d'écran |
+| Navigation complète | `access_control_test.dart`, les tests de parcours de `test/features/`, captures d'écran, `integration_test/app_test.dart` (vraie application sur émulateur) |
+| Grande taille de police | `large_text_test.dart` : écrans principaux à 200 % |
+| « Partager vers DocSafe » | `share_intake_flow_test.dart` (coffre verrouillé puis ouvert) |
+| Code oublié, lecture, modification, textes légaux, aide | `more_screens_test.dart`, `help_and_details_test.dart` |
 | Onboarding | `test/features/vault_flow_test.dart`, téléphone simulé |
 | Ajout d'un document | `import_flow_test.dart` |
 | Recherche | `scan_search_flow_test.dart` |
@@ -80,6 +85,8 @@ Les tests d'intégration du paquet `integration_test` (scanner réel, sélecteur
 | Le contrôle de cohérence décrit dans la documentation n'était pas écrit | Mineur | Relecture | Fichiers orphelins supprimés au déverrouillage |
 | À la réouverture du coffre, la reprogrammation des rappels lisait encore la base fermée de la session précédente (rappels non reprogrammés) | Majeur | Journal du téléphone simulé, puis test de régression | Le service des rappels est construit sur la session qui vient de s'ouvrir |
 | **La version publiable contenait la permission Internet** (et l'état du réseau), ajoutée par un paquet pour ses statistiques d'usage (scanner ML Kit) | Bloquant (règle D8, fiche « aucune donnée collectée ») | Contrôle automatique `tool/check_apk.py` (phase 6) | Permissions retirées explicitement dans le manifeste ; contrôle rendu vraiment bloquant |
+| **« Code oublié » ne laissait pas choisir de nouveau code** : après la clé de récupération, l'application allait directement à l'accueil, avec l'ancien code (oublié) | Majeur | Nouveau test de l'écran « Code oublié » | L'écran reste affiché jusqu'au choix du nouveau code |
+| Écran du code et en-tête d'étape débordaient à la taille de police maximale (200 %) | Majeur (accessibilité) | Nouveau test à 200 % | Écran du code défilant en très grande police, libellé d'étape raccourci au besoin |
 | Quitter l'écran de restauration sans restaurer provoquait une erreur interne | Mineur | Captures d'écran | Corrigé |
 | La barre de répartition de l'écran Stockage ne s'affichait pas | Mineur | Captures d'écran | Corrigé |
 

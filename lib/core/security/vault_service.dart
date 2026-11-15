@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import '../config/app_config.dart';
 import '../database/app_database.dart';
 import '../errors/app_exception.dart';
+import '../platform/backup_exclusion.dart';
 import '../storage/vault_paths.dart';
 import '../utils/app_log.dart';
 import '../utils/bytes.dart';
@@ -300,6 +301,10 @@ final class VaultService {
 
   Future<VaultSession> _openSession(Uint8List vaultKey) async {
     await _paths.ensureCreated();
+    // iPhone : le coffre ne part ni dans iCloud ni dans la sauvegarde de
+    // l'ordinateur (refait à chaque ouverture : un coffre restauré est un
+    // nouveau dossier).
+    await BackupExclusion.exclude(_paths.vaultDir);
     await _paths.purgeSecureTemp();
     await _paths.purgePartialFiles();
     AppLog.event('vault.session.opening');

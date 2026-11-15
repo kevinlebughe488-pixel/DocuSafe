@@ -35,14 +35,21 @@ final class StepHeader extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                l10n.setupStep(step, total),
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+              // Très grande police : le texte peut se raccourcir, jamais déborder.
+              Flexible(
+                flex: 3,
+                child: Text(
+                  l10n.setupStep(step, total),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
+                flex: 2,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(

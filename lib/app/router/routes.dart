@@ -47,6 +47,7 @@ abstract final class Routes {
   static const settingsNotifications = '/settings/notifications';
   static const settingsStorage = '/settings/storage';
   static const settingsBackup = '/settings/backup';
+  static const settingsHelp = '/settings/help';
 
   /// Restauration d'une sauvegarde : depuis l'accueil (pas encore de coffre)
   /// ou depuis les réglages.

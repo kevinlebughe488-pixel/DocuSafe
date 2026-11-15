@@ -28,7 +28,7 @@ Textes prêts à copier dans la Play Console. Les longueurs maximales de Google 
 > • Une clé de récupération vous permet de retrouver l'accès si vous oubliez votre code.
 >
 > **Simple au quotidien**
-> • Numérisez un document avec l'appareil photo, ou importez un PDF ou une photo.
+> • Numérisez un document avec l'appareil photo, importez un PDF ou une photo, ou envoyez-le depuis une autre application avec « Partager ».
 > • Rangez-le dans une catégorie : identité, études, travail, finances, logement, santé…
 > • Retrouvez-le en quelques lettres, même sans accents.
 > • Soyez prévenu avant l'expiration d'un passeport ou d'un titre de séjour.

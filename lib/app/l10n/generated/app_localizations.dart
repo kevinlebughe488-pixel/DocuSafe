@@ -1180,6 +1180,12 @@ abstract class AppLocalizations {
   /// **'Ouvrir'**
   String get detailOpen;
 
+  /// No description provided for @detailUpdatedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifié le'**
+  String get detailUpdatedOn;
+
   /// No description provided for @detailShare.
   ///
   /// In fr, this message translates to:
@@ -1455,6 +1461,132 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'J\'ai une sauvegarde'**
   String get onboardingRestore;
+
+  /// No description provided for @helpTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide et assistance'**
+  String get helpTitle;
+
+  /// No description provided for @helpIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les réponses aux questions les plus courantes. Elles sont lisibles sans Internet.'**
+  String get helpIntro;
+
+  /// No description provided for @helpForgotPinQ.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai oublié mon code'**
+  String get helpForgotPinQ;
+
+  /// No description provided for @helpForgotPinA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur l\'écran de déverrouillage, touchez « Code oublié ? » puis saisissez votre clé de récupération : vous choisirez un nouveau code. Sans le code ni la clé de récupération, personne ne peut ouvrir le coffre, pas même l\'éditeur de DocSafe. Pensez à noter votre clé (Paramètres → Sécurité).'**
+  String get helpForgotPinA;
+
+  /// No description provided for @helpWhereQ.
+  ///
+  /// In fr, this message translates to:
+  /// **'Où sont mes documents ?'**
+  String get helpWhereQ;
+
+  /// No description provided for @helpWhereA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Uniquement sur ce téléphone, chiffrés. DocSafe n\'a pas accès à Internet et n\'envoie rien. Les sauvegardes automatiques du téléphone ne les emportent pas.'**
+  String get helpWhereA;
+
+  /// No description provided for @helpNewPhoneQ.
+  ///
+  /// In fr, this message translates to:
+  /// **'Je change de téléphone'**
+  String get helpNewPhoneQ;
+
+  /// No description provided for @helpNewPhoneA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paramètres → Sauvegarde et synchronisation → Créer une sauvegarde. Copiez le fichier .docsafe sur le nouveau téléphone, puis, à l\'accueil de DocSafe, touchez « J\'ai une sauvegarde ». Il vous faudra votre clé de récupération.'**
+  String get helpNewPhoneA;
+
+  /// No description provided for @helpRemindersQ.
+  ///
+  /// In fr, this message translates to:
+  /// **'Je ne reçois pas les rappels'**
+  String get helpRemindersQ;
+
+  /// No description provided for @helpRemindersA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifiez que les notifications de DocSafe sont autorisées dans les réglages du téléphone. Sur certaines marques, l\'économie de batterie bloque les rappels : retirez DocSafe des applications optimisées. L\'onglet Échéances reste toujours à jour.'**
+  String get helpRemindersA;
+
+  /// No description provided for @helpScannerQ.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le scanner ne s\'ouvre pas'**
+  String get helpScannerQ;
+
+  /// No description provided for @helpScannerA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autorisez l\'appareil photo pour DocSafe dans les réglages du téléphone. Sans les services Google Play, le scanner passe en mode simple : prise de photo puis recadrage à la main.'**
+  String get helpScannerA;
+
+  /// No description provided for @helpBiometricQ.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'empreinte ou le visage ne fonctionne plus'**
+  String get helpBiometricQ;
+
+  /// No description provided for @helpBiometricA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Si une empreinte ou un visage a été ajouté au téléphone, DocSafe désactive la biométrie par sécurité et demande le code. Réactivez-la dans Paramètres → Sécurité.'**
+  String get helpBiometricA;
+
+  /// No description provided for @helpShareQ.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager un document sans risque'**
+  String get helpShareQ;
+
+  /// No description provided for @helpShareA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un document partagé ou exporté n\'est plus protégé par DocSafe. Envoyez-le seulement à une personne de confiance, et supprimez la copie quand vous n\'en avez plus besoin.'**
+  String get helpShareA;
+
+  /// No description provided for @helpEraseQ.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer toutes mes données'**
+  String get helpEraseQ;
+
+  /// No description provided for @helpEraseA.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paramètres → Sécurité → Effacer le coffre. Les clés, les documents et les réglages sont détruits. Cette action est définitive.'**
+  String get helpEraseA;
+
+  /// No description provided for @helpContactTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écrire à l\'assistance'**
+  String get helpContactTitle;
+
+  /// No description provided for @helpContactCopy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier l\'adresse'**
+  String get helpContactCopy;
+
+  /// No description provided for @helpContactCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse copiée.'**
+  String get helpContactCopied;
 
   /// No description provided for @exportAllTitle.
   ///

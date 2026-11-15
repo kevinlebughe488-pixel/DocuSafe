@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.StatFs
+import android.net.Uri
+import android.provider.OpenableColumns
 import android.view.WindowManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,6 +16,7 @@ import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
+import java.util.UUID
 import java.util.concurrent.Executors
 
 /**
@@ -36,6 +39,11 @@ class MainActivity : FlutterFragmentActivity() {
     private val ioExecutor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
 
+    // « Partager vers DocSafe » : fichiers reçus, copiés dans cache/shared_in,
+    // en attente d'être repris par Dart (canal docusafe/share_in).
+    private var shareChannel: MethodChannel? = null
+    private val pendingShares = mutableListOf<Map<String, String>>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Doit être enregistré avant que l'activité ne démarre.
         createDocument = registerForActivityResult(
@@ -46,6 +54,15 @@ class MainActivity : FlutterFragmentActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
         super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) {
+            handleShareIntent(intent)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleShareIntent(intent)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -66,6 +83,22 @@ class MainActivity : FlutterFragmentActivity() {
                     else -> result.notImplemented()
                 }
             }
+
+        shareChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "docusafe/share_in").also {
+            it.setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "takePending" -> {
+                        val items = synchronized(pendingShares) {
+                            val copy = pendingShares.toList()
+                            pendingShares.clear()
+                            copy
+                        }
+                        result.success(items)
+                    }
+                    else -> result.notImplemented()
+                }
+            }
+        }
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "docusafe/platform")
             .setMethodCallHandler { call, result ->
@@ -124,5 +157,80 @@ class MainActivity : FlutterFragmentActivity() {
                 mainHandler.post { result.error("write_failed", null, null) }
             }
         }
+    }
+
+    /**
+     * Fichiers partagés depuis une autre application. Seuls les contenus
+     * « content:// » sont acceptés (jamais un chemin « file:// », qui pourrait
+     * désigner un fichier privé de DocSafe). Chaque fichier est copié, au plus
+     * MAX_SHARE_BYTES + 1 octets : un fichier trop gros arrive tronqué et sera
+     * refusé par la vérification de l'importation, sans remplir le téléphone.
+     */
+    private fun handleShareIntent(intent: Intent?) {
+        if (intent == null) return
+        val uris: List<Uri> = when (intent.action) {
+            Intent.ACTION_SEND -> listOfNotNull(intent.streamUri())
+            Intent.ACTION_SEND_MULTIPLE -> intent.streamUris()
+            else -> return
+        }.filter { it.scheme == "content" }
+        if (uris.isEmpty()) return
+        ioExecutor.execute {
+            val dir = File(cacheDir, "shared_in")
+            dir.deleteRecursively()
+            val received = mutableListOf<Map<String, String>>()
+            for (uri in uris) {
+                try {
+                    val target = File(File(dir, UUID.randomUUID().toString()).apply { mkdirs() }, displayName(uri))
+                    contentResolver.openInputStream(uri)?.use { input ->
+                        target.outputStream().use { output -> copyAtMost(input, output, MAX_SHARE_BYTES + 1) }
+                    } ?: continue
+                    received.add(mapOf("path" to target.path, "name" to target.name))
+                } catch (e: Exception) {
+                    // Fichier illisible : ignoré.
+                }
+            }
+            if (received.isEmpty()) return@execute
+            synchronized(pendingShares) {
+                pendingShares.clear()
+                pendingShares.addAll(received)
+            }
+            mainHandler.post { shareChannel?.invokeMethod("sharedAvailable", null) }
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun Intent.streamUri(): Uri? =
+        if (Build.VERSION.SDK_INT >= 33) getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+        else getParcelableExtra(Intent.EXTRA_STREAM) as? Uri
+
+    @Suppress("DEPRECATION")
+    private fun Intent.streamUris(): List<Uri> =
+        (if (Build.VERSION.SDK_INT >= 33) getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java)
+        else getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)) ?: emptyList()
+
+    private fun displayName(uri: Uri): String {
+        var name: String? = null
+        contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) name = cursor.getString(0)
+        }
+        // Jamais de séparateur de dossier dans un nom venu d'une autre application.
+        val clean = (name ?: "document").replace(Regex("[/\\\\\u0000]"), "_").trim().take(120)
+        return if (clean.isEmpty() || clean == "." || clean == "..") "document" else clean
+    }
+
+    private fun copyAtMost(input: java.io.InputStream, output: java.io.OutputStream, limit: Long) {
+        val buffer = ByteArray(1 shl 16)
+        var total = 0L
+        while (total < limit) {
+            val read = input.read(buffer, 0, minOf(buffer.size.toLong(), limit - total).toInt())
+            if (read < 0) break
+            output.write(buffer, 0, read)
+            total += read
+        }
+    }
+
+    companion object {
+        /** Taille maximale d'un document (DocumentLimits.maxFileSizeBytes). */
+        private const val MAX_SHARE_BYTES = 100L * 1000 * 1000
     }
 }

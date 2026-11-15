@@ -43,8 +43,13 @@ start docs\maquettes\index.html
 | [docs/05-parcours-utilisateurs.md](docs/05-parcours-utilisateurs.md) | Parcours de l'utilisateur, écran par écran |
 | [docs/06-dependances.md](docs/06-dependances.md) | Paquets retenus et justification |
 | [docs/07-design.md](docs/07-design.md) | Système de design : couleurs, typographie, composants, navigation |
+| [docs/08-tests-et-risques.md](docs/08-tests-et-risques.md) | Matrice de tests, défauts corrigés, risques à jour |
+| [docs/09-conformite.md](docs/09-conformite.md) | Conformité au cahier des charges, exigence par exigence |
+| [docs/rapport-couverture.md](docs/rapport-couverture.md) | Rapport de couverture des tests |
+| [docs/publication/README.md](docs/publication/README.md) | Dossier de publication (fiches, captures, signature, essais sur téléphones) |
+| [docs/apercu-telephone.md](docs/apercu-telephone.md) | Voir l'application sur un téléphone ou dans le navigateur |
 | [docs/maquettes/index.html](docs/maquettes/index.html) | Maquettes des 46 écrans, en clair et en sombre |
-| [docs/captures/index.html](docs/captures/index.html) | Captures d'écran réelles des 12 écrans de la phase 3, Android et iPhone, en clair et en sombre |
+| [docs/captures/index.html](docs/captures/index.html) | Captures d'écran réelles de l'application, Android et iPhone, en clair et en sombre |
 | [docs/guide-installation-windows.md](docs/guide-installation-windows.md) | Installation de l'environnement de développement |
 | [docs/problemes-connus.md](docs/problemes-connus.md) | Problèmes connus |
 

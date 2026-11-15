@@ -10,6 +10,7 @@ Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera te
 | P4 | L'application n'a jamais été lancée sur un vrai téléphone (seulement sur le téléphone simulé de GitHub et sur Appetize) | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
 | P5 | Miniatures et lecture des PDF (PDFium), scanner du système (ML Kit, VisionKit) non vérifiés hors des tests | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
 | P6 | Partage, « Enregistrer sous », sauvegarde et restauration non vérifiés sur téléphone | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
+| P7 | Quota gratuit de GitHub Actions (dépôt privé) : environ 2 000 minutes par mois, une minute de Mac compte pour dix | À surveiller | Ouvert depuis le 15/11/2026 |
 
 ---
 
@@ -96,6 +97,11 @@ Une fois le PC sain : supprimer `D:\dev\flutter`, réinstaller Flutter (15 minut
 
 - La limite de 200 Mo de l'export complet est levée (15/11/2026) : sur Android, l'archive et la sauvegarde sont copiées par petits morceaux vers l'emplacement choisi, par un petit code natif (`MainActivity.kt`, `saveFile`). Sur iPhone, elles passent par la feuille de partage (« Enregistrer dans Fichiers ») : à vérifier sur iOS. L'espace libre sur iPhone n'est pas encore lu (affiché seulement sur Android).
 - Les tests utilisent des services simulés. À vérifier au premier lancement : feuille de partage, enregistrement dans « Téléchargements » et sur Google Drive, sauvegarde d'un coffre de plusieurs centaines de Mo, restauration sur un deuxième téléphone, suppression des fichiers temporaires.
+
+## P7 – Quota des recettes GitHub
+
+- Chaque envoi de code lance la recette « Aperçu Android » (environ 20 minutes, émulateur compris). « Publication Android » ne se lance que si la configuration Android change, « Compilation iOS » si la configuration iPhone change (minutes de Mac comptées dix fois), « Tests d'intégration » sur les pull requests ou à la demande.
+- Pour un dépôt privé, l'offre gratuite de GitHub donne environ 2 000 minutes par mois (à vérifier dans Settings → Billing). Si le quota est atteint, les recettes s'arrêtent jusqu'au mois suivant : rien n'est perdu, il suffit de les relancer.
 
 ## P2 – Flutter installé mais inutilisable
 
