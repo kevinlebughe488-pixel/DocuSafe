@@ -43,12 +43,21 @@ final class _RestoreScreenState extends ConsumerState<RestoreScreen> {
   String? _error;
   bool _done = false;
 
+  // Gardé dès le départ : `ref` n'est plus utilisable dans `dispose`.
+  late final BackupService _backups = ref.read(backupServiceProvider);
+
+  @override
+  void initState() {
+    super.initState();
+    _backups; // force la lecture tant que l'écran est monté
+  }
+
   @override
   void dispose() {
     _keyField.dispose();
     Bytes.wipe(_vaultKey);
     if (!_done) {
-      unawaited(ref.read(backupServiceProvider).discardUnpacked());
+      unawaited(_backups.discardUnpacked());
     }
     super.dispose();
   }
@@ -64,7 +73,7 @@ final class _RestoreScreenState extends ConsumerState<RestoreScreen> {
         return;
       }
       setState(() => _step = _Step.unpacking);
-      final info = await ref.read(backupServiceProvider).unpack(picked.file);
+      final info = await _backups.unpack(picked.file);
       await ref.read(filePickerServiceProvider).clearTemporaryFiles();
       setState(() {
         _info = info;
@@ -88,7 +97,7 @@ final class _RestoreScreenState extends ConsumerState<RestoreScreen> {
     setState(() => _error = null);
     try {
       final key = RecoveryKey.parse(_keyField.text);
-      final slot = await ref.read(backupServiceProvider).unpackedRecoverySlot();
+      final slot = await _backups.unpackedRecoverySlot();
       final vaultKey = await ref
           .read(vaultControllerProvider.notifier)
           .service

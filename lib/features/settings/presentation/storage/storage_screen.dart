@@ -101,6 +101,8 @@ final class StorageScreen extends ConsumerWidget {
                     child: SizedBox(
                       height: 12,
                       child: Row(
+                        // Sans cela, les bandes n'ont aucune hauteur.
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           for (final u in usage)
                             Expanded(

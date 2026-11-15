@@ -35,6 +35,12 @@ class SettingsDao extends DatabaseAccessor<AppDatabase> with _$SettingsDaoMixin 
   Stream<bool> watchFlag(String key) =>
       watch().map((row) => _decode(row.vaultConfiguration)[key] == true);
 
+  /// Observe un réglage texte du JSON `vault_configuration` (`null` : absent).
+  Stream<String?> watchString(String key) => watch().map((row) {
+    final value = _decode(row.vaultConfiguration)[key];
+    return value is String && value.isNotEmpty ? value : null;
+  });
+
   /// Lit un réglage du JSON `vault_configuration`.
   Future<Object?> readConfig(String key) async {
     final row = await get();

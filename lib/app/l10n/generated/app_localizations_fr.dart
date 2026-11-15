@@ -327,6 +327,24 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String homeGreeting(String name) {
+    return 'Bonjour $name';
+  }
+
+  @override
+  String get profileTitle => 'Profil local';
+
+  @override
+  String get profileSubtitle => 'Nom affiché sur l\'accueil';
+
+  @override
+  String get profileFieldLabel => 'Votre nom ou prénom';
+
+  @override
+  String get profileHelper =>
+      'Facultatif. Il reste uniquement sur ce téléphone.';
+
+  @override
   String get homeLock => 'Verrouiller';
 
   @override
@@ -334,10 +352,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeEmptyTitle => 'Votre coffre est vide';
-
-  @override
-  String get homeEmptyBody =>
-      'Le scanner et l\'importation arrivent à la prochaine étape du développement. Votre coffre est prêt : code, chiffrement et catégories sont en place.';
 
   @override
   String get homeCategories => 'Catégories';

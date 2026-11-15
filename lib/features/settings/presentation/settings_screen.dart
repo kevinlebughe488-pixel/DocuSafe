@@ -8,9 +8,10 @@ import '../../../core/utils/formats.dart';
 import '../../../core/widgets/settings_tile.dart';
 import '../../documents/presentation/share/document_exit_flow.dart';
 import 'about_view_model.dart';
+import 'profile_name.dart';
 import 'storage/storage_screen.dart';
 
-/// Paramètres (écran 18) : sécurité, notifications, catégories, stockage,
+/// Paramètres (écran 18) : profil local, sécurité, notifications, catégories, stockage,
 /// export des données, sauvegarde, textes légaux, à propos.
 final class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -20,10 +21,18 @@ final class SettingsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final version = ref.watch(appVersionProvider).value;
     final totalSize = ref.watch(totalSizeProvider).value;
+    final profileName = ref.watch(profileNameProvider).value;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
+          SettingsTile(
+            icon: Icons.person_outline_rounded,
+            title: l10n.profileTitle,
+            subtitle: profileName ?? l10n.profileSubtitle,
+            onTap: () => editProfileName(context, ref),
+          ),
+          const Divider(),
           SettingsTile(
             icon: Icons.shield_outlined,
             title: l10n.settingsSecurityTitle,

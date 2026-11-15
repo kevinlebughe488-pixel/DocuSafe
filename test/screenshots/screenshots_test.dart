@@ -386,7 +386,19 @@ void main() {
       await tester.enterText(find.byType(TextField).last, 'pass');
       await settle(tester, rounds: 10);
     });
-  }, skip: !enabled, timeout: const Timeout(Duration(minutes: 5)));
+    await both(tester, '26-stockage', () async {
+      await unlockWithDocuments();
+      unawaited(containerOf(tester).read(routerProvider).push(Routes.settingsStorage));
+    });
+    await both(tester, '27-sauvegarde', () async {
+      await unlockWithDocuments();
+      unawaited(containerOf(tester).read(routerProvider).push(Routes.settingsBackup));
+    });
+    await both(tester, '28-restauration', () async {
+      await unlockWithDocuments();
+      unawaited(containerOf(tester).read(routerProvider).push(Routes.restore));
+    });
+  }, skip: !enabled, timeout: const Timeout(Duration(minutes: 8)));
 }
 
 /// Biométrie simulée : disponible, jamais reconnue.

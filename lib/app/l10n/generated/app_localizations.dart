@@ -610,6 +610,36 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{Aucun document} =1{1 document} other{{count} documents}}'**
   String homeDocumentCount(int count);
 
+  /// No description provided for @homeGreeting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonjour {name}'**
+  String homeGreeting(String name);
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil local'**
+  String get profileTitle;
+
+  /// No description provided for @profileSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom affiché sur l\'accueil'**
+  String get profileSubtitle;
+
+  /// No description provided for @profileFieldLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre nom ou prénom'**
+  String get profileFieldLabel;
+
+  /// No description provided for @profileHelper.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultatif. Il reste uniquement sur ce téléphone.'**
+  String get profileHelper;
+
   /// No description provided for @homeLock.
   ///
   /// In fr, this message translates to:
@@ -627,12 +657,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Votre coffre est vide'**
   String get homeEmptyTitle;
-
-  /// No description provided for @homeEmptyBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Le scanner et l\'importation arrivent à la prochaine étape du développement. Votre coffre est prêt : code, chiffrement et catégories sont en place.'**
-  String get homeEmptyBody;
 
   /// No description provided for @homeCategories.
   ///

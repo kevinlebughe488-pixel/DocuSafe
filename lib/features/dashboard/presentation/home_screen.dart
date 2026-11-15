@@ -24,6 +24,7 @@ import '../../auth/presentation/reauth/reauth_sheet.dart';
 import '../../documents/presentation/import/import_view_model.dart';
 import '../../documents/presentation/list/documents_view_model.dart';
 import '../../reminders/presentation/deadlines_screen.dart';
+import '../../settings/presentation/profile_name.dart';
 
 /// Tableau de bord (écran 5) : compteur, recherche, scanner et importation,
 /// catégories, favoris, ajoutés récemment. Construit comme une liste de
@@ -41,6 +42,7 @@ final class HomeScreen extends ConsumerWidget {
     final favorites = ref.watch(_favoritesProvider).value ?? const [];
     final recent = ref.watch(_recentProvider).value ?? const [];
     final recoveryConfirmed = ref.watch(_recoveryConfirmedProvider).value ?? true;
+    final profileName = ref.watch(profileNameProvider).value;
     final categoryNames = ref.watch(categoriesByIdProvider).value ?? const {};
     final today = DateOnly.today();
     final upcoming = (ref.watch(expiringDocumentsProvider).value ?? const <DocumentRow>[])
@@ -82,6 +84,16 @@ final class HomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (profileName != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                    child: Text(
+                      l10n.homeGreeting(profileName),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
                 Text(l10n.homeDocumentCount(count), style: theme.textTheme.headlineSmall),
                 const SizedBox(height: AppSpacing.xs),
                 SecureLabel(
