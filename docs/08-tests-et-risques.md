@@ -93,6 +93,7 @@ Couverture des tests : [rapport-couverture.md](rapport-couverture.md) (79 % des 
 | Code jugé compliqué : `112233` refusé, bouton « Continuer » à toucher | Gêne | Même essai | Code de 6 chiffres validé tout seul ; seuls `111111` et les suites refusés (D5 révisée) |
 | Après le cadenas de l'accueil, l'écran du code ressemblait à celui de la création | Gêne | Même essai | Écran titré « Coffre verrouillé » |
 | Pas d'endroit pour voir ou donner les autorisations | Gêne | Même essai | Paramètres → Autorisations |
+| **Le scanner ML Kit ne s'initialisait pas dans la version compilée** : l'optimiseur R8 retirait le constructeur d'un composant que ML Kit crée par réflexion (`CommonComponentRegistrar`). Le scanner passait directement en mode de secours | Majeur | Journal du téléphone simulé (15/11/2026) | Règle R8 (`android/app/proguard-rules.pro`) ; `tool/smoke_test.py` échoue si l'avertissement revient |
 | La barre de répartition de l'écran Stockage ne s'affichait pas | Mineur | Captures d'écran | Corrigé |
 
 ## 4. Analyse des risques, mise à jour

@@ -159,6 +159,18 @@ def main():
     for step, labels in SCREENS:
         print(f"[{step}] {' | '.join(labels)[:400]}")
     errors = [line for line in log.splitlines() if "[docusafe] ERREUR" in line]
+    # Composants créés par réflexion que R8 aurait abîmés (ML Kit : sans eux,
+    # le scanner passe directement en mode de secours).
+    app_pids = set(re.findall(r"Start proc (\d+):" + re.escape(PACKAGE) + r"[/ ]", log))
+    if pid:
+        app_pids.add(pid)
+    broken = [
+        line for line in log.splitlines()
+        if "Could not instantiate" in line
+        and any(f"({p.rjust(5)})" in line for p in app_pids)
+    ]
+    for line in broken:
+        print(line[:300])
     steps = [
         ("saisie du code", ok),
         ("coffre créé", created),
@@ -166,6 +178,7 @@ def main():
         ("réouverture avec le code", reopened),
         ("réouverture après arrêt de l'application", restarted),
         (f"aucune erreur de l'application ({len(errors)} trouvée(s))", not errors),
+        (f"composants ML Kit initialisés ({len(broken)} échec(s))", not broken),
     ]
     for name, passed in steps:
         print(f"=== {'RÉUSSI' if passed else 'ÉCHEC '} : {name}")

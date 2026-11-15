@@ -114,6 +114,12 @@ android {
                 manifestPlaceholders["appLabel"] = "DocSafe aperçu"
                 signingConfig = signingConfigs.getByName("apercu")
             }
+            // Règles de R8 propres à DocSafe : sans elles, le scanner ML Kit
+            // ne s'initialise pas dans la version compilée.
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 }
