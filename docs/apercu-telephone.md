@@ -14,9 +14,9 @@ Pour suivre la compilation : onglet **Actions** du dépôt sur GitHub. Une coche
 
 1. Sur le téléphone, connectez-vous à GitHub : application **GitHub** ou navigateur. Le dépôt est privé, la connexion est donc nécessaire.
 2. Ouvrez la page : `https://github.com/kevinlebughe488-pixel/DocuSafe/releases/tag/apercu`
-3. Dans **Assets**, touchez le fichier `DocuSafe-apercu-….apk` pour le télécharger.
+3. Dans **Assets**, touchez le fichier `DocSafe-apercu-….apk` pour le télécharger.
 4. Ouvrez le fichier téléchargé. Android demande d'autoriser l'installation depuis cette source (le navigateur ou l'application Fichiers) : acceptez **pour cette source seulement**.
-5. Touchez **Installer**. L'application apparaît sous le nom **DocuSafe aperçu**.
+5. Touchez **Installer**. L'application apparaît sous le nom **DocSafe aperçu**.
 
 ## Mettre à jour
 
@@ -33,13 +33,31 @@ Refaites les étapes 2 à 5. La nouvelle version s'installe **par-dessus** l'anc
 
 Appetize.io est un site qui fait tourner un téléphone Android **dans le navigateur**. Rien à installer.
 
+### Version automatique (recommandée) : un lien toujours à jour
+
+Une fois réglé, chaque envoi de code met à jour **la même adresse** : vous ouvrez toujours le même lien et vous voyez la dernière version.
+
+À faire **une seule fois**, depuis un appareil sain (téléphone, tablette, autre ordinateur ; pas le PC infecté) :
+
+1. Sur https://appetize.io, créez un compte gratuit.
+2. Dans votre compte Appetize, ouvrez la page des réglages et copiez votre **jeton d'API** (« API token » : un mot de passe réservé aux programmes).
+3. Sur GitHub : dépôt DocuSafe → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**. Nom : `APPETIZE_API_TOKEN`. Valeur : le jeton copié.
+4. Prévenez-moi : je relance une compilation.
+
+Ensuite, le lien « **Essayer dans le navigateur** » apparaît en haut de la page de l'aperçu : https://github.com/kevinlebughe488-pixel/DocuSafe/releases/tag/apercu
+
+### Version manuelle
+
 1. Téléchargez l'APK depuis la page Releases (voir plus haut).
-2. Sur https://appetize.io, créez un compte gratuit puis envoyez l'APK (« Upload »).
+2. Sur https://appetize.io, envoyez l'APK (« Upload »).
 3. Le site affiche un téléphone : utilisez l'application à la souris et au clavier.
+
+### À savoir
 
 - L'offre gratuite limite le temps d'utilisation chaque mois et chaque séance.
 - Le scanner (caméra), l'empreinte et les notifications n'y fonctionnent pas. Créez le coffre avec un code, puis importez des documents depuis le téléphone simulé.
 - Dans la version aperçu seulement, l'écran n'est pas protégé contre les captures : sinon le site n'afficherait qu'un écran noir. La version publiée garde la protection.
+- Le lien Appetize est privé tant que vous ne le partagez pas, mais quiconque l'a peut essayer l'application. Elle ne contient aucune donnée : chaque visiteur part d'un coffre vide.
 - **Tant que le PC est infecté** : ne vous connectez pas à GitHub ni à Appetize depuis ce PC, car le virus peut voler les mots de passe tapés. Utilisez un autre appareil : un autre ordinateur, une tablette, ou même un iPhone (le site marche dans Safari).
 
 ## Plus tard, sur le PC nettoyé

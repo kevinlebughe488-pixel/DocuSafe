@@ -1,6 +1,6 @@
-# DocuSafe – consignes pour Claude
+# DocSafe – consignes pour Claude
 
-Application mobile Flutter : coffre-fort de documents **chiffré** et **hors ligne**, Android d'abord, iPhone ensuite avec le même code.
+Application mobile Flutter **DocSafe** (nom corrigé le 15/11/2026 : jamais « DocuSafe » dans un texte visible ; les identifiants internes `docusafe` restent) : coffre-fort de documents **chiffré** et **hors ligne**, Android d'abord, iPhone ensuite avec le même code.
 Le document de référence est [docs/cahier-des-charges.md](docs/cahier-des-charges.md) : en cas de doute, il prime.
 
 ## Le développeur

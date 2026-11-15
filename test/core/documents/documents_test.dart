@@ -154,7 +154,7 @@ void main() {
     final cipherBytes = encrypted.readAsBytesSync();
     expect(String.fromCharCodes(cipherBytes.sublist(0, 4)), 'DSF1');
     expect(String.fromCharCodes(cipherBytes).contains('%PDF'), isFalse);
-    expect(String.fromCharCodes(cipherBytes).contains('DocuSafe'), isFalse);
+    expect(String.fromCharCodes(cipherBytes).contains('DocSafe'), isFalse);
     expect(File('${encrypted.path}.part').existsSync(), isFalse);
     // Pas de miniature pour un PDF avec le service « images seulement ».
     expect(paths.fileFor(VaultPaths.thumbnailRelativePath(row.id)).existsSync(), isFalse);

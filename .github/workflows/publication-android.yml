@@ -88,13 +88,13 @@ jobs:
       - name: Rassemblement
         run: |
           mkdir -p sortie
-          cp build/app/outputs/bundle/release/app-release.aab "sortie/DocuSafe-${{ github.run_number }}-$SIGNATURE.aab"
-          cp build/app/outputs/flutter-apk/app-release.apk "sortie/DocuSafe-${{ github.run_number }}-$SIGNATURE.apk"
+          cp build/app/outputs/bundle/release/app-release.aab "sortie/DocSafe-${{ github.run_number }}-$SIGNATURE.aab"
+          cp build/app/outputs/flutter-apk/app-release.apk "sortie/DocSafe-${{ github.run_number }}-$SIGNATURE.apk"
           cp verifications.txt sortie/
           ls -l sortie
 
       - uses: actions/upload-artifact@v4
         with:
-          name: DocuSafe-publication-${{ github.run_number }}
+          name: DocSafe-publication-${{ github.run_number }}
           path: sortie
           retention-days: 30

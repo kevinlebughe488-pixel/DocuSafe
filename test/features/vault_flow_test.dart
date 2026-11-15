@@ -47,7 +47,7 @@ void main() {
     await settle(tester);
 
     // Aucun coffre : onboarding.
-    expect(find.text('Bienvenue dans DocuSafe'), findsOneWidget);
+    expect(find.text('Bienvenue dans DocSafe'), findsOneWidget);
     await tester.tap(find.text('Passer'));
     await settle(tester, rounds: 5);
 

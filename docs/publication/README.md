@@ -1,6 +1,6 @@
 # Dossier de publication (phase 6)
 
-Tout ce qu'il faut pour publier DocuSafe sur Google Play, puis sur l'App Store. **Le travail s'arrête volontairement à une marche de la publication** (demande du développeur, 15/11/2026) : rien n'est envoyé à un magasin, aucun compte n'est créé ; l'envoi final reste une décision du développeur. Les étapes marquées **(vous)** demandent votre téléphone, vos comptes ou une décision de votre part ; le reste est prêt.
+Tout ce qu'il faut pour publier DocSafe sur Google Play, puis sur l'App Store. **Le travail s'arrête volontairement à une marche de la publication** (demande du développeur, 15/11/2026) : rien n'est envoyé à un magasin, aucun compte n'est créé ; l'envoi final reste une décision du développeur. Les étapes marquées **(vous)** demandent votre téléphone, vos comptes ou une décision de votre part ; le reste est prêt.
 
 ## Contenu du dossier
 
@@ -45,7 +45,7 @@ Voir [app-store.md](app-store.md) : compte Apple Developer, compilation signée 
 |---|---|
 | Adresse e-mail de contact publique | Obligatoire sur les deux fiches. Aucune adresse n'a été inventée. |
 | Hébergement de la politique de confidentialité | Les magasins exigent une adresse web publique (Google Sites, page personnelle… le dépôt GitHub étant privé). |
-| Nom « DocuSafe » | D'autres produits portent un nom proche (risque R10) : vérification des marques avant publication. |
-| Chiffrement et réglementation | DocuSafe contient du chiffrement. La France encadre la fourniture de moyens de cryptologie et Apple pose des questions d'export : **à vérifier** auprès des sources officielles (ANSSI, documentation d'App Store Connect) avant la publication. Ce point est juridique, pas technique. |
+| Nom « DocSafe » | D'autres produits portent un nom proche (risque R10) : vérification des marques avant publication. |
+| Chiffrement et réglementation | DocSafe contient du chiffrement. La France encadre la fourniture de moyens de cryptologie et Apple pose des questions d'export : **à vérifier** auprès des sources officielles (ANSSI, documentation d'App Store Connect) avant la publication. Ce point est juridique, pas technique. |
 | Public cible | Proposé : 18 ans et plus (documents administratifs). À confirmer. |
 | Version 1.0.0 | Déjà en place (`pubspec.yaml`). Le numéro de compilation est celui de la recette GitHub ; il augmente à chaque compilation, comme Google Play et Apple l'exigent. |

@@ -82,7 +82,7 @@ Widget testApp(TestEnvironment env, {BiometricService? biometrics}) =>
     );
 
 /// L'application seule, à placer dans un `ProviderScope` personnalisé.
-Widget testAppChild() => const DocuSafeApp();
+Widget testAppChild() => const DocSafeApp();
 
 /// Un widget seul, dans une MaterialApp avec les textes français.
 Widget wrap(Widget child, {List<Override> overrides = const []}) =>

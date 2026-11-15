@@ -14,7 +14,7 @@ abstract final class PdfBuilder {
     final paths = [for (final p in pages) p.path];
     final out = output.path;
     return Isolate.run(() async {
-      final doc = pw.Document(creator: 'DocuSafe', producer: 'DocuSafe');
+      final doc = pw.Document(creator: 'DocSafe', producer: 'DocSafe');
       for (final path in paths) {
         final image = pw.MemoryImage(File(path).readAsBytesSync());
         final width = PdfPageFormat.a4.width;

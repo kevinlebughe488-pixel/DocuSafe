@@ -17,7 +17,7 @@ Ce document résume ce que j'ai compris, l'état de l'environnement, les choix q
 
 ## 1. Ce que j'ai compris
 
-DocuSafe est un coffre-fort de documents sur téléphone. Trois idées dominent tout le reste :
+DocSafe est un coffre-fort de documents sur téléphone. Trois idées dominent tout le reste :
 
 1. **Tout reste sur le téléphone.** Pas de compte, pas de serveur, pas besoin d'Internet.
 2. **Tout est chiffré.** Les fichiers, les miniatures, les titres, les tags et le texte extrait. Sans le code PIN (ou la biométrie, ou la clé de récupération), rien n'est lisible.
@@ -87,13 +87,13 @@ Deux points demandaient **votre réponse** : **D2** et **D13**.
 | N° | Sujet | Choix proposé | Pourquoi |
 |---|---|---|---|
 | D1 | Versions | Flutter 3.50 / Dart 3.14. Android minimum : **7.0 (API 24)**. iOS minimum : **15.0**. `compileSdk` 37, `targetSdk` 36. | Flutter 3.50 n'accepte plus les versions d'Android inférieures à 7.0, et tous les paquets retenus s'alignent dessus. Android 7.0 couvre la quasi-totalité des téléphones en service, y compris l'entrée de gamme. |
-| **D2** | Identifiant de l'application | **À confirmer.** Je propose `com.docusafe.app`. Nom du projet Dart : `docusafe`. | Cet identifiant est **définitif** une fois l'application publiée. Si vous possédez un nom de domaine, il est d'usage de l'utiliser à l'envers (ex. `com.monentreprise.docusafe`). |
+| **D2** | Identifiant de l'application | **À confirmer.** Je propose `com.docusafe.app`. Nom du projet Dart : `docusafe`. | Cet identifiant est **définitif** une fois l'application publiée. Si vous possédez un nom de domaine, il est d'usage de l'utiliser à l'envers (ex. `com.monentreprise.docsafe`). |
 | D3 | Base de données | `drift` + `sqlite3` avec le moteur **SQLite3MultipleCiphers** : la base entière est chiffrée, pas seulement quelques champs. | Le paquet `sqlcipher_flutter_libs` (qui correspond au « SQLCipher » du cahier des charges) est officiellement en fin de vie. Son remplaçant est intégré au paquet `sqlite3`. Chiffrer toute la base protège aussi les titres, les tags et l'index de recherche. |
 | D4 | Scanner | Paquet **`cunning_document_scanner`**. | Il utilise ML Kit sur Android et VisionKit sur iOS, exactement comme demandé, et il contient déjà la solution de repli (recadrage manuel) pour les téléphones sans services Google Play. `google_mlkit_document_scanner` ne couvre toujours qu'Android. |
 | D5 | Code PIN | **6 chiffres minimum** (jusqu'à 12). Les codes trop simples (`000000`, `123456`…) sont refusés. | Un code à 4 chiffres n'offre que 10 000 combinaisons : trop peu pour un coffre-fort. |
 | D6 | Clé de récupération | Générée **automatiquement à la création du coffre**. **Révision du 14/11/2026 (décision du développeur, choix délégué) :** elle n'est plus une étape obligatoire de l'inscription. Elle est créée en silence ; un rappel sur l'accueil et dans les réglages invite à la noter, jusqu'à ce que l'utilisateur confirme l'avoir conservée. Elle est affichée une seule fois. | C'est le seul moyen de retrouver l'accès si le PIN est oublié, et la sauvegarde chiffrée (D13) ne se restaure qu'avec elle. La rendre discrète allège l'inscription sans rien retirer à la sécurité ; le risque accepté est qu'un utilisateur ignore le rappel. |
 | D7 | Biométrie | Clé protégée **par le matériel du téléphone** et libérée uniquement après une vraie authentification biométrique. Disponible sur **Android 9 et plus** et sur iOS. Sur Android 7 et 8 : PIN uniquement. | Une biométrie qui ne ferait qu'afficher une fenêtre « OK » serait contournable sur un téléphone compromis. Le paquet de stockage sécurisé n'assure cette protection matérielle qu'à partir d'Android 9. |
-| D8 | Internet | L'application publiée **ne demande pas la permission Internet**. | Garantie simple et vérifiable : DocuSafe ne peut techniquement rien envoyer. La permission sera ajoutée le jour où la synchronisation ou les achats intégrés arriveront. |
+| D8 | Internet | L'application publiée **ne demande pas la permission Internet**. | Garantie simple et vérifiable : DocSafe ne peut techniquement rien envoyer. La permission sera ajoutée le jour où la synchronisation ou les achats intégrés arriveront. |
 | D9 | Notifications | Texte **générique par défaut** (« Un document arrive à échéance dans 30 jours »), sans le nom du document. Option pour afficher le nom. Alarmes « inexactes ». | Une notification s'affiche sur l'écran verrouillé et le système la stocke en clair. Un rappel à 30 jours n'a pas besoin d'être exact à la minute, ce qui évite une permission sensible et contrôlée par Google Play. |
 | D10 | Suppression d'une catégorie | L'application demande où déplacer les documents (par défaut : « Autres »). La catégorie « Autres » ne peut pas être supprimée. | Le cahier des charges interdit de supprimer les documents avec la catégorie. |
 | D11 | Champs ajoutés au modèle de données | `docType` (type de document), `lastOpenedAt`, `pageCount`, et quelques champs techniques pour les rappels et les catégories. | Nécessaires pour des fonctions demandées : « Type de document » (§3.6), « Documents consultés récemment » (§3.11), annulation d'un rappel. Détail dans [03-modele-de-donnees.md](03-modele-de-donnees.md). |
@@ -120,7 +120,7 @@ Deux points demandaient **votre réponse** : **D2** et **D13**.
 | R7 | L'utilisateur perd son PIN **et** sa clé de récupération | Documents définitivement inaccessibles | Explication claire à la création du coffre (exigée par le cahier des charges). Aucun contournement possible : c'est le prix d'un vrai chiffrement. |
 | R8 | Fichiers en clair pendant un court instant (sortie du scanner, fichier choisi, fichier partagé) | Fuite possible | Dossier temporaire privé, purge après chaque opération, au verrouillage et au démarrage. |
 | R9 | Les paquets ont beaucoup évolué récemment (versions majeures récentes) | Exemples trouvés sur Internet souvent périmés | Je lis la documentation de la version exacte avant d'écrire le code. Versions figées dans `pubspec.lock`. |
-| R10 | Nom « DocuSafe » | D'autres produits portent un nom proche | À vérifier avant la publication (Google Play, App Store, marques déposées dans vos pays cibles). Ce point relève d'un conseil juridique, pas de la technique. |
+| R10 | Nom « DocSafe » | D'autres produits portent un nom proche | À vérifier avant la publication (Google Play, App Store, marques déposées dans vos pays cibles). Ce point relève d'un conseil juridique, pas de la technique. |
 | R11 | Exigences des magasins (niveau d'API cible, formulaires de confidentialité) | Refus à la soumission | Vérification des règles en vigueur en phase 6. |
 
 ---

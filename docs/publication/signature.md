@@ -26,7 +26,7 @@ Faites une **copie de sauvegarde** du fichier `docusafe-upload.jks` (clé USB ra
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:USERPROFILE\docusafe-upload.jks")) | Set-Clipboard
 ```
 
-2. Sur GitHub : dépôt DocuSafe → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**. Créer quatre secrets :
+2. Sur GitHub : dépôt DocSafe → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**. Créer quatre secrets :
 
 | Nom du secret | Valeur |
 |---|---|
@@ -39,10 +39,10 @@ Les secrets ne sont jamais affichés, même dans les journaux de GitHub.
 
 ## 3. Compiler le fichier à envoyer
 
-Sur GitHub : onglet **Actions** → **Publication Android** → **Run workflow**. Au bout d'environ 20 minutes, la page de la compilation propose le fichier `DocuSafe-publication-…` à télécharger. Il contient :
+Sur GitHub : onglet **Actions** → **Publication Android** → **Run workflow**. Au bout d'environ 20 minutes, la page de la compilation propose le fichier `DocSafe-publication-…` à télécharger. Il contient :
 
-- `DocuSafe-…-cle-d-envoi.aab` : le fichier à envoyer dans la Play Console ;
-- `DocuSafe-…-cle-d-envoi.apk` : la même application, installable directement pour un dernier contrôle ;
+- `DocSafe-…-cle-d-envoi.aab` : le fichier à envoyer dans la Play Console ;
+- `DocSafe-…-cle-d-envoi.apk` : la même application, installable directement pour un dernier contrôle ;
 - `verifications.txt` : le résultat des contrôles (permissions, compatibilité).
 
 Sans les secrets, les fichiers portent la mention `debogage` : ils servent aux vérifications mais Google Play les refuse.

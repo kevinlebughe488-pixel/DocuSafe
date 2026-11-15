@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'argon2_params.dart';
 
-/// Primitives cryptographiques utilisées par DocuSafe.
+/// Primitives cryptographiques utilisées par DocSafe.
 ///
 /// C'est le **seul** endroit où un paquet de cryptographie est appelé
 /// (docs/02-architecture.md, règle 3). Changer de paquet ne touche que

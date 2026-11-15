@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-/// Couleurs Material 3 de DocuSafe, recopiées **à l'identique** de
+/// Couleurs Material 3 de DocSafe, recopiées **à l'identique** de
 /// docs/07-design.md §3.1. Aucun calcul au lancement.
 abstract final class AppColors {
   static const Color brand = Color(0xFF205DB0);

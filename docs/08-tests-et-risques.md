@@ -48,7 +48,7 @@ Les tests d'intégration du paquet `integration_test` (scanner réel, sélecteur
 |---|---|
 | Accès sans authentification | `test/features/access_control_test.dart` : sans coffre ou coffre verrouillé, aucune adresse protégée ne s'affiche |
 | Mauvaise saisie du PIN | `vault_service_test.dart` (refus, compteur, attentes de 30 s à 60 min) |
-| Verrouillage automatique | `access_control_test.dart` : inactivité, arrière-plan, tolérance de cinq minutes pour les fenêtres ouvertes par DocuSafe ; `session_providers_test.dart` : après un verrouillage, la base est bien celle de la nouvelle session ; `deadlines_flow_test.dart` : les rappels sont reprogrammés à la réouverture ; téléphone simulé : verrouillage, réouverture, relance |
+| Verrouillage automatique | `access_control_test.dart` : inactivité, arrière-plan, tolérance de cinq minutes pour les fenêtres ouvertes par DocSafe ; `session_providers_test.dart` : après un verrouillage, la base est bien celle de la nouvelle session ; `deadlines_flow_test.dart` : les rappels sont reprogrammés à la réouverture ; téléphone simulé : verrouillage, réouverture, relance |
 | Vérification du chiffrement des fichiers | `file_cipher_test.dart`, `documents_test.dart` (aucun octet en clair sur le disque), `vault_service_test.dart` (base illisible sans la clé), `backup_test.dart` (rien en clair dans une sauvegarde) |
 | Vérification des journaux | `test/core/logging_test.dart` : aucun `print`, codes fixes seulement, une erreur est journalisée par son type et jamais par son message |
 | Gestion des fichiers temporaires | `documents_test.dart`, `export_test.dart`, `scan_search_flow_test.dart` (abandon d'un scan), `storage_backup_flow_test.dart` (nettoyage), `share_export_flow_test.dart` (purge au verrouillage) |
@@ -95,7 +95,7 @@ Les tests d'intégration du paquet `integration_test` (scanner réel, sélecteur
 | R7 | Code **et** clé de récupération perdus | Assumé. Depuis D6 révisée, la clé est proposée par un rappel : un utilisateur peut l'ignorer. La sauvegarde exige que la clé ait été notée, ce qui pousse à le faire. |
 | R8 | Fichiers en clair pendant un court instant | Couvert : `secure_tmp/` purgé après chaque opération, au verrouillage et au démarrage ; tests dédiés. |
 | R9 | Paquets récents | Versions figées ; chaque paquet ajouté a été vérifié sur sa version exacte. |
-| R10 | Nom « DocuSafe » | À vérifier avant publication (conseil juridique). |
+| R10 | Nom « DocSafe » | À vérifier avant publication (conseil juridique). |
 | R11 | Exigences des magasins | Phase 6. |
 | **R12** | L'application n'a jamais tourné sur un vrai téléphone | Réduit par le téléphone simulé de GitHub (création, verrouillage, réouverture). Restent : scanner, lecture des PDF, partage, notifications, biométrie (P4, P5, P6). |
 | **R13** | Une sauvegarde ne s'ouvre qu'avec la clé de récupération en vigueur quand elle a été faite | Indiqué à l'écran. Après un changement de clé, il faut refaire une sauvegarde. |

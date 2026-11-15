@@ -4,7 +4,7 @@ Version provisoire du 13 novembre 2026. Ce texte sera relu avant la publication 
 
 ## Objet
 
-DocuSafe est une application qui permet de numériser, classer et protéger des documents personnels sur votre téléphone.
+DocSafe est une application qui permet de numériser, classer et protéger des documents personnels sur votre téléphone.
 
 ## Vos responsabilités
 
@@ -14,8 +14,8 @@ DocuSafe est une application qui permet de numériser, classer et protéger des 
 
 ## Limites
 
-- DocuSafe protège vos données au repos et pendant votre utilisation normale. Aucune application ne peut protéger des données affichées sur un téléphone entièrement compromis.
-- Un document partagé ou exporté hors de DocuSafe n'est plus protégé par l'application.
+- DocSafe protège vos données au repos et pendant votre utilisation normale. Aucune application ne peut protéger des données affichées sur un téléphone entièrement compromis.
+- Un document partagé ou exporté hors de DocSafe n'est plus protégé par l'application.
 
 ## Évolutions
 

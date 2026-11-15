@@ -123,7 +123,7 @@ void main() {
     await tester.tap(find.text('Continuer'));
     await waitFor(tester, () => env.shares.saved.length == 2);
     final archive = env.shares.saved.last;
-    expect(archive.$1, startsWith('DocuSafe-export-'));
+    expect(archive.$1, startsWith('DocSafe-export-'));
     final zip = ZipDecoder().decodeBytes(archive.$2);
     expect(zip.files.single.name, endsWith('/Bail.pdf'));
     expect(zip.files.single.content, original);

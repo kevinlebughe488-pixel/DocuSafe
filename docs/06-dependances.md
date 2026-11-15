@@ -53,7 +53,7 @@ Les versions seront figées dans `pubspec.lock` au moment de l'installation (pha
 | `cunning_document_scanner` | 3.1.0 (vérifié le 14/11/2026) | Scanner : ML Kit (Android), VisionKit (iOS), repli à recadrage manuel. API `scanDocuments()` ; `cleanCache()` vide son dossier après chaque scan. | MIT | victorcarreras.dev |
 | `file_picker` | 13.3.3 | Choix d'un fichier (PDF, images), enregistrement d'un export | MIT | victorcarreras.dev |
 | `image_picker` | 1.2.4 | Choix de photos dans la galerie, sans permission | Apache-2.0 / BSD-3 | flutter.dev |
-| `receive_sharing_intent` | 1.9.0 | « Partager vers DocuSafe » | Apache-2.0 | kasem.dev |
+| `receive_sharing_intent` | 1.9.0 | « Partager vers DocSafe » | Apache-2.0 | kasem.dev |
 | `share_plus` | 13.3.1 | Feuille de partage du système | BSD-3 | fluttercommunity.dev |
 | `archive` | 4.7.1 (vérifié le 14/11/2026) | « Exporter mes données » : archive ZIP écrite dans un isolate, sans compression (les PDF et les photos sont déjà compressés). Déjà présent en dépendance indirecte (via `image`), déclaré directement depuis le lot c. | MIT | taosengine.com |
 | `pdf` | 3.13.1 (vérifié le 14/11/2026) | Création du PDF à partir des pages scannées (dans un isolate) | Apache-2.0 | nfet.net |
@@ -138,7 +138,7 @@ Composants natifs embarqués : SQLite (domaine public), SQLite3MultipleCiphers (
 | `cryptography` | Dernière version en novembre 2025 : paquet stable mais peu actif. Son complément natif `cryptography_flutter` a été retiré le 15/11/2026 (calcul HMAC natif en échec sur Android). Tout est en Dart pur. | Chiffrement isolé derrière l'interface `CryptoEngine` (phase 3 : fait). Mesure de vitesse sur téléphone encore à faire (P4). **Plan B : `webcrypto`** (éditeur google.dev, mis à jour le 11/11/2026), sans Argon2id mais avec PBKDF2 natif. |
 | `sqlite3` | Télécharge un binaire précompilé pendant la compilation (contrôlé par empreinte SHA-256). | **La première compilation exige une connexion Internet.** |
 | `flutter_local_notifications` | Exige `compileSdk` 37 et l'option Gradle « desugaring ». | Configuration Android en phase 3. La plateforme Android 37 est déjà installée sur le PC. |
-| `cunning_document_scanner` | Déclare ses propres règles de sauvegarde Android, qui entrent en conflit avec celles de DocuSafe. Écrit ses images dans un dossier externe privé. | Attribut `tools:replace` dans le manifeste. Purge du dossier après chaque scan. |
+| `cunning_document_scanner` | Déclare ses propres règles de sauvegarde Android, qui entrent en conflit avec celles de DocSafe. Écrit ses images dans un dossier externe privé. | Attribut `tools:replace` dans le manifeste. Purge du dossier après chaque scan. |
 | `local_auth`, `flutter_secure_storage` | La fenêtre biométrique exige que `MainActivity` hérite de `FlutterFragmentActivity`. | Configuration Android en phase 3 |
 | `receive_sharing_intent` | Sur iOS : Swift Package Manager obligatoire, `SceneDelegate`, extension de partage à créer dans Xcode. | Partie Android dans le MVP. Partie iOS reportée, comme l'autorise le cahier des charges. **À vérifier sur iOS.** |
 | `pdfrx` | Embarque PDFium (quelques Mo par architecture). iOS 15 minimum. | Livraison en AAB : chaque téléphone ne télécharge que sa propre architecture. |

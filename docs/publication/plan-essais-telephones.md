@@ -26,8 +26,8 @@ Pour chaque ligne, noter **OK** ou décrire le problème (capture d'écran, mod�
 | 2 | Verrouiller (cadenas), rouvrir avec le code | Coffre rouvert | Durée de déverrouillage |
 | 3 | Taper 5 fois un faux code | Message « il reste … essais », puis attente de 30 s | |
 | 4 | Activer l'empreinte (Paramètres → Sécurité), verrouiller, rouvrir avec l'empreinte | Coffre rouvert | |
-| 5 | Ajouter une nouvelle empreinte dans les réglages du téléphone, revenir dans DocuSafe | L'empreinte est refusée, le code est demandé | |
-| 6 | Quitter DocuSafe (bouton Accueil du téléphone), revenir | Coffre verrouillé | |
+| 5 | Ajouter une nouvelle empreinte dans les réglages du téléphone, revenir dans DocSafe | L'empreinte est refusée, le code est demandé | |
+| 6 | Quitter DocSafe (bouton Accueil du téléphone), revenir | Coffre verrouillé | |
 | 7 | Ne plus toucher l'écran pendant 2 minutes | Coffre verrouillé | |
 | 8 | Noter la clé de récupération, puis « Code oublié ? » et la saisir | Choix d'un nouveau code, coffre ouvert | |
 
@@ -49,7 +49,7 @@ Pour chaque ligne, noter **OK** ou décrire le problème (capture d'écran, mod�
 | N° | Action | Résultat attendu |
 |---|---|---|
 | 17 | Donner à un document une date d'expiration dans 7 jours ; régler l'heure des rappels quelques minutes plus tard | La demande d'autorisation des notifications apparaît une fois |
-| 18 | Attendre l'heure du rappel, DocuSafe fermé | Notification au texte générique (sans le nom du document) |
+| 18 | Attendre l'heure du rappel, DocSafe fermé | Notification au texte générique (sans le nom du document) |
 | 19 | Toucher la notification | Le code est demandé, puis la fiche du document s'ouvre |
 | 20 | Redémarrer le téléphone avant l'heure d'un rappel | Le rappel arrive quand même (à noter : marque du téléphone si ce n'est pas le cas) |
 
@@ -69,7 +69,7 @@ Pour chaque ligne, noter **OK** ou décrire le problème (capture d'écran, mod�
 |---|---|---|
 | 26 | Mode sombre du téléphone | Tous les écrans lisibles |
 | 27 | Plus grande taille de police du téléphone | Rien de coupé ni de superposé (noter les écrans concernés) |
-| 28 | Icône sur l'écran d'accueil du téléphone, y compris avec les icônes à thème (Android 13 et plus) | Icône DocuSafe nette |
+| 28 | Icône sur l'écran d'accueil du téléphone, y compris avec les icônes à thème (Android 13 et plus) | Icône DocSafe nette |
 
 ## Après les essais
 

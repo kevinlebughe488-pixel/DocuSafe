@@ -82,7 +82,7 @@ void main() {
     for (final location in protected) {
       container.read(routerProvider).go(location);
       await settle(tester, rounds: 3);
-      expect(find.text('Bienvenue dans DocuSafe'), findsOneWidget, reason: location);
+      expect(find.text('Bienvenue dans DocSafe'), findsOneWidget, reason: location);
     }
     await teardownApp(tester);
   });
@@ -138,7 +138,7 @@ void main() {
     await teardownApp(tester);
   });
 
-  testWidgets('fenêtre du système ouverte par DocuSafe : tolérance de cinq minutes', (
+  testWidgets('fenêtre du système ouverte par DocSafe : tolérance de cinq minutes', (
     tester,
   ) async {
     final container = await start(tester);

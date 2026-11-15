@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Android 11 et antérieur : aucune donnée de DocuSafe dans la sauvegarde. -->
+<!-- Android 11 et antérieur : aucune donnée de DocSafe dans la sauvegarde. -->
 <full-backup-content>
     <exclude domain="root" path="." />
     <exclude domain="file" path="." />

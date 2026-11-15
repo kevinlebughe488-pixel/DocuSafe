@@ -46,7 +46,7 @@ final class BackupService {
   final VaultPaths _paths;
 
   static const String format = 'DSB1';
-  static const String fileExtension = 'docusafe';
+  static const String fileExtension = 'docsafe';
   static const String mimeType = 'application/octet-stream';
   static const String manifestName = 'manifest.json';
 
@@ -107,7 +107,7 @@ final class BackupService {
   /// Décompresse [backup] dans [restoreDir] et contrôle chaque fichier.
   ///
   /// Lève [ValidationException] (`backup.invalid`) si ce n'est pas une
-  /// sauvegarde DocuSafe ou si un fichier est abîmé. Rien n'est modifié dans
+  /// sauvegarde DocSafe ou si un fichier est abîmé. Rien n'est modifié dans
   /// le coffre actuel.
   Future<BackupInfo> unpack(File backup) async {
     final dir = restoreDir;

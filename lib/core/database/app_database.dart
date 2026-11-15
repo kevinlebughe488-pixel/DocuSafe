@@ -19,7 +19,7 @@ import 'tables.dart';
 
 part 'app_database.g.dart';
 
-/// Base de données chiffrée de DocuSafe (docs/03-modele-de-donnees.md).
+/// Base de données chiffrée de DocSafe (docs/03-modele-de-donnees.md).
 ///
 /// Elle n'est ouverte que lorsque le coffre est déverrouillé, avec une clé
 /// dérivée de la clé du coffre. Le moteur est SQLite3MultipleCiphers

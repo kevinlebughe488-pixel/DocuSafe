@@ -10,7 +10,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appName => 'DocuSafe';
+  String get appName => 'DocSafe';
 
   @override
   String get appTagline => 'Vos documents, protégés.';
@@ -72,7 +72,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'L\'opération n\'a pas pu aboutir. Réessayez dans un instant.';
 
   @override
-  String get onboardingTitle1 => 'Bienvenue dans DocuSafe';
+  String get onboardingTitle1 => 'Bienvenue dans DocSafe';
 
   @override
   String get onboardingBody1 =>
@@ -83,7 +83,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get onboardingBody2 =>
-      'Pas de compte à créer, pas de serveur. DocuSafe fonctionne sans connexion Internet.';
+      'Pas de compte à créer, pas de serveur. DocSafe fonctionne sans connexion Internet.';
 
   @override
   String get onboardingTitle3 => 'Chiffré et protégé par votre code';
@@ -182,7 +182,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String setupBiometricBody(String method) {
-    return 'Utilisez $method pour ouvrir DocuSafe. Votre code reste toujours valable.';
+    return 'Utilisez $method pour ouvrir DocSafe. Votre code reste toujours valable.';
   }
 
   @override
@@ -222,7 +222,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get unlockTitle => 'Saisissez votre code';
 
   @override
-  String get unlockBiometricReason => 'Déverrouiller DocuSafe';
+  String get unlockBiometricReason => 'Déverrouiller DocSafe';
 
   @override
   String unlockWrongPin(int remaining) {
@@ -701,14 +701,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get shareWarningBody =>
-      'Le fichier partagé ne sera plus protégé par DocuSafe. Envoyez-le uniquement à une personne de confiance.';
+      'Le fichier partagé ne sera plus protégé par DocSafe. Envoyez-le uniquement à une personne de confiance.';
 
   @override
   String get exportWarningTitle => 'Exporter ce document ?';
 
   @override
   String get exportWarningBody =>
-      'La copie enregistrée ne sera plus protégée par DocuSafe. Choisissez un emplacement sûr.';
+      'La copie enregistrée ne sera plus protégée par DocSafe. Choisissez un emplacement sûr.';
 
   @override
   String get exportDone => 'Copie enregistrée.';
@@ -805,7 +805,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String backupFileName(String date, String extension) {
-    return 'DocuSafe-sauvegarde-$date.$extension';
+    return 'DocSafe-sauvegarde-$date.$extension';
   }
 
   @override
@@ -816,7 +816,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get restoreIntro =>
-      'Choisissez le fichier de sauvegarde DocuSafe (.docusafe). Il vous faudra ensuite votre clé de récupération.';
+      'Choisissez le fichier de sauvegarde DocSafe (.docsafe). Il vous faudra ensuite votre clé de récupération.';
 
   @override
   String get restoreReplaceWarning =>
@@ -830,7 +830,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get restoreInvalidFile =>
-      'Ce fichier n\'est pas une sauvegarde DocuSafe, ou il est abîmé.';
+      'Ce fichier n\'est pas une sauvegarde DocSafe, ou il est abîmé.';
 
   @override
   String restoreFound(String date, String count) {
@@ -869,7 +869,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get exportAllWarningBody =>
-      'Le fichier ZIP contiendra tous vos documents en clair : il ne sera plus protégé par DocuSafe. Rangez-le dans un endroit sûr et supprimez-le quand vous n\'en avez plus besoin.';
+      'Le fichier ZIP contiendra tous vos documents en clair : il ne sera plus protégé par DocSafe. Rangez-le dans un endroit sûr et supprimez-le quand vous n\'en avez plus besoin.';
 
   @override
   String get exportAllEmpty => 'Aucun document à exporter.';
@@ -885,7 +885,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String exportArchiveName(String date) {
-    return 'DocuSafe-export-$date.zip';
+    return 'DocSafe-export-$date.zip';
   }
 
   @override
@@ -936,7 +936,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get viewerCorruptBody =>
-      'Ce fichier a été modifié ou endommagé en dehors de DocuSafe. Par sécurité, il n\'est pas affiché.';
+      'Ce fichier a été modifié ou endommagé en dehors de DocSafe. Par sécurité, il n\'est pas affiché.';
 
   @override
   String get viewerMissingBody =>
@@ -1126,7 +1126,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get importOriginalReminder =>
-      'L\'original se trouve toujours dans votre galerie ou vos fichiers. Supprimez-le si vous voulez le garder uniquement dans DocuSafe.';
+      'L\'original se trouve toujours dans votre galerie ou vos fichiers. Supprimez-le si vous voulez le garder uniquement dans DocSafe.';
 
   @override
   String importFailed(int count) {
@@ -1266,7 +1266,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scanFailed =>
-      'Le scanner n\'a pas pu s\'ouvrir. Vérifiez que DocuSafe a accès à l\'appareil photo dans les réglages du téléphone.';
+      'Le scanner n\'a pas pu s\'ouvrir. Vérifiez que DocSafe a accès à l\'appareil photo dans les réglages du téléphone.';
 
   @override
   String get scanPreviewTitle => 'Aperçu du scan';
@@ -1553,7 +1553,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get permissionBody =>
-      'DocuSafe vous rappelle l\'échéance 90, 30 et 7 jours avant, puis le jour même. Les rappels restent sur votre téléphone.';
+      'DocSafe vous rappelle l\'échéance 90, 30 et 7 jours avant, puis le jour même. Les rappels restent sur votre téléphone.';
 
   @override
   String get permissionAllow => 'Autoriser les notifications';
@@ -1595,7 +1595,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notifSettingsPreview => 'Aperçu';
 
   @override
-  String get notifSettingsPreviewNow => 'DocuSafe · maintenant';
+  String get notifSettingsPreviewNow => 'DocSafe · maintenant';
 
   @override
   String get notifSettingsExampleTitle => 'Passeport';

@@ -73,7 +73,7 @@ void main() {
     expect(find.text('3 fichiers sélectionnés'), findsOneWidget);
     expect(find.text('Format non pris en charge'), findsOneWidget);
     expect(find.text('Continuer avec 2 fichiers'), findsOneWidget);
-    // Les copies temporaires sont dans le dossier privé de DocuSafe.
+    // Les copies temporaires sont dans le dossier privé de DocSafe.
     expect(env.paths.secureTempDir.listSync().length, 3);
 
     await tester.tap(find.text('Continuer avec 2 fichiers'));

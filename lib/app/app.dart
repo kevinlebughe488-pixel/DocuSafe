@@ -14,8 +14,8 @@ import 'theme/app_theme.dart';
 
 /// Racine de l'application : thème, textes, routeur, verrouillage par
 /// inactivité et écran de masquage.
-final class DocuSafeApp extends ConsumerWidget {
-  const DocuSafeApp({super.key});
+final class DocSafeApp extends ConsumerWidget {
+  const DocSafeApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

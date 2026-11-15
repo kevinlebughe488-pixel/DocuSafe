@@ -46,12 +46,12 @@ void main() {
       final session = await service.commitSetup(pending);
       final file = await BackupService(paths: other)
           .create(session, now: DateTime(2026, 11, 2, 9));
-      backup = await file.copy('${env.root.path}/recue.docusafe');
+      backup = await file.copy('${env.root.path}/recue.docsafe');
       await session.close();
     });
 
     final picker = FakeFilePickerService(
-      backup: PickedFile(file: backup, displayName: 'recue.docusafe'),
+      backup: PickedFile(file: backup, displayName: 'recue.docsafe'),
     );
     await tester.pumpWidget(
       ProviderScope(

@@ -6,7 +6,7 @@ import 'app_colors.dart';
 import 'app_spacing.dart';
 import 'ds_colors.dart';
 
-/// Thème Material 3 de DocuSafe (docs/07-design.md).
+/// Thème Material 3 de DocSafe (docs/07-design.md).
 ///
 /// Police du système, couleurs figées, formes et hauteurs définies ici une
 /// seule fois : aucun écran ne définit ses propres couleurs ou arrondis.

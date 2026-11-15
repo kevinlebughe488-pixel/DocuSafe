@@ -65,7 +65,7 @@ void main() {
     final pdf = File('test/fixtures/simple.pdf').readAsBytesSync();
     expect(_contains(raw, pdf.sublist(0, 64)), isFalse);
     expect(_contains(raw, 'Bail'.codeUnits), isFalse);
-    final copy = await file.copy('${root.path}/transfert.docusafe');
+    final copy = await file.copy('${root.path}/transfert.docsafe');
     await backupA.discard(file);
     expect(file.existsSync(), isFalse);
     await sessionA.close();
@@ -108,7 +108,7 @@ void main() {
     final backup = BackupService(paths: paths);
     final file = await backup.create(session, now: DateTime(2026, 11, 14));
 
-    final damaged = File('${root.path}/abime.docusafe')
+    final damaged = File('${root.path}/abime.docsafe')
       ..writeAsBytesSync(file.readAsBytesSync());
     final bytes = damaged.readAsBytesSync();
     bytes[bytes.length ~/ 3] ^= 0xFF;
@@ -116,7 +116,7 @@ void main() {
     await expectLater(backup.unpack(damaged), throwsA(isA<ValidationException>()));
     expect(backup.restoreDir.existsSync(), isFalse);
 
-    final foreign = File('${root.path}/photo.docusafe')
+    final foreign = File('${root.path}/photo.docsafe')
       ..writeAsBytesSync(File('test/fixtures/rouge.png').readAsBytesSync());
     await expectLater(backup.unpack(foreign), throwsA(isA<ValidationException>()));
 

@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../app/theme/app_colors.dart';
 
-/// Symbole de DocuSafe (docs/07-design.md §2) : un document blanc à coin
+/// Symbole de DocSafe (docs/07-design.md §2) : un document blanc à coin
 /// replié, percé d'une serrure, sur un carré bleu aux angles arrondis.
 /// Dessiné en vectoriel. Les icônes de l'application (Android, iOS, Google
 /// Play) reprennent cette géométrie : tool/generate_icons.py.
@@ -13,7 +13,7 @@ final class DsLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'DocuSafe',
+    label: 'DocSafe',
     image: true,
     child: SizedBox.square(
       dimension: size,

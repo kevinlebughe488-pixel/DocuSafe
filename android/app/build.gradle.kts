@@ -69,7 +69,7 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        manifestPlaceholders["appLabel"] = "DocuSafe"
+        manifestPlaceholders["appLabel"] = "DocSafe"
         // Version aperçu : écran non protégé, pour qu'un émulateur en ligne
         // (Appetize) puisse l'afficher. Jamais dans la version publiée.
         buildConfigField("boolean", "APERCU", apercu.toString())
@@ -108,7 +108,7 @@ android {
             }
             if (apercu) {
                 applicationIdSuffix = ".apercu"
-                manifestPlaceholders["appLabel"] = "DocuSafe aperçu"
+                manifestPlaceholders["appLabel"] = "DocSafe aperçu"
                 signingConfig = signingConfigs.getByName("apercu")
             }
         }

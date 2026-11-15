@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>DocuSafe</string>
+	<string>DocSafe</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -28,11 +28,11 @@
 	<true/>
 	<!-- Permissions (docs/04-securite.md §16). À vérifier sur iOS. -->
 	<key>NSFaceIDUsageDescription</key>
-	<string>DocuSafe utilise Face ID pour déverrouiller votre coffre-fort.</string>
+	<string>DocSafe utilise Face ID pour déverrouiller votre coffre-fort.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>DocuSafe utilise l’appareil photo pour numériser vos documents.</string>
+	<string>DocSafe utilise l’appareil photo pour numériser vos documents.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>DocuSafe accède à la photo que vous choisissez pour l’ajouter à votre coffre-fort.</string>
+	<string>DocSafe accède à la photo que vous choisissez pour l’ajouter à votre coffre-fort.</string>
 	<!-- Textes français dans l’application. -->
 	<key>CFBundleLocalizations</key>
 	<array>

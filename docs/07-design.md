@@ -1,4 +1,4 @@
-# Système de design de DocuSafe
+# Système de design de DocSafe
 
 Document rédigé le 13/11/2026 (phase 2). Il fixe les règles visuelles de l'application. Les maquettes qui les appliquent se trouvent dans [maquettes/index.html](maquettes/index.html).
 
@@ -26,10 +26,10 @@ La page contient 46 écrans, avec un bouton **Clair / Sombre**.
 
 | Élément | Choix |
 |---|---|
-| Nom affiché | DocuSafe |
+| Nom affiché | DocSafe |
 | Signature | « Vos documents, protégés. » |
 | Symbole | Un document blanc à coin replié, percé d'une serrure, sur un carré bleu aux angles arrondis |
-| Couleur de marque | Bleu DocuSafe `#205DB0` |
+| Couleur de marque | Bleu DocSafe `#205DB0` |
 | Couleur d'accent | Sarcelle `#246867`, réservée à tout ce qui évoque la protection |
 
 Le symbole est dessiné en vectoriel (`DsLogo`). Les icônes de l'application sont produites à partir de la même géométrie par `tool/generate_icons.py` (phase 6) : icônes Android classiques, icône adaptative et monochrome (Android 13), toutes les tailles iOS (carrées, opaques), icône 512 × 512 et bannière 1024 × 500 pour Google Play (`docs/publication/images/`).
@@ -222,7 +222,7 @@ Ils sont configurés une seule fois dans le thème : `FilledButton`, `FilledButt
 | Plein, rouge | Action destructrice confirmée (« Supprimer définitivement ») |
 | Grand (hauteur 56) | Bouton unique en bas d'un écran d'étape |
 
-### 7.2. Composants propres à DocuSafe
+### 7.2. Composants propres à DocSafe
 
 | Composant | Rôle | Écrans |
 |---|---|---|

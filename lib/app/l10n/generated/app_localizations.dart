@@ -97,7 +97,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In fr, this message translates to:
-  /// **'DocuSafe'**
+  /// **'DocSafe'**
   String get appName;
 
   /// No description provided for @appTagline.
@@ -217,7 +217,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingTitle1.
   ///
   /// In fr, this message translates to:
-  /// **'Bienvenue dans DocuSafe'**
+  /// **'Bienvenue dans DocSafe'**
   String get onboardingTitle1;
 
   /// No description provided for @onboardingBody1.
@@ -235,7 +235,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingBody2.
   ///
   /// In fr, this message translates to:
-  /// **'Pas de compte à créer, pas de serveur. DocuSafe fonctionne sans connexion Internet.'**
+  /// **'Pas de compte à créer, pas de serveur. DocSafe fonctionne sans connexion Internet.'**
   String get onboardingBody2;
 
   /// No description provided for @onboardingTitle3.
@@ -403,7 +403,7 @@ abstract class AppLocalizations {
   /// No description provided for @setupBiometricBody.
   ///
   /// In fr, this message translates to:
-  /// **'Utilisez {method} pour ouvrir DocuSafe. Votre code reste toujours valable.'**
+  /// **'Utilisez {method} pour ouvrir DocSafe. Votre code reste toujours valable.'**
   String setupBiometricBody(String method);
 
   /// No description provided for @setupBiometricEnable.
@@ -475,7 +475,7 @@ abstract class AppLocalizations {
   /// No description provided for @unlockBiometricReason.
   ///
   /// In fr, this message translates to:
-  /// **'Déverrouiller DocuSafe'**
+  /// **'Déverrouiller DocSafe'**
   String get unlockBiometricReason;
 
   /// No description provided for @unlockWrongPin.
@@ -1201,7 +1201,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareWarningBody.
   ///
   /// In fr, this message translates to:
-  /// **'Le fichier partagé ne sera plus protégé par DocuSafe. Envoyez-le uniquement à une personne de confiance.'**
+  /// **'Le fichier partagé ne sera plus protégé par DocSafe. Envoyez-le uniquement à une personne de confiance.'**
   String get shareWarningBody;
 
   /// No description provided for @exportWarningTitle.
@@ -1213,7 +1213,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportWarningBody.
   ///
   /// In fr, this message translates to:
-  /// **'La copie enregistrée ne sera plus protégée par DocuSafe. Choisissez un emplacement sûr.'**
+  /// **'La copie enregistrée ne sera plus protégée par DocSafe. Choisissez un emplacement sûr.'**
   String get exportWarningBody;
 
   /// No description provided for @exportDone.
@@ -1369,7 +1369,7 @@ abstract class AppLocalizations {
   /// No description provided for @backupFileName.
   ///
   /// In fr, this message translates to:
-  /// **'DocuSafe-sauvegarde-{date}.{extension}'**
+  /// **'DocSafe-sauvegarde-{date}.{extension}'**
   String backupFileName(String date, String extension);
 
   /// No description provided for @backupDone.
@@ -1387,7 +1387,7 @@ abstract class AppLocalizations {
   /// No description provided for @restoreIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Choisissez le fichier de sauvegarde DocuSafe (.docusafe). Il vous faudra ensuite votre clé de récupération.'**
+  /// **'Choisissez le fichier de sauvegarde DocSafe (.docsafe). Il vous faudra ensuite votre clé de récupération.'**
   String get restoreIntro;
 
   /// No description provided for @restoreReplaceWarning.
@@ -1411,7 +1411,7 @@ abstract class AppLocalizations {
   /// No description provided for @restoreInvalidFile.
   ///
   /// In fr, this message translates to:
-  /// **'Ce fichier n\'est pas une sauvegarde DocuSafe, ou il est abîmé.'**
+  /// **'Ce fichier n\'est pas une sauvegarde DocSafe, ou il est abîmé.'**
   String get restoreInvalidFile;
 
   /// No description provided for @restoreFound.
@@ -1477,7 +1477,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportAllWarningBody.
   ///
   /// In fr, this message translates to:
-  /// **'Le fichier ZIP contiendra tous vos documents en clair : il ne sera plus protégé par DocuSafe. Rangez-le dans un endroit sûr et supprimez-le quand vous n\'en avez plus besoin.'**
+  /// **'Le fichier ZIP contiendra tous vos documents en clair : il ne sera plus protégé par DocSafe. Rangez-le dans un endroit sûr et supprimez-le quand vous n\'en avez plus besoin.'**
   String get exportAllWarningBody;
 
   /// No description provided for @exportAllEmpty.
@@ -1507,7 +1507,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportArchiveName.
   ///
   /// In fr, this message translates to:
-  /// **'DocuSafe-export-{date}.zip'**
+  /// **'DocSafe-export-{date}.zip'**
   String exportArchiveName(String date);
 
   /// No description provided for @storageInsufficient.
@@ -1603,7 +1603,7 @@ abstract class AppLocalizations {
   /// No description provided for @viewerCorruptBody.
   ///
   /// In fr, this message translates to:
-  /// **'Ce fichier a été modifié ou endommagé en dehors de DocuSafe. Par sécurité, il n\'est pas affiché.'**
+  /// **'Ce fichier a été modifié ou endommagé en dehors de DocSafe. Par sécurité, il n\'est pas affiché.'**
   String get viewerCorruptBody;
 
   /// No description provided for @viewerMissingBody.
@@ -1915,7 +1915,7 @@ abstract class AppLocalizations {
   /// No description provided for @importOriginalReminder.
   ///
   /// In fr, this message translates to:
-  /// **'L\'original se trouve toujours dans votre galerie ou vos fichiers. Supprimez-le si vous voulez le garder uniquement dans DocuSafe.'**
+  /// **'L\'original se trouve toujours dans votre galerie ou vos fichiers. Supprimez-le si vous voulez le garder uniquement dans DocSafe.'**
   String get importOriginalReminder;
 
   /// No description provided for @importFailed.
@@ -2143,7 +2143,7 @@ abstract class AppLocalizations {
   /// No description provided for @scanFailed.
   ///
   /// In fr, this message translates to:
-  /// **'Le scanner n\'a pas pu s\'ouvrir. Vérifiez que DocuSafe a accès à l\'appareil photo dans les réglages du téléphone.'**
+  /// **'Le scanner n\'a pas pu s\'ouvrir. Vérifiez que DocSafe a accès à l\'appareil photo dans les réglages du téléphone.'**
   String get scanFailed;
 
   /// No description provided for @scanPreviewTitle.
@@ -2563,7 +2563,7 @@ abstract class AppLocalizations {
   /// No description provided for @permissionBody.
   ///
   /// In fr, this message translates to:
-  /// **'DocuSafe vous rappelle l\'échéance 90, 30 et 7 jours avant, puis le jour même. Les rappels restent sur votre téléphone.'**
+  /// **'DocSafe vous rappelle l\'échéance 90, 30 et 7 jours avant, puis le jour même. Les rappels restent sur votre téléphone.'**
   String get permissionBody;
 
   /// No description provided for @permissionAllow.
@@ -2641,7 +2641,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifSettingsPreviewNow.
   ///
   /// In fr, this message translates to:
-  /// **'DocuSafe · maintenant'**
+  /// **'DocSafe · maintenant'**
   String get notifSettingsPreviewNow;
 
   /// No description provided for @notifSettingsExampleTitle.

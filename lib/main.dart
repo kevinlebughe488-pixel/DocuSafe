@@ -30,7 +30,7 @@ Future<void> main() async {
   runApp(
     ProviderScope(
       overrides: [vaultPathsProvider.overrideWithValue(paths)],
-      child: const DocuSafeApp(),
+      child: const DocSafeApp(),
     ),
   );
 }

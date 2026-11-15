@@ -52,7 +52,7 @@ final biometricStoreProvider = Provider<SecureStore?>((ref) {
     return null;
   }
   return FlutterSecureStore.biometric(
-    promptTitle: 'Déverrouiller DocuSafe',
+    promptTitle: 'Déverrouiller DocSafe',
     promptSubtitle: 'Utilisez votre empreinte ou votre visage',
     cancelLabel: 'Utiliser mon code',
   );

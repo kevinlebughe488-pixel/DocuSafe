@@ -1,13 +1,15 @@
 # CAHIER DES CHARGES FONCTIONNEL ET TECHNIQUE
 
-## DOCUSAFE – Application mobile Flutter de gestion et de sécurisation documentaire
+> **Nom de l'application : DocSafe** (correction du développeur le 15/11/2026 ; les premières versions de ce document disaient « DocuSafe »). Les identifiants techniques internes (`com.docusafe.app`, paquet Dart `docusafe`, nom du dépôt) ne sont pas visibles des utilisateurs et restent inchangés sauf décision contraire.
+
+## DOCSAFE – Application mobile Flutter de gestion et de sécurisation documentaire
 
 > Copie de référence du cahier des charges fourni par le développeur le 13/11/2026.
 > Le texte est repris tel quel ; seule la mise en forme (titres, listes, tableaux) a été adaptée au format Markdown.
 
 - **Version :** 1.1 (adaptation Flutter)
 - **Type de projet :** Application mobile multiplateforme développée avec Flutter
-- **Nom commercial :** DocuSafe
+- **Nom commercial :** DocSafe
 - **Plateformes cibles :** Android en priorité (MVP), puis iPhone (iOS) avec le même code
 - **Langue initiale :** Français
 - **Marché cible :** International, avec une attention particulière aux marchés africains
@@ -56,11 +58,11 @@ Cette dispersion entraîne plusieurs difficultés :
 * Oubli des dates d’expiration.
 * Difficulté à conserver des documents accessibles hors connexion.
 
-DocuSafe a pour ambition de répondre à ces problèmes à travers une application mobile sécurisée, simple, moderne et intelligente.
+DocSafe a pour ambition de répondre à ces problèmes à travers une application mobile sécurisée, simple, moderne et intelligente.
 
 ### 1.2. Vision du produit
 
-DocuSafe est un coffre-fort documentaire numérique permettant à chaque utilisateur de numériser, importer, organiser, consulter, rechercher et protéger ses documents personnels et professionnels depuis son téléphone (Android ou iPhone).
+DocSafe est un coffre-fort documentaire numérique permettant à chaque utilisateur de numériser, importer, organiser, consulter, rechercher et protéger ses documents personnels et professionnels depuis son téléphone (Android ou iPhone).
 
 L’application doit privilégier le stockage local sécurisé et le fonctionnement hors ligne.
 
@@ -96,7 +98,7 @@ L’application doit proposer une expérience d’accueil professionnelle.
 
 Fonctionnalités :
 
-* Écran de bienvenue présentant DocuSafe.
+* Écran de bienvenue présentant DocSafe.
 * Présentation des avantages principaux.
 * Configuration initiale du coffre-fort.
 * Création d’un code PIN local.
@@ -115,7 +117,7 @@ Le tableau de bord constitue l’écran principal de l’application.
 
 Il doit afficher :
 
-* Le nom et l’identité visuelle de DocuSafe.
+* Le nom et l’identité visuelle de DocSafe.
 * Le nombre total de documents.
 * Les catégories documentaires.
 * Les documents récemment ajoutés.
@@ -162,7 +164,7 @@ L’utilisateur doit pouvoir importer des fichiers depuis :
 * La galerie photos (Android) et la photothèque (iOS).
 * Les documents PDF.
 * Les images compatibles.
-* Les autres applications via le partage (« Partager vers DocuSafe ») : intent de partage sur Android, extension de partage sur iOS. L’extension de partage iOS peut être reportée après le MVP.
+* Les autres applications via le partage (« Partager vers DocSafe ») : intent de partage sur Android, extension de partage sur iOS. L’extension de partage iOS peut être reportée après le MVP.
 
 Formats initiaux à prendre en charge :
 
@@ -235,7 +237,7 @@ Actions disponibles :
 
 ### 3.7. Sécurité documentaire
 
-La sécurité représente l’un des piliers fondamentaux de DocuSafe.
+La sécurité représente l’un des piliers fondamentaux de DocSafe.
 
 Exigences :
 
@@ -369,7 +371,7 @@ Fonctionnalités :
 
 Afficher un avertissement avant le partage d’un document confidentiel.
 
-Le partage constitue une sortie volontaire du coffre-fort : un fichier exporté ne bénéficie plus automatiquement de la protection de DocuSafe.
+Le partage constitue une sortie volontaire du coffre-fort : un fichier exporté ne bénéficie plus automatiquement de la protection de DocSafe.
 
 ### 3.13. Paramètres
 
@@ -588,7 +590,7 @@ Ne pas prétendre qu’un service cloud assure automatiquement un chiffrement de
 
 ### 5.1. Direction artistique
 
-DocuSafe doit présenter une identité visuelle moderne, minimaliste et professionnelle.
+DocSafe doit présenter une identité visuelle moderne, minimaliste et professionnelle.
 
 L’application doit inspirer :
 
@@ -948,10 +950,10 @@ En cas d’ambiguïté, l’agent doit proposer une solution techniquement justi
 
 ## 15. DÉFINITION DU RÉSULTAT FINAL
 
-DocuSafe doit devenir une application mobile Flutter fiable, sécurisée et commercialisable, d’abord sur Android, puis sur iPhone.
+DocSafe doit devenir une application mobile Flutter fiable, sécurisée et commercialisable, d’abord sur Android, puis sur iPhone.
 
 Le résultat attendu est un véritable produit logiciel et non une simple démonstration d’interface.
 
 La priorité absolue est la confidentialité des documents, le fonctionnement hors ligne, la simplicité d’utilisation et la qualité de l’expérience utilisateur.
 
-Principe directeur : les documents de l’utilisateur lui appartiennent. DocuSafe doit les protéger sans rendre leur utilisation compliquée.
+Principe directeur : les documents de l’utilisateur lui appartiennent. DocSafe doit les protéger sans rendre leur utilisation compliquée.

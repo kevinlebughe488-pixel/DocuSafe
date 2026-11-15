@@ -6,7 +6,7 @@ Textes prêts à copier dans la Play Console. Les longueurs maximales de Google 
 
 **Nom de l'application** (30 caractères au plus) :
 
-> DocuSafe – Coffre-fort privé
+> DocSafe – Coffre-fort privé
 
 **Description courte** (80 caractères au plus) :
 
@@ -14,7 +14,7 @@ Textes prêts à copier dans la Play Console. Les longueurs maximales de Google 
 
 **Description complète** :
 
-> DocuSafe garde vos documents importants dans un coffre-fort chiffré, uniquement sur votre téléphone : pièce d'identité, passeport, permis, diplômes, contrats, factures, ordonnances.
+> DocSafe garde vos documents importants dans un coffre-fort chiffré, uniquement sur votre téléphone : pièce d'identité, passeport, permis, diplômes, contrats, factures, ordonnances.
 >
 > **Vos documents ne quittent jamais votre téléphone**
 > • Aucun compte, aucune inscription.
@@ -37,7 +37,7 @@ Textes prêts à copier dans la Play Console. Les longueurs maximales de Google 
 > • Partagez ou exportez un document quand vous le décidez.
 > • Créez une sauvegarde chiffrée et restaurez-la sur un nouveau téléphone.
 >
-> Important : sans votre code ni votre clé de récupération, personne ne peut ouvrir le coffre, pas même l'éditeur de DocuSafe. Notez votre clé de récupération et gardez-la en lieu sûr.
+> Important : sans votre code ni votre clé de récupération, personne ne peut ouvrir le coffre, pas même l'éditeur de DocSafe. Notez votre clé de récupération et gardez-la en lieu sûr.
 
 **Catégorie** : Productivité.
 

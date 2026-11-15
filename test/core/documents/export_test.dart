@@ -149,9 +149,9 @@ void main() {
     await add('rouge.png', 'Photo', 'default-identity');
     final archive = await exporter.buildArchive(
       uncategorizedFolder: 'Autres',
-      archiveName: 'DocuSafe.zip',
+      archiveName: 'DocSafe.zip',
     );
-    expect(archive!.fileName, 'DocuSafe.zip');
+    expect(archive!.fileName, 'DocSafe.zip');
     expect(archive.mimeType, 'application/zip');
     final zip = ZipDecoder().decodeBytes(archive.file!.readAsBytesSync());
     final categories = {

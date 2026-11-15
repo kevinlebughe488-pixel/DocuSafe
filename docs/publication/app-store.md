@@ -12,7 +12,7 @@ L'iPhone vient après Google Play (cahier des charges §13). Le projet iOS est c
 
 | Champ | Texte |
 |---|---|
-| Nom (30 caractères au plus) | DocuSafe – Coffre-fort privé |
+| Nom (30 caractères au plus) | DocSafe – Coffre-fort privé |
 | Sous-titre (30 caractères au plus) | Vos documents, protégés. |
 | Mots-clés (100 caractères au plus) | coffre-fort,documents,chiffrement,papiers,identité,scanner,passeport,factures,échéances,diplômes |
 | Catégorie | Productivité (secondaire : Utilitaires) |
@@ -23,7 +23,7 @@ L'iPhone vient après Google Play (cahier des charges §13). Le projet iOS est c
 
 ## Chiffrement
 
-App Store Connect pose des questions sur le chiffrement (réglementation de l'export). DocuSafe utilise des algorithmes standard (AES-256-GCM, ChaCha20-Poly1305, Argon2id) uniquement pour protéger les données de l'utilisateur sur son appareil. La réponse exacte et l'éventuelle déclaration en France (ANSSI) sont **à vérifier** avant la publication : point juridique.
+App Store Connect pose des questions sur le chiffrement (réglementation de l'export). DocSafe utilise des algorithmes standard (AES-256-GCM, ChaCha20-Poly1305, Argon2id) uniquement pour protéger les données de l'utilisateur sur son appareil. La réponse exacte et l'éventuelle déclaration en France (ANSSI) sont **à vérifier** avant la publication : point juridique.
 
 ## Points « à vérifier sur iOS »
 

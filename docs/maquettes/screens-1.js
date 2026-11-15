@@ -1,4 +1,4 @@
-/* DocuSafe – maquettes, écrans 1 à 10 : démarrage, déverrouillage, accueil, documents, ajout. */
+/* DocSafe – maquettes, écrans 1 à 10 : démarrage, déverrouillage, accueil, documents, ajout. */
 (function () {
   'use strict';
   const { I, logo, phone, btn, chip, badge, cat, section, field, tile, thumb, docTile, dots, keypad, CATS, DOCS } = window.UI;
@@ -8,10 +8,10 @@
      1. Démarrage et création du coffre
      ===================================================================== */
   const g1 = DS.group('g1', '1. Démarrage et création du coffre',
-    'Première ouverture. Aucun compte, aucune connexion : l’utilisateur découvre DocuSafe, choisit son code, note sa clé de récupération, puis active la biométrie s’il le souhaite.');
+    'Première ouverture. Aucun compte, aucune connexion : l’utilisateur découvre DocSafe, choisit son code, note sa clé de récupération, puis active la biométrie s’il le souhaite.');
 
   DS.frame(g1, '1', 'Écran de démarrage', 'Visible moins d’une seconde, le temps de préparer l’application.', phone({
-    body: `<div class="empty">${logo(96)}<div class="t-hm w500 mt24">DocuSafe</div><p class="mt8">Vos documents, protégés.</p></div>
+    body: `<div class="empty">${logo(96)}<div class="t-hm w500 mt24">DocSafe</div><p class="mt8">Vos documents, protégés.</p></div>
       <div class="center mb16"><span class="secure-line">${I('lock-fill')}Chiffré sur cet appareil</span></div>`,
   }));
 
@@ -32,11 +32,11 @@
     });
   };
   DS.frame(g1, '2a', 'Onboarding – bienvenue', 'Quatre pages courtes. « Passer » mène directement à la création du coffre.',
-    onboarding(0, 'shield_lock', 'description', 'fingerprint', 'Bienvenue dans DocuSafe',
+    onboarding(0, 'shield_lock', 'description', 'fingerprint', 'Bienvenue dans DocSafe',
       'Le coffre-fort de vos documents importants : pièces d’identité, diplômes, contrats, factures.'));
   DS.frame(g1, '2b', 'Onboarding – stockage local', 'Explique le fonctionnement hors ligne.',
     onboarding(1, 'smartphone', 'wifi_off', 'cloud_off', 'Tout reste sur votre téléphone',
-      'Pas de compte à créer, pas de serveur. DocuSafe fonctionne sans connexion Internet.'));
+      'Pas de compte à créer, pas de serveur. DocSafe fonctionne sans connexion Internet.'));
   DS.frame(g1, '2c', 'Onboarding – sécurité', 'Explique le chiffrement en mots simples.',
     onboarding(2, 'encrypted', 'pin', 'fingerprint', 'Chiffré et protégé par votre code',
       'Chaque document est chiffré. Sans votre code ou votre empreinte, personne ne peut le lire.'));
@@ -71,7 +71,7 @@
 
   DS.frame(g1, '3c', 'Biométrie (facultatif)', 'Proposée uniquement si le téléphone le permet.', phone({
     app: { back: true },
-    body: `${stepHead(3, 'Déverrouiller plus vite ?', 'Utilisez votre empreinte pour ouvrir DocuSafe. Votre code reste toujours valable.')}
+    body: `${stepHead(3, 'Déverrouiller plus vite ?', 'Utilisez votre empreinte pour ouvrir DocSafe. Votre code reste toujours valable.')}
       <div class="col grow" style="justify-content:center"><div class="illus big sec">${I('fingerprint')}</div></div>
       <div class="pad col g8" style="padding-bottom:16px">${btn('Activer l’empreinte', 'filled lg block', 'fingerprint')}${btn('Plus tard', 'text block')}</div>`,
   }));

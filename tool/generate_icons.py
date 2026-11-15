@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Génère toutes les icônes de DocuSafe à partir du symbole (phase 6).
+"""Génère toutes les icônes de DocSafe à partir du symbole (phase 6).
 
 Le dessin reprend exactement la géométrie de `lib/core/widgets/ds_logo.dart`
 (docs/07-design.md §2) : document blanc à coin replié, serrure bleue, fond
-bleu DocuSafe #205DB0.
+bleu DocSafe #205DB0.
 
 Produit :
 - Android : icônes classiques (mipmap-*/ic_launcher.png, coins arrondis),
@@ -143,7 +143,7 @@ def play_store():
     title = ImageFont.truetype(str(fonts / "Roboto-Bold.ttf"), 96 * SS)
     tagline = ImageFont.truetype(str(fonts / "Roboto-Regular.ttf"), 44 * SS)
     x = tx + tile + 20 * SS
-    d.text((x, 150 * SS), "DocuSafe", font=title, fill=WHITE)
+    d.text((x, 150 * SS), "DocSafe", font=title, fill=WHITE)
     d.text((x, 280 * SS), "Vos documents, protégés.", font=tagline, fill=(0xD7, 0xE2, 0xFF, 255))
     save(img.resize((1024, 500), Image.LANCZOS), PUB / "banniere-play-1024x500.png", opaque=True)
 

@@ -31,7 +31,7 @@ abstract final class AppConfig {
   ];
 
   /// Tolérance maximale en arrière-plan pendant une opération lancée par
-  /// DocuSafe (scanner, sélecteur, partage, fenêtre biométrique) (§10).
+  /// DocSafe (scanner, sélecteur, partage, fenêtre biométrique) (§10).
   static const Duration externalOperationTolerance = Duration(minutes: 5);
 
   /// Une authentification récente n'est pas redemandée (§11).

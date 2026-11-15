@@ -1,4 +1,4 @@
-/* DocuSafe – maquettes : composants communs.
+/* DocSafe – maquettes : composants communs.
    Chaque fonction renvoie du HTML. Les écrans (screens-1.js, screens-2.js) les assemblent.
    Ces composants correspondent aux widgets réutilisables décrits dans docs/07-design.md. */
 (function () {
@@ -22,7 +22,7 @@
 
   /* ---------- Logo ---------- */
   const logo = (size) =>
-    `<svg width="${size || 32}" height="${size || 32}" viewBox="0 0 48 48" role="img" aria-label="DocuSafe" style="flex:none;display:block">` +
+    `<svg width="${size || 32}" height="${size || 32}" viewBox="0 0 48 48" role="img" aria-label="DocSafe" style="flex:none;display:block">` +
     '<rect width="48" height="48" rx="12" fill="#205DB0"/>' +
     '<path d="M16 9.5h11.2l8.3 8.3V36a2.5 2.5 0 0 1-2.5 2.5H16a2.5 2.5 0 0 1-2.5-2.5V12A2.5 2.5 0 0 1 16 9.5Z" fill="#fff"/>' +
     '<path d="M27.2 9.5v5.8a2.5 2.5 0 0 0 2.5 2.5h5.8Z" fill="#ABC7FF"/>' +
@@ -61,7 +61,7 @@
   const appBar = (o) => {
     const lead = o.back ? `<span class="iconbtn">${I('arrow_back')}</span>` : o.close ? `<span class="iconbtn">${I('close')}</span>` : '';
     const title = o.brand
-      ? `<div class="brand">${logo(32)}<span>DocuSafe</span></div>`
+      ? `<div class="brand">${logo(32)}<span>DocSafe</span></div>`
       : `<div class="title${lead ? ' after-lead' : ''}">${o.title || ''}</div>`;
     const actions = (o.actions || []).map((a) => (a.charAt(0) === '<' ? a : `<span class="iconbtn">${I(a)}</span>`)).join('');
     return `<div class="appbar">${lead}${title}${actions}</div>`;

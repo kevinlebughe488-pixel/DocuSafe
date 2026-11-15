@@ -7,7 +7,7 @@ import 'biometric_service.dart';
 /// Noms de la biométrie à l'écran.
 ///
 /// Sur iPhone, Apple demande d'employer les noms « Face ID » et « Touch ID ».
-/// Sur Android, DocuSafe parle d'« empreinte » et de « reconnaissance du
+/// Sur Android, DocSafe parle d'« empreinte » et de « reconnaissance du
 /// visage » (docs/07-design.md : mots du quotidien).
 abstract final class BiometricLabels {
   static bool get _apple =>

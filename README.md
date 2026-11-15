@@ -1,4 +1,4 @@
- # DocuSafe
+ # DocSafe
 
 Coffre-fort documentaire pour téléphone, développé avec Flutter. Les documents restent sur l'appareil, chiffrés, et l'application fonctionne sans connexion Internet.
 

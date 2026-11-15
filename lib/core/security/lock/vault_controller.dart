@@ -239,7 +239,7 @@ final class VaultController extends Notifier<VaultState> {
     _restartInactivityTimer();
   }
 
-  /// Une opération lancée par DocuSafe (scanner, sélecteur, partage, fenêtre
+  /// Une opération lancée par DocSafe (scanner, sélecteur, partage, fenêtre
   /// biométrique) fait passer l'application en arrière-plan : tolérance de
   /// cinq minutes au lieu du verrouillage immédiat (docs/04-securite.md §10).
   void beginExternalOperation() => _externalOperations++;

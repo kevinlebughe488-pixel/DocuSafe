@@ -99,7 +99,7 @@ void main() {
   Future<void> shoot(WidgetTester tester, String name) async {
     await settle(tester, rounds: 8);
     await expectLater(
-      find.byType(DocuSafeApp),
+      find.byType(DocSafeApp),
       matchesGoldenFile('$outputDir/$name.png'),
     );
   }
@@ -122,7 +122,7 @@ void main() {
   }
 
   ProviderContainer containerOf(WidgetTester tester) =>
-      ProviderScope.containerOf(tester.element(find.byType(DocuSafeApp)));
+      ProviderScope.containerOf(tester.element(find.byType(DocSafeApp)));
 
   Future<void> createVault() async {
     final service = env.overrides().isEmpty
@@ -153,7 +153,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [...env.overrides(biometrics: biometrics), ...extra],
-        child: const DocuSafeApp(),
+        child: const DocSafeApp(),
       ),
     );
     await settle(tester, rounds: 8);

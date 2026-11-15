@@ -97,7 +97,7 @@ void main() {
     await tester.tap(find.text('Créer une sauvegarde'));
     await waitFor(tester, () => env.shares.saved.isNotEmpty);
     final (name, bytes) = env.shares.saved.single;
-    expect(name, endsWith('.docusafe'));
+    expect(name, endsWith('.docsafe'));
     final zip = ZipDecoder().decodeBytes(bytes);
     expect(zip.files.map((f) => f.name), contains('manifest.json'));
     expect(zip.files.where((f) => f.name.startsWith('files/')).length, 1);

@@ -30,8 +30,8 @@ abstract interface class FilePickerService {
   /// Galerie photos, plusieurs images possibles.
   Future<List<PickedFile>> pickPhotos();
 
-  /// Un fichier de sauvegarde DocuSafe (n'importe quel type : l'extension
-  /// `.docusafe` n'est pas connue du système). `null` si annulé.
+  /// Un fichier de sauvegarde DocSafe (n'importe quel type : l'extension
+  /// `.docsafe` n'est pas connue du système). `null` si annulé.
   Future<PickedFile?> pickBackup();
 
   /// Nettoie les copies temporaires créées par les sélecteurs.
