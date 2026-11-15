@@ -301,13 +301,13 @@ abstract class AppLocalizations {
   /// No description provided for @setupPinBody.
   ///
   /// In fr, this message translates to:
-  /// **'6 chiffres ou plus. Ce code protège tous vos documents.'**
+  /// **'6 chiffres. Ce code protège tous vos documents.'**
   String get setupPinBody;
 
   /// No description provided for @setupPinHint.
   ///
   /// In fr, this message translates to:
-  /// **'Évitez les suites simples comme 123456.'**
+  /// **'Évitez 123456 ou 111111.'**
   String get setupPinHint;
 
   /// No description provided for @setupPinConfirmTitle.
@@ -325,13 +325,13 @@ abstract class AppLocalizations {
   /// No description provided for @setupPinTooSimple.
   ///
   /// In fr, this message translates to:
-  /// **'Ce code est trop simple. Choisissez-en un autre.'**
+  /// **'Code trop simple : évitez 123456 ou 111111.'**
   String get setupPinTooSimple;
 
   /// No description provided for @setupPinTooShort.
   ///
   /// In fr, this message translates to:
-  /// **'Le code doit avoir au moins 6 chiffres.'**
+  /// **'Le code doit avoir 6 chiffres.'**
   String get setupPinTooShort;
 
   /// No description provided for @setupPinMismatch.
@@ -469,8 +469,14 @@ abstract class AppLocalizations {
   /// No description provided for @unlockTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Saisissez votre code'**
+  /// **'Coffre verrouillé'**
   String get unlockTitle;
+
+  /// No description provided for @unlockBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez votre code pour l\'ouvrir.'**
+  String get unlockBody;
 
   /// No description provided for @unlockBiometricReason.
   ///
@@ -583,7 +589,7 @@ abstract class AppLocalizations {
   /// No description provided for @recoveryNewPinBody.
   ///
   /// In fr, this message translates to:
-  /// **'6 chiffres ou plus. Il remplace l\'ancien code.'**
+  /// **'6 chiffres. Il remplace l\'ancien code.'**
   String get recoveryNewPinBody;
 
   /// No description provided for @durationSeconds.
@@ -835,7 +841,7 @@ abstract class AppLocalizations {
   /// No description provided for @changePinBody.
   ///
   /// In fr, this message translates to:
-  /// **'6 chiffres ou plus. Il remplace l\'ancien code.'**
+  /// **'6 chiffres. Il remplace l\'ancien code.'**
   String get changePinBody;
 
   /// No description provided for @reauthTitle.
@@ -1531,7 +1537,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpScannerA.
   ///
   /// In fr, this message translates to:
-  /// **'Autorisez l\'appareil photo pour DocSafe dans les réglages du téléphone. Sans les services Google Play, le scanner passe en mode simple : prise de photo puis recadrage à la main.'**
+  /// **'À la première utilisation, le téléphone prépare l\'outil de numérisation de Google : patientez une minute, puis réessayez. Sans les services Google Play, DocSafe ouvre l\'appareil photo du téléphone, puis vous recadrez la photo à la main. Sur iPhone, autorisez l\'appareil photo dans Paramètres, puis Autorisations.'**
   String get helpScannerA;
 
   /// No description provided for @helpBiometricQ.
@@ -2272,12 +2278,6 @@ abstract class AppLocalizations {
   /// **'Fond d\'une couleur différente'**
   String get scanTipContrast;
 
-  /// No description provided for @scanFailed.
-  ///
-  /// In fr, this message translates to:
-  /// **'Le scanner n\'a pas pu s\'ouvrir. Vérifiez que DocSafe a accès à l\'appareil photo dans les réglages du téléphone.'**
-  String get scanFailed;
-
   /// No description provided for @scanPreviewTitle.
   ///
   /// In fr, this message translates to:
@@ -2710,6 +2710,78 @@ abstract class AppLocalizations {
   /// **'Notifications'**
   String get settingsNotifications;
 
+  /// No description provided for @permissionsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autorisations'**
+  String get permissionsTitle;
+
+  /// No description provided for @permissionsSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numérisation, notifications'**
+  String get permissionsSubtitle;
+
+  /// No description provided for @permissionsIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'DocSafe ne demande que ce qui lui est utile. Rien ne quitte votre téléphone.'**
+  String get permissionsIntro;
+
+  /// No description provided for @permissionsScanTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numérisation'**
+  String get permissionsScanTitle;
+
+  /// No description provided for @permissionsScanNotNeeded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune autorisation nécessaire : l\'outil de numérisation du téléphone prend la photo.'**
+  String get permissionsScanNotNeeded;
+
+  /// No description provided for @permissionsCameraGranted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appareil photo autorisé.'**
+  String get permissionsCameraGranted;
+
+  /// No description provided for @permissionsCameraDenied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appareil photo refusé. Touchez pour ouvrir les réglages du téléphone.'**
+  String get permissionsCameraDenied;
+
+  /// No description provided for @permissionsCameraAsk.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez pour autoriser l\'appareil photo.'**
+  String get permissionsCameraAsk;
+
+  /// No description provided for @permissionsNotificationsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notifications'**
+  String get permissionsNotificationsTitle;
+
+  /// No description provided for @permissionsNotificationsGranted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autorisées, pour les rappels d\'échéance.'**
+  String get permissionsNotificationsGranted;
+
+  /// No description provided for @permissionsNotificationsDenied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivées : aucun rappel ne s\'affichera. Touchez pour les autoriser.'**
+  String get permissionsNotificationsDenied;
+
+  /// No description provided for @permissionsOpenSettings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir les réglages du téléphone'**
+  String get permissionsOpenSettings;
+
   /// No description provided for @notifSettingsEnabled.
   ///
   /// In fr, this message translates to:
@@ -2815,8 +2887,14 @@ abstract class AppLocalizations {
   /// No description provided for @errorScanner.
   ///
   /// In fr, this message translates to:
-  /// **'Le scanner n\'a pas pu s\'ouvrir. Vérifiez l\'accès à l\'appareil photo dans les réglages du téléphone.'**
+  /// **'Le scanner n\'a pas pu s\'ouvrir. Réessayez dans une minute : à la première utilisation, le téléphone prépare l\'outil de numérisation.'**
   String get errorScanner;
+
+  /// No description provided for @errorScannerCamera.
+  ///
+  /// In fr, this message translates to:
+  /// **'DocSafe n\'a pas accès à l\'appareil photo. Autorisez-le dans les réglages du téléphone.'**
+  String get errorScannerCamera;
 
   /// No description provided for @errorUnexpected.
   ///

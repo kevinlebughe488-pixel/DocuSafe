@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../../app/l10n/generated/app_localizations.dart';
 import '../../../../app/router/routes.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../core/config/app_config.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/security/auth/biometric_labels.dart';
 import '../../../../core/security/auth/biometric_service.dart';
@@ -52,15 +53,17 @@ final class _UnlockScreenState extends ConsumerState<UnlockScreen> {
     final biometricChanged =
         vault is VaultLocked && vault.reason == LockReason.biometricChanged;
     final lockout = state.remainingLockout;
+    // Longueur du code (validation automatique), `null` pour un ancien coffre.
+    final pinLength = ref.watch(pinLengthProvider);
 
     final String title;
-    final String? subtitle;
+    final String subtitle;
     if (lockout != null) {
       title = l10n.unlockTooManyTitle;
       subtitle = l10n.unlockTooManyBody;
     } else {
       title = l10n.unlockTitle;
-      subtitle = biometricChanged ? l10n.unlockBiometricChanged : null;
+      subtitle = biometricChanged ? l10n.unlockBiometricChanged : l10n.unlockBody;
     }
 
     final message = lockout != null
@@ -75,25 +78,25 @@ final class _UnlockScreenState extends ConsumerState<UnlockScreen> {
             const DsLogo(size: 56),
             const SizedBox(height: AppSpacing.lg),
             Text(title, style: theme.textTheme.titleLarge),
-            if (subtitle != null)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.xxl,
-                  AppSpacing.xs,
-                  AppSpacing.xxl,
-                  0,
-                ),
-                child: Text(
-                  subtitle,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.xxl,
+                AppSpacing.xs,
+                AppSpacing.xxl,
+                0,
+              ),
+              child: Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
+            ),
             Expanded(
               child: PinEntry(
                 onSubmit: vm.submitPin,
+                length: pinLength.hasValue ? pinLength.value : AppConfig.pinLength,
                 submitLabel: l10n.commonConfirm,
                 message: message,
                 messageIsError: message != null,

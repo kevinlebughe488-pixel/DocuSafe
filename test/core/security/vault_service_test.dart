@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:docusafe/core/config/app_config.dart';
@@ -173,6 +174,25 @@ void main() {
     final error = await _expectAuthError(service.unlockWithBiometrics());
     expect(error.code, 'auth.biometric_unavailable');
     expect(await service.isBiometricEnabled(), isFalse);
+  });
+
+  test('longueur du code dans la serrure, absente des anciennes serrures', () async {
+    expect(await service.pinLength(), isNull);
+    await createVault();
+    expect(await service.pinLength(), 6);
+    expect(jsonDecode((await store.read(SecureStoreKeys.pinSlot))!), containsPair('len', 6));
+
+    // Coffre créé avant le 15/11/2026 : pas de longueur, le code ouvre
+    // toujours le coffre (écran avec bouton « Confirmer »).
+    final slot = jsonDecode((await store.read(SecureStoreKeys.pinSlot))!) as Map<String, Object?>
+      ..remove('len');
+    await store.write(SecureStoreKeys.pinSlot, jsonEncode(slot));
+    expect(await service.pinLength(), isNull);
+    final session = await service.unlockWithPin(pin);
+    // Nouveau code : la longueur est enregistrée.
+    await service.changePin(session, otherPin);
+    await session.close();
+    expect(await service.pinLength(), 6);
   });
 
   test('vérification du code sans ouvrir la base', () async {

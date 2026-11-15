@@ -3,27 +3,18 @@ import 'package:docusafe/core/security/auth/pin_policy.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('format : 6 à 12 chiffres', () {
-    expect(() => PinPolicy.validate('12345'), throwsA(same(ValidationException.pinFormat)));
-    expect(() => PinPolicy.validate('1234567890123'), throwsA(same(ValidationException.pinFormat)));
-    expect(() => PinPolicy.validate('12a456'), throwsA(same(ValidationException.pinFormat)));
-    expect(() => PinPolicy.validate(''), throwsA(same(ValidationException.pinFormat)));
+  test('format : 6 chiffres exactement', () {
+    for (final pin in ['12345', '1234567', '20491573', '12a456', '']) {
+      expect(
+        () => PinPolicy.validate(pin),
+        throwsA(same(ValidationException.pinFormat)),
+        reason: pin,
+      );
+    }
   });
 
-  test('codes trop simples refusés', () {
-    for (final pin in [
-      '000000',
-      '111111',
-      '123456',
-      '654321',
-      '345678',
-      '121212',
-      '123123',
-      '112233',
-      '998877',
-      '12345678',
-      '00000000',
-    ]) {
+  test('refusés : six chiffres identiques et suites', () {
+    for (final pin in ['000000', '111111', '999999', '123456', '012345', '456789', '654321', '987654']) {
       expect(
         () => PinPolicy.validate(pin),
         throwsA(same(ValidationException.pinTooSimple)),
@@ -32,8 +23,8 @@ void main() {
     }
   });
 
-  test('codes acceptables', () {
-    for (final pin in ['204915', '731906', '102030', '135790', '2468013579', '113355']) {
+  test('acceptés : les autres codes, même faciles à retenir (D5 révisée)', () {
+    for (final pin in ['112233', '121212', '123123', '998877', '204915', '731906', '102030', '113355']) {
       expect(() => PinPolicy.validate(pin), returnsNormally, reason: pin);
     }
   });

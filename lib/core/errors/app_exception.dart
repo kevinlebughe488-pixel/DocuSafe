@@ -105,9 +105,13 @@ final class VaultLockedException extends AppException {
   const VaultLockedException() : super('vault.locked');
 }
 
-/// Le scanner n'a pas pu s'ouvrir (caméra refusée, service indisponible).
+/// Le scanner n'a pas pu s'ouvrir. [cameraDenied] : l'appareil photo est
+/// refusé à DocSafe (iPhone ; aucune autorisation n'est utile sur Android).
 final class ScannerException extends AppException {
-  const ScannerException() : super('scanner.failed');
+  const ScannerException({this.cameraDenied = false})
+    : super(cameraDenied ? 'scanner.camera_denied' : 'scanner.failed');
+
+  final bool cameraDenied;
 }
 
 /// L'utilisateur a annulé l'opération en cours.

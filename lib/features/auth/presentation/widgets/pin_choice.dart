@@ -112,7 +112,6 @@ final class _PinChoiceState extends State<PinChoice> {
           child: PinEntry(
             key: ValueKey(confirming),
             onSubmit: _submit,
-            submitLabel: l10n.commonContinue,
             message: error,
             messageIsError: error != null,
             hint: confirming ? null : l10n.setupPinHint,

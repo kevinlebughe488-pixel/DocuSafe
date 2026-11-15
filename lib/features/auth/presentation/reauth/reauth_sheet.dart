@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../../app/l10n/generated/app_localizations.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../core/config/app_config.dart';
 import '../../../../core/errors/app_exception.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/utils/error_messages.dart';
@@ -83,6 +84,7 @@ final class _ReauthSheetState extends ConsumerState<_ReauthSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final pinLength = ref.watch(pinLengthProvider);
     return SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.8,
       child: Column(
@@ -105,6 +107,7 @@ final class _ReauthSheetState extends ConsumerState<_ReauthSheet> {
           Expanded(
             child: PinEntry(
               onSubmit: _submit,
+              length: pinLength.hasValue ? pinLength.value : AppConfig.pinLength,
               submitLabel: l10n.commonConfirm,
               message: _error,
               messageIsError: _error != null,

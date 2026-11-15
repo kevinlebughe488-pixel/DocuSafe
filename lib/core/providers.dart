@@ -16,6 +16,7 @@ import 'platform/notification_service.dart';
 import 'platform/scanner_service.dart';
 import 'platform/share_intake_service.dart';
 import 'platform/share_service.dart';
+import 'platform/system_settings_service.dart';
 import 'platform/thumbnail_service.dart';
 import 'reminders/reminder_service.dart';
 import 'security/auth/biometric_service.dart';
@@ -124,6 +125,18 @@ final reminderServiceProvider = Provider<ReminderService>(
 
 final scannerServiceProvider = Provider<ScannerService>(
   (ref) => const PlatformScannerService(),
+);
+
+/// Longueur du code enregistrée dans la serrure : validation automatique.
+/// `null` pour un coffre créé avant le 15/11/2026 (bouton « Confirmer »).
+/// Relue à chaque affichage de l'écran du code.
+final pinLengthProvider = FutureProvider.autoDispose<int?>(
+  (ref) => ref.watch(vaultServiceProvider).pinLength(),
+);
+
+/// Réglages du téléphone : appareil photo (iPhone), page de DocSafe.
+final systemSettingsServiceProvider = Provider<SystemSettingsService>(
+  (ref) => const PlatformSystemSettingsService(),
 );
 
 final documentSearchProvider = Provider<DocumentSearch>(

@@ -39,10 +39,8 @@ void main() {
     await tester.tap(find.text('Passer'));
     await settle(tester, rounds: 5);
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await tester.pump();
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await settle(tester, rounds: 40);
     final container = ProviderScope.containerOf(tester.element(find.byType(Scaffold).first));
 
@@ -55,12 +53,11 @@ void main() {
     });
     env.shareIntake.deliver([PickedFile(file: received, displayName: 'Attestation.pdf')]);
     await settle(tester, rounds: 6);
-    expect(find.text('Saisissez votre code'), findsOneWidget);
+    expect(find.text('Coffre verrouillé'), findsOneWidget);
     expect(container.read(pendingSharesProvider), hasLength(1));
 
     // Déverrouillage : l'importation s'ouvre avec le fichier reçu.
     await typePin(tester, '204915');
-    await tester.tap(find.text('Confirmer'));
     await settle(tester, rounds: 40);
     expect(container.read(vaultControllerProvider), isA<VaultUnlocked>());
     expect(find.text('1 fichier sélectionné'), findsOneWidget);

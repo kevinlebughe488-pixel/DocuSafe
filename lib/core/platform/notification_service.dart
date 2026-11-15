@@ -43,6 +43,9 @@ abstract interface class NotificationService {
   /// Demande l'autorisation du système (Android 13 et plus, iOS).
   Future<bool> requestPermission();
 
+  /// Les notifications de DocSafe sont-elles autorisées par le système ?
+  Future<bool> isPermissionGranted();
+
   /// Remplace toutes les notifications programmées par [notifications].
   Future<void> replaceAll(List<ScheduledNotification> notifications);
 
@@ -124,6 +127,28 @@ final class PlatformNotificationService implements NotificationService {
   }
 
   @override
+  Future<bool> isPermissionGranted() async {
+    try {
+      if (Platform.isAndroid) {
+        return await _plugin
+                .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+                ?.areNotificationsEnabled() ??
+            false;
+      }
+      if (Platform.isIOS) {
+        // À vérifier sur iOS.
+        final options = await _plugin
+            .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+            ?.checkPermissions();
+        return options?.isEnabled ?? false;
+      }
+    } on Object catch (e, s) {
+      AppLog.error('notifications.permission', e, s);
+    }
+    return false;
+  }
+
+  @override
   Future<void> replaceAll(List<ScheduledNotification> notifications) async {
     await _plugin.cancelAll();
     for (final n in notifications) {
@@ -153,7 +178,11 @@ final class PlatformNotificationService implements NotificationService {
 /// Version simulée : garde en mémoire ce qui serait programmé (tests).
 final class FakeNotificationService implements NotificationService {
   List<ScheduledNotification> scheduled = [];
+  /// Réponse de l'utilisateur à la prochaine demande.
   bool permissionGranted = true;
+
+  /// État actuel dans les réglages du système.
+  bool systemEnabled = false;
   int permissionRequests = 0;
   String? pendingLaunchPayload;
   void Function(String payload)? _onTap;
@@ -171,8 +200,12 @@ final class FakeNotificationService implements NotificationService {
   @override
   Future<bool> requestPermission() async {
     permissionRequests++;
+    systemEnabled = permissionGranted;
     return permissionGranted;
   }
+
+  @override
+  Future<bool> isPermissionGranted() async => systemEnabled;
 
   @override
   Future<void> replaceAll(List<ScheduledNotification> notifications) async =>

@@ -89,11 +89,11 @@ void main() {
 
   testWidgets('coffre verrouillé : aucune adresse protégée ne s\'affiche', (tester) async {
     final container = await start(tester);
-    expect(find.text('Saisissez votre code'), findsOneWidget);
+    expect(find.text('Coffre verrouillé'), findsOneWidget);
     for (final location in protected) {
       container.read(routerProvider).go(location);
       await settle(tester, rounds: 3);
-      expect(find.text('Saisissez votre code'), findsOneWidget, reason: location);
+      expect(find.text('Coffre verrouillé'), findsOneWidget, reason: location);
       expect(container.read(vaultControllerProvider), isA<VaultLocked>());
     }
     // La base est fermée : aucune session n'existe.
@@ -122,7 +122,7 @@ void main() {
     final state = container.read(vaultControllerProvider);
     expect(state, isA<VaultLocked>());
     expect((state as VaultLocked).reason, LockReason.inactivity);
-    expect(find.text('Saisissez votre code'), findsOneWidget);
+    expect(find.text('Coffre verrouillé'), findsOneWidget);
     await teardownApp(tester);
   });
 
@@ -134,7 +134,7 @@ void main() {
     expect(state, isA<VaultLocked>());
     expect((state as VaultLocked).reason, LockReason.background);
     await foreground(tester);
-    expect(find.text('Saisissez votre code'), findsOneWidget);
+    expect(find.text('Coffre verrouillé'), findsOneWidget);
     await teardownApp(tester);
   });
 

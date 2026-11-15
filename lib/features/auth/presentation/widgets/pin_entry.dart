@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
 
 import '../../../../app/theme/app_spacing.dart';
@@ -5,15 +7,18 @@ import '../../../../core/config/app_config.dart';
 import '../../../../core/widgets/pin_dots.dart';
 import '../../../../core/widgets/pin_keypad.dart';
 
-/// Saisie d'un code : points, message, bouton de validation et clavier.
+/// Saisie d'un code : points, message et clavier.
 ///
-/// Le code a une longueur variable (6 à 12 chiffres) : l'utilisateur valide
-/// avec le bouton dès que six chiffres sont saisis.
+/// Avec [length] (6 chiffres, D5 révisée le 15/11/2026), le code est validé
+/// tout seul dès le dernier chiffre : pas de bouton. Sans [length] (coffre
+/// créé avant cette date, code de 6 à 12 chiffres), un bouton [submitLabel]
+/// valide le code dès que six chiffres sont saisis.
 final class PinEntry extends StatefulWidget {
   const PinEntry({
     super.key,
     required this.onSubmit,
-    required this.submitLabel,
+    this.length = AppConfig.pinLength,
+    this.submitLabel,
     this.message,
     this.messageIsError = false,
     this.hint,
@@ -27,7 +32,12 @@ final class PinEntry extends StatefulWidget {
   });
 
   final ValueChanged<String> onSubmit;
-  final String submitLabel;
+
+  /// Longueur du code, ou `null` pour un ancien coffre (bouton de validation).
+  final int? length;
+
+  /// Libellé du bouton, utilisé seulement sans [length].
+  final String? submitLabel;
   final String? message;
   final bool messageIsError;
   final String? hint;
@@ -50,29 +60,50 @@ final class PinEntry extends StatefulWidget {
 final class _PinEntryState extends State<PinEntry> {
   String _pin = '';
 
+  /// Validation automatique, juste après l'affichage du dernier point.
+  Timer? _autoSubmit;
+
   @override
   void didUpdateWidget(covariant PinEntry oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.resetToken != widget.resetToken) {
+      _autoSubmit?.cancel();
       _pin = '';
     }
   }
 
+  @override
+  void dispose() {
+    _autoSubmit?.cancel();
+    super.dispose();
+  }
+
   void _digit(String d) {
-    if (_pin.length >= AppConfig.pinMaxLength) {
+    final length = widget.length;
+    if (_pin.length >= (length ?? AppConfig.legacyPinMaxLength)) {
       return;
     }
     setState(() => _pin += d);
+    if (length != null && _pin.length == length) {
+      _autoSubmit?.cancel();
+      _autoSubmit = Timer(const Duration(milliseconds: 150), _submit);
+    }
   }
 
   void _backspace() {
     if (_pin.isEmpty) {
       return;
     }
+    _autoSubmit?.cancel();
     setState(() => _pin = _pin.substring(0, _pin.length - 1));
   }
 
   void _submit() {
+    _autoSubmit?.cancel();
+    final length = widget.length;
+    if (!mounted || (length != null && _pin.length != length)) {
+      return;
+    }
     final pin = _pin;
     setState(() => _pin = '');
     widget.onSubmit(pin);
@@ -82,7 +113,7 @@ final class _PinEntryState extends State<PinEntry> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final canSubmit =
-        widget.enabled && !widget.busy && _pin.length >= AppConfig.pinMinLength;
+        widget.enabled && !widget.busy && _pin.length >= AppConfig.pinLength;
     // Très grande police (accessibilité, §6.3) : tout l'écran défile plutôt
     // que de déborder ; les touches gardent leur taille normale.
     final largeText = MediaQuery.textScalerOf(context).scale(10) > 13;
@@ -105,10 +136,10 @@ final class _PinEntryState extends State<PinEntry> {
     );
   }
 
-  /// Hauteur réservée au-dessus du clavier (points, message, bouton) :
-  /// disposition ordinaire, puis disposition compacte des petits écrans.
-  static const double _topHeight = 140;
-  static const double _compactTopHeight = 100;
+  /// Hauteur réservée au-dessus du clavier (points, message, bouton s'il
+  /// existe) : disposition ordinaire, puis compacte des petits écrans.
+  double get _topHeight => widget.length == null ? 140 : 96;
+  double get _compactTopHeight => widget.length == null ? 100 : 68;
 
   /// Taille des touches selon la hauteur disponible : 72 points sur un écran
   /// ordinaire, moins sur un petit écran (jamais sous 44), pour que le
@@ -195,7 +226,11 @@ final class _PinEntryState extends State<PinEntry> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        PinDots(filled: _pin.length, hasError: widget.messageIsError),
+        PinDots(
+          filled: _pin.length,
+          minDots: widget.length ?? AppConfig.pinLength,
+          hasError: widget.messageIsError,
+        ),
         SizedBox(height: compact ? AppSpacing.sm : AppSpacing.lg),
         ConstrainedBox(
           constraints: BoxConstraints(minHeight: compact ? 28 : 40),
@@ -221,16 +256,19 @@ final class _PinEntryState extends State<PinEntry> {
                   ),
                 ),
         ),
-        SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
-        FilledButton.tonal(
-          style: compact
-              ? FilledButton.styleFrom(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                )
-              : null,
-          onPressed: canSubmit ? _submit : null,
-          child: Text(widget.submitLabel),
-        ),
+        // Ancien coffre seulement : code de longueur variable.
+        if (widget.length == null) ...[
+          SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
+          FilledButton.tonal(
+            style: compact
+                ? FilledButton.styleFrom(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  )
+                : null,
+            onPressed: canSubmit ? _submit : null,
+            child: Text(widget.submitLabel ?? ''),
+          ),
+        ],
       ],
     );
   }

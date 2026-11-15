@@ -10,6 +10,7 @@ import 'package:docusafe/app/router/routes.dart';
 import 'package:docusafe/core/documents/ingest_document.dart';
 import 'package:docusafe/core/platform/file_picker_service.dart';
 import 'package:docusafe/core/platform/scanner_service.dart';
+import 'package:docusafe/core/platform/system_settings_service.dart';
 import 'package:docusafe/core/platform/thumbnail_service.dart';
 import 'package:docusafe/core/providers.dart';
 import 'package:docusafe/core/security/auth/biometric_service.dart';
@@ -413,6 +414,13 @@ void main() {
     await both(tester, '29-aide', () async {
       await unlockWithDocuments();
       unawaited(containerOf(tester).read(routerProvider).push(Routes.settingsHelp));
+    });
+    await both(tester, '30-autorisations', () async {
+      // Sur iPhone, le scanner demande l'appareil photo ; pas sur Android.
+      env.systemSettings.camera = ios ? CameraAccess.granted : CameraAccess.notNeeded;
+      env.notifications.systemEnabled = true;
+      await unlockWithDocuments();
+      unawaited(containerOf(tester).read(routerProvider).push(Routes.settingsPermissions));
     });
   }, skip: !enabled, timeout: const Timeout(Duration(minutes: 8)));
 }

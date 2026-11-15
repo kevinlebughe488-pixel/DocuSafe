@@ -17,11 +17,12 @@ void main() {
 
   tearDown(() => env.dispose());
 
-  testWidgets('petit écran : le bouton Continuer reste atteignable', (
+  testWidgets('petit écran : création du coffre au clavier, sans bouton', (
     tester,
   ) async {
-    // Régression (15/11/2026) : sur 320 × 640, le bouton passait sous le
-    // clavier et le toucher ajoutait un chiffre au lieu de valider.
+    // Régression (15/11/2026) : sur 320 × 640, le bouton « Continuer »
+    // passait sous le clavier. Depuis, le code de six chiffres est validé
+    // tout seul : tout le clavier doit rester utilisable.
     useSmallPhoneSize(tester);
     await tester.pumpWidget(testApp(env));
     await settle(tester);
@@ -29,11 +30,9 @@ void main() {
     await settle(tester, rounds: 5);
     expect(find.text('Choisissez votre code'), findsOneWidget);
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await tester.pump();
     expect(find.text('Confirmez votre code'), findsOneWidget);
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await settle(tester, rounds: 40);
     expect(find.text('Votre coffre est vide'), findsOneWidget);
     await teardownApp(tester);
@@ -54,12 +53,10 @@ void main() {
     // Étape 1 : code, puis confirmation. Rien n'est écrit avant la confirmation.
     expect(find.text('Choisissez votre code'), findsOneWidget);
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await tester.pump();
     expect(find.text('Confirmez votre code'), findsOneWidget);
     expect(env.store.values, isEmpty);
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await settle(tester, rounds: 40);
 
     // Pas de biométrie dans les tests : tableau de bord directement, avec le
@@ -89,17 +86,15 @@ void main() {
     final unlockedSession = (container.read(vaultControllerProvider) as VaultUnlocked).session;
     await tester.tap(find.byTooltip('Verrouiller'));
     await settle(tester);
-    expect(find.text('Saisissez votre code'), findsOneWidget);
+    expect(find.text('Coffre verrouillé'), findsOneWidget);
     expect(unlockedSession.isClosed, isTrue);
     expect(container.read(vaultControllerProvider), isA<VaultLocked>());
 
     // Mauvais code : message, puis bon code : retour au tableau de bord.
     await typePin(tester, '731906');
-    await tester.tap(find.text('Confirmer'));
     await settle(tester);
     expect(find.textContaining('Code incorrect'), findsOneWidget);
     await typePin(tester, '204915');
-    await tester.tap(find.text('Confirmer'));
     await settle(tester, rounds: 40);
     expect(find.text('Votre coffre est vide'), findsOneWidget);
     await teardownApp(tester);
@@ -113,15 +108,12 @@ void main() {
     await settle(tester, rounds: 5);
 
     await typePin(tester, '123456');
-    await tester.tap(find.text('Continuer'));
     await tester.pump();
-    expect(find.text('Ce code est trop simple. Choisissez-en un autre.'), findsOneWidget);
+    expect(find.text('Code trop simple : évitez 123456 ou 111111.'), findsOneWidget);
 
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await tester.pump();
     await typePin(tester, '204916');
-    await tester.tap(find.text('Continuer'));
     await tester.pump();
     expect(find.text('Les deux codes ne sont pas identiques. Recommencez.'), findsOneWidget);
     expect(find.text('Choisissez votre code'), findsOneWidget);

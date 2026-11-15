@@ -74,11 +74,13 @@ def tap(label, timeout=30, exact=True):
     return False
 
 
-def type_pin(submit="Continuer"):
+def type_pin(submit=None):
+    """Tape le code. Six chiffres sont validés tout seuls (depuis le
+    15/11/2026) ; [submit] ne sert qu'à un ancien coffre (bouton)."""
     for digit in PIN:
         if not tap(digit, timeout=15):
             return False
-    return tap(submit, timeout=10)
+    return tap(submit, timeout=10) if submit else True
 
 
 def wait_for(texts, seconds, step):
@@ -121,9 +123,9 @@ def main():
     relocked = reopened = restarted = False
     if created:
         relocked = tap("Verrouiller", timeout=10) and wait_for(
-            ["Saisissez votre code"], 20, "verrouillé")
+            ["Coffre verrouillé"], 20, "verrouillé")
     if relocked:
-        reopened = type_pin("Confirmer") and wait_for(
+        reopened = type_pin() and wait_for(
             ["Votre coffre est vide"], 40, "rouvert")
     if reopened:
         # Application arrêtée puis relancée : le coffre doit être verrouillé,
@@ -131,8 +133,8 @@ def main():
         adb("shell", "am", "force-stop", PACKAGE)
         adb("shell", "monkey", "-p", PACKAGE, "-c",
             "android.intent.category.LAUNCHER", "1")
-        restarted = (wait_for(["Saisissez votre code"], 30, "relancé")
-                     and type_pin("Confirmer")
+        restarted = (wait_for(["Coffre verrouillé"], 30, "relancé")
+                     and type_pin()
                      and wait_for(["Votre coffre est vide"], 40, "rouvert après relance"))
 
     adb("shell", "screencap", "-p", "/sdcard/ecran.png", check=False)

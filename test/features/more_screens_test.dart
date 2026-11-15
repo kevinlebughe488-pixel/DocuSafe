@@ -46,7 +46,7 @@ void main() {
   testWidgets('code oublié : clé de récupération puis nouveau code', (tester) async {
     late String recoveryKey;
     final container = await start(tester, onKey: (k) => recoveryKey = k);
-    expect(find.text('Saisissez votre code'), findsOneWidget);
+    expect(find.text('Coffre verrouillé'), findsOneWidget);
     await tester.tap(find.text('Code oublié ?'));
     await settle(tester, rounds: 6);
     expect(find.text('Code oublié'), findsOneWidget);
@@ -56,10 +56,8 @@ void main() {
     await settle(tester, rounds: 30);
     expect(find.text('Choisissez un nouveau code'), findsWidgets);
     await typePin(tester, '813572');
-    await tester.tap(find.text('Continuer'));
     await tester.pump();
     await typePin(tester, '813572');
-    await tester.tap(find.text('Continuer'));
     await settle(tester, rounds: 30);
     expect(container.read(vaultControllerProvider), isA<VaultUnlocked>());
 

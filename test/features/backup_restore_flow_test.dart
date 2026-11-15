@@ -86,10 +86,8 @@ void main() {
     await settle(tester, rounds: 10);
     expect(find.text('Choisissez votre code'), findsOneWidget);
     await typePin(tester, '813572');
-    await tester.tap(find.text('Continuer'));
     await tester.pump();
     await typePin(tester, '813572');
-    await tester.tap(find.text('Continuer'));
     await settle(tester, rounds: 40);
 
     expect(container.read(vaultControllerProvider), isA<VaultUnlocked>());

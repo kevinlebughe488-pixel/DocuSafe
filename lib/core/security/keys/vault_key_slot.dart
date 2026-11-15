@@ -9,10 +9,12 @@ import '../crypto/argon2_params.dart';
 ///
 /// Format JSON, version 1 :
 /// ```json
-/// {"v":1,"kdf":"argon2id","m":19456,"t":2,"p":1,
+/// {"v":1,"kdf":"argon2id","m":19456,"t":2,"p":1,"len":6,
 ///  "salt":"…","nonce":"…","wrapped":"…"}
 /// ```
 /// Les paramètres de dérivation sont enregistrés pour pouvoir évoluer.
+/// `len` (longueur du code, serrure du code seulement) est absent des
+/// serrures créées avant le 15/11/2026.
 final class VaultKeySlot {
   const VaultKeySlot({
     required this.kdf,
@@ -20,6 +22,7 @@ final class VaultKeySlot {
     required this.nonce,
     required this.wrappedKey,
     this.argon2,
+    this.pinLength,
   });
 
   static const int version = 1;
@@ -46,10 +49,16 @@ final class VaultKeySlot {
   /// Paramètres Argon2id, présents si [kdf] vaut `argon2id`.
   final Argon2Params? argon2;
 
+  /// Longueur du code : l'écran de déverrouillage valide tout seul dès
+  /// qu'elle est atteinte. Information non secrète (tous les nouveaux codes
+  /// ont 6 chiffres). `null` dans une ancienne serrure : bouton « Confirmer ».
+  final int? pinLength;
+
   String encode() => jsonEncode({
     'v': version,
     'kdf': kdf,
     if (argon2 != null) ...argon2!.toJson(),
+    'len': ?pinLength,
     'salt': base64Encode(salt),
     'nonce': base64Encode(nonce),
     'wrapped': base64Encode(wrappedKey),
@@ -65,6 +74,7 @@ final class VaultKeySlot {
       return VaultKeySlot(
         kdf: kdf,
         argon2: kdf == kdfArgon2id ? Argon2Params.fromJson(json) : null,
+        pinLength: json['len'] as int?,
         salt: base64Decode(json['salt']! as String),
         nonce: base64Decode(json['nonce']! as String),
         wrappedKey: base64Decode(json['wrapped']! as String),

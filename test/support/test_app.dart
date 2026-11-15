@@ -9,6 +9,7 @@ import 'package:docusafe/core/database/app_database.dart';
 import 'package:docusafe/core/platform/notification_service.dart';
 import 'package:docusafe/core/platform/share_intake_service.dart';
 import 'package:docusafe/core/platform/share_service.dart';
+import 'package:docusafe/core/platform/system_settings_service.dart';
 import 'package:docusafe/core/providers.dart';
 import 'package:docusafe/core/security/auth/biometric_service.dart';
 import 'package:docusafe/core/security/auth/pin_attempts.dart';
@@ -51,6 +52,9 @@ final class TestEnvironment {
   /// « Partager vers DocSafe » simulé : fichiers reçus d'une autre application.
   final FakeShareIntakeService shareIntake = FakeShareIntakeService();
 
+  /// Réglages du téléphone simulés (Paramètres → Autorisations).
+  final FakeSystemSettingsService systemSettings = FakeSystemSettingsService();
+
   VaultPaths get paths => VaultPaths.under(root);
 
   List<Override> overrides({BiometricService? biometrics}) => [
@@ -64,6 +68,7 @@ final class TestEnvironment {
     notificationServiceProvider.overrideWithValue(notifications),
     shareServiceProvider.overrideWithValue(shares),
     shareIntakeServiceProvider.overrideWithValue(shareIntake),
+    systemSettingsServiceProvider.overrideWithValue(systemSettings),
     vaultServiceProvider.overrideWith(
       (ref) => VaultService(
         crypto: ref.watch(cryptoEngineProvider),
@@ -109,12 +114,15 @@ Widget wrap(Widget child, {List<Override> overrides = const []}) =>
       ),
     );
 
-/// Tape un code sur le clavier dessiné par l'application.
+/// Tape un code sur le clavier dessiné par l'application. Un code de six
+/// chiffres est validé tout seul, juste après le dernier : le temps est
+/// avancé d'autant.
 Future<void> typePin(WidgetTester tester, String pin) async {
   for (final d in pin.split('')) {
     await tester.tap(find.widgetWithText(InkWell, d).last);
     await tester.pump();
   }
+  await tester.pump(const Duration(milliseconds: 200));
 }
 
 /// Laisse le temps aux opérations réelles (isolates, fichiers) de finir et

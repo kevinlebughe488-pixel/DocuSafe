@@ -187,6 +187,20 @@ final class VaultService {
     return _openSession(vaultKey);
   }
 
+  /// Longueur du code enregistrée dans sa serrure (validation automatique),
+  /// ou `null` : coffre créé avant le 15/11/2026, ou pas de coffre.
+  Future<int?> pinLength() async {
+    final raw = await _store.read(SecureStoreKeys.pinSlot);
+    if (raw == null) {
+      return null;
+    }
+    try {
+      return VaultKeySlot.decode(raw).pinLength;
+    } on CryptoException {
+      return null;
+    }
+  }
+
   /// Vérifie le code sans ouvrir la base (nouvelle authentification §11).
   Future<void> verifyPin(String pin) async {
     final key = await _unwrapWithPin(pin);
@@ -371,6 +385,7 @@ final class VaultService {
       return VaultKeySlot(
         kdf: VaultKeySlot.kdfArgon2id,
         argon2: argon2Params,
+        pinLength: pin.length,
         salt: salt,
         nonce: nonce,
         wrappedKey: wrapped,

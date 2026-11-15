@@ -33,7 +33,7 @@ final class PlatformScannerService implements ScannerService {
       return [for (final path in result.images) File(path)];
     } on CunningDocumentScannerException catch (e, s) {
       AppLog.error('scanner.failed', e, s);
-      throw const ScannerException();
+      throw ScannerException(cameraDenied: e.code == 'permission_denied');
     } on PlatformException catch (e, s) {
       AppLog.error('scanner.platform', e, s);
       throw const ScannerException();
@@ -52,16 +52,22 @@ final class PlatformScannerService implements ScannerService {
 
 /// Scanner simulé : retourne des images préparées (tests).
 final class FakeScannerService implements ScannerService {
-  FakeScannerService({this.pages = const []});
+  FakeScannerService({this.pages = const [], this.error});
 
   /// Pages rendues au prochain appel de [scan].
   List<File> pages;
+
+  /// Erreur levée par [scan] à la place des pages (scanner indisponible).
+  AppException? error;
   int scanCalls = 0;
   int cleanCalls = 0;
 
   @override
   Future<List<File>> scan() async {
     scanCalls++;
+    if (error case final AppException e) {
+      throw e;
+    }
     return pages;
   }
 

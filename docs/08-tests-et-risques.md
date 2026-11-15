@@ -73,6 +73,7 @@ Couverture des tests : [rapport-couverture.md](rapport-couverture.md) (79 % des 
 | Suppression | `import_flow_test.dart` |
 | Exportation | `share_export_flow_test.dart` |
 | Petit écran | `vault_flow_test.dart` (320 × 640 points), téléphone simulé |
+| Retours d'essai du 15/11/2026 : code validé tout seul, ancien coffre (bouton), autorisations, scanner refusé | `test/features/phone_feedback_test.dart`, `pin_widgets_test.dart`, `pin_policy_test.dart`, `vault_service_test.dart` |
 
 ## 3. Défauts trouvés et corrigés en phase 5
 
@@ -88,6 +89,10 @@ Couverture des tests : [rapport-couverture.md](rapport-couverture.md) (79 % des 
 | **« Code oublié » ne laissait pas choisir de nouveau code** : après la clé de récupération, l'application allait directement à l'accueil, avec l'ancien code (oublié) | Majeur | Nouveau test de l'écran « Code oublié » | L'écran reste affiché jusqu'au choix du nouveau code |
 | Écran du code et en-tête d'étape débordaient à la taille de police maximale (200 %) | Majeur (accessibilité) | Nouveau test à 200 % | Écran du code défilant en très grande police, libellé d'étape raccourci au besoin |
 | Quitter l'écran de restauration sans restaurer provoquait une erreur interne | Mineur | Captures d'écran | Corrigé |
+| **Le scanner ne s'ouvrait pas** : l'autorisation `CAMERA` était déclarée sans jamais être demandée. Android refuse alors l'appareil photo du système au scanner de secours, utilisé quand l'outil de Google n'est pas encore prêt (première utilisation) | Majeur | Essai du développeur sur un téléphone (15/11/2026) | Autorisation retirée (aucune n'est utile sur Android), contrôle bloquant dans `tool/check_apk.py`, message d'erreur utile |
+| Code jugé compliqué : `112233` refusé, bouton « Continuer » à toucher | Gêne | Même essai | Code de 6 chiffres validé tout seul ; seuls `111111` et les suites refusés (D5 révisée) |
+| Après le cadenas de l'accueil, l'écran du code ressemblait à celui de la création | Gêne | Même essai | Écran titré « Coffre verrouillé » |
+| Pas d'endroit pour voir ou donner les autorisations | Gêne | Même essai | Paramètres → Autorisations |
 | La barre de répartition de l'écran Stockage ne s'affichait pas | Mineur | Captures d'écran | Corrigé |
 
 ## 4. Analyse des risques, mise à jour

@@ -22,7 +22,7 @@ Pour chaque ligne, noter **OK** ou décrire le problème (capture d'écran, mod�
 
 | N° | Action | Résultat attendu | Mesure à noter |
 |---|---|---|---|
-| 1 | Créer le coffre avec un code de 6 chiffres | Accueil affiché | Durée entre « Continuer » et l'accueil |
+| 1 | Créer le coffre avec un code de 6 chiffres (`112233` est accepté, `123456` refusé) | Validation toute seule au sixième chiffre, accueil affiché | Durée entre le dernier chiffre de la confirmation et l'accueil |
 | 2 | Verrouiller (cadenas), rouvrir avec le code | Coffre rouvert | Durée de déverrouillage |
 | 3 | Taper 5 fois un faux code | Message « il reste … essais », puis attente de 30 s | |
 | 4 | Activer l'empreinte (Paramètres → Sécurité), verrouiller, rouvrir avec l'empreinte | Coffre rouvert | |
@@ -40,7 +40,8 @@ Pour chaque ligne, noter **OK** ou décrire le problème (capture d'écran, mod�
 | 11 | Ouvrir ce PDF, faire défiler toutes les pages | Affichage fluide | Durée d'ouverture |
 | 12 | Importer une photo de la galerie | Miniature correcte, bien orientée | |
 | 13 | Numériser 3 pages avec le scanner | Contours détectés, PDF de 3 pages dans le coffre | |
-| 14 | Refuser l'accès à l'appareil photo, puis relancer le scanner | Message clair avec lien vers les réglages | |
+| 14 | Android : premier scan juste après l'installation ; iPhone : refuser l'appareil photo, puis relancer le scanner | Android : le scanner s'ouvre (outil de Google, ou appareil photo puis recadrage) ; iPhone : message et bouton « Ouvrir les réglages du téléphone » | |
+| 14 bis | Paramètres → Autorisations : autoriser les notifications, puis « Ouvrir les réglages du téléphone » et revenir | État mis à jour au retour, coffre toujours ouvert | |
 | 15 | Rechercher un document par 3 lettres sans accent | Document trouvé | |
 | 16 | Modifier, mettre en favori, déplacer, supprimer un document | Changements visibles partout | |
 

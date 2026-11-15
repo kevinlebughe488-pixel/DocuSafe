@@ -1,3 +1,4 @@
+import AVFoundation
 import Flutter
 import UIKit
 import UserNotifications
@@ -24,7 +25,10 @@ import UserNotifications
   /// Canal « docusafe/platform » côté iPhone (à vérifier sur iOS) :
   /// - excludeFromBackup : exclut un dossier de la sauvegarde iCloud et de la
   ///   sauvegarde de l'ordinateur (cahier des charges §3.7) ;
-  /// - freeBytes : espace libre pour l'écran Stockage.
+  /// - freeBytes : espace libre pour l'écran Stockage ;
+  /// - openAppSettings : page de DocSafe dans l'application Réglages ;
+  /// - cameraAccess, requestCameraAccess : appareil photo du scanner
+  ///   (VisionKit), pour Paramètres → Autorisations.
   private func registerPlatformChannel(messenger: FlutterBinaryMessenger) {
     let channel = FlutterMethodChannel(name: "docusafe/platform", binaryMessenger: messenger)
     channel.setMethodCallHandler { call, result in
@@ -51,9 +55,29 @@ import UserNotifications
         } else {
           result(nil)
         }
+      case "openAppSettings":
+        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+          result(false)
+          return
+        }
+        UIApplication.shared.open(url, options: [:]) { opened in result(opened) }
+      case "cameraAccess":
+        result(Self.cameraAccess(AVCaptureDevice.authorizationStatus(for: .video)))
+      case "requestCameraAccess":
+        AVCaptureDevice.requestAccess(for: .video) { granted in
+          DispatchQueue.main.async { result(granted ? "granted" : "denied") }
+        }
       default:
         result(FlutterMethodNotImplemented)
       }
+    }
+  }
+
+  private static func cameraAccess(_ status: AVAuthorizationStatus) -> String {
+    switch status {
+    case .authorized: return "granted"
+    case .notDetermined: return "notDetermined"
+    default: return "denied"  // refusé, ou interdit par un contrôle parental
     }
   }
 }

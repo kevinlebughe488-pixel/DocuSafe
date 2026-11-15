@@ -9,7 +9,7 @@
 | 3.1 | Accueil, création du coffre, code PIN, biométrie facultative, confidentialité, sans compte ni Internet, récupération expliquée | Fait |
 | 3.2 | Tableau de bord : nom, nombre de documents, catégories, récents, favoris, échéances, scanner, importation, recherche | Fait |
 | 3.2 | Tableau de bord personnalisable | Plus tard (« évolutions futures ») |
-| 3.3 | Scanner : ML Kit (Android), VisionKit (iPhone), contours, perspective, multipage, aperçu, réorganisation, PDF, repli manuel | Fait, à vérifier sur téléphone |
+| 3.3 | Scanner : ML Kit (Android), VisionKit (iPhone), contours, perspective, multipage, aperçu, réorganisation, PDF, repli manuel | Fait. Repli manuel réparé le 15/11/2026 (autorisation inutile retirée). À vérifier sur téléphone |
 | 3.4 | Importation : fichiers, galerie, PDF, JPEG, PNG, vérification et chiffrement | Fait |
 | 3.4 | « Partager vers DocSafe » sur Android | Fait, à vérifier sur téléphone |
 | 3.4 | Extension de partage iPhone | Plus tard (autorisé) |

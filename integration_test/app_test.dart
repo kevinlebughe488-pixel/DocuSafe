@@ -39,11 +39,13 @@ void main() {
     fail('Toujours affiché après $seconds s : $finder');
   }
 
+  /// Six chiffres : le code est validé tout seul après le dernier.
   Future<void> typePin(WidgetTester tester, String pin) async {
     for (final digit in pin.split('')) {
       await tester.tap(find.widgetWithText(InkWell, digit).last);
       await tester.pump(const Duration(milliseconds: 100));
     }
+    await tester.pump(const Duration(milliseconds: 250));
   }
 
   testWidgets('créer le coffre, verrouiller, rouvrir, profil, aide', (tester) async {
@@ -59,10 +61,8 @@ void main() {
     await tester.tap(find.text('Passer'));
     await waitFor(tester, find.text('Choisissez votre code'));
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await waitFor(tester, find.text('Confirmez votre code'));
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     // Biométrie proposée seulement si le téléphone en a une.
     final ready = find.text('Votre coffre est vide');
     final biometric = find.text('Plus tard');
@@ -77,12 +77,10 @@ void main() {
 
     // Mauvais code refusé, bon code accepté.
     await tester.tap(find.byTooltip('Verrouiller'));
-    await waitFor(tester, find.text('Saisissez votre code'));
+    await waitFor(tester, find.text('Coffre verrouillé'));
     await typePin(tester, '111999');
-    await tester.tap(find.text('Confirmer'));
     await waitFor(tester, find.textContaining('Code incorrect'), seconds: 180);
     await typePin(tester, '204915');
-    await tester.tap(find.text('Confirmer'));
     await waitFor(tester, ready, seconds: 180);
 
     // Profil local, puis salutation sur l'accueil.

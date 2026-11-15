@@ -18,7 +18,7 @@ Parcours révisé le 14/11/2026 (D6 révisée) : la clé de récupération n'est
 | Étape | Ce que voit l'utilisateur |
 |---|---|
 | Onboarding, 4 pages courtes | 1. Bienvenue dans DocSafe. 2. Vos documents restent sur votre téléphone : pas de compte, pas d'Internet. 3. Tout est chiffré et protégé par votre code. 4. Confidentialité : lien vers la politique et les conditions. Bouton « Créer mon coffre-fort ». |
-| Création du PIN | Saisie de 6 chiffres ou plus, puis confirmation. Un code trop simple est refusé avec une explication. Le coffre est créé dès la confirmation ; la clé de récupération est générée en silence. |
+| Création du PIN | Saisie de 6 chiffres, validée toute seule dès le sixième (pas de bouton), puis confirmation de la même façon. Seuls six chiffres identiques (`111111`) et les suites (`123456`) sont refusés, avec une explication. Le coffre est créé dès la confirmation ; la clé de récupération est générée en silence. |
 | Biométrie | Proposée seulement si le téléphone la permet : « Activer Face ID » / « Activer l'empreinte », ou « Plus tard ». |
 | Fin | Tableau de bord vide avec deux actions bien visibles : « Scanner un document » et « Importer un fichier ». Un bandeau « Votre clé de récupération n'est pas encore notée… » avec le bouton « Noter ma clé » reste affiché tant que la clé n'a pas été notée. |
 | Noter ma clé | La clé s'affiche une seule fois. Texte clair : « Sans votre code et sans cette clé, vos documents seront définitivement perdus. Personne ne pourra les récupérer. » Bouton « Copier ». Case à cocher « J'ai conservé ma clé en lieu sûr » obligatoire pour terminer. Le bandeau disparaît ensuite. |
@@ -37,6 +37,8 @@ Cas particuliers :
 Splash (1) → Déverrouillage (4) → dernier écran consulté, ou Tableau de bord (5)
 ```
 
+- Écran titré « Coffre verrouillé », sous-titre « Saisissez votre code pour l'ouvrir. » : il se distingue de la création du code. Il s'affiche aussi après le cadenas de l'accueil (verrouillage volontaire).
+- Le code est validé tout seul dès le sixième chiffre. Coffre créé avant le 15/11/2026 avec un code plus long : bouton « Confirmer ».
 - Biométrie activée : la fenêtre du système s'ouvre toute seule. En cas d'échec ou d'annulation, le clavier PIN est disponible.
 - PIN faux : message, nombre d'essais restants. Après 5 échecs : attente affichée avec un décompte.
 - **« Code oublié ? »** → saisie de la clé de récupération → choix d'un nouveau PIN → coffre ouvert.
@@ -58,7 +60,7 @@ Scanner (8) → scanner du système → Prévisualisation (9) → Informations �
 | Informations | Nom (prérempli : « Scan du 13/11/2026 »), catégorie. Facultatif : type, date d'expiration, tags. |
 | Enregistrement | Barre de progression : création du PDF, chiffrement. Puis ouverture de la fiche. |
 
-Cas particuliers : annulation à tout moment (rien n'est conservé) ; permission de l'appareil photo refusée (explication et lien vers les réglages) ; espace de stockage insuffisant (message clair, rien n'est perdu tant que la prévisualisation est ouverte).
+Cas particuliers : annulation à tout moment (rien n'est conservé) ; appareil photo refusé sur iPhone (explication et bouton « Ouvrir les réglages du téléphone ») ; sur Android, aucune autorisation, mais l'outil de Google peut demander une minute de préparation à la première utilisation (message « Réessayez dans une minute ») ; sans services Google Play, l'appareil photo du téléphone s'ouvre, puis recadrage à la main ; espace de stockage insuffisant (message clair, rien n'est perdu tant que la prévisualisation est ouverte).
 
 ---
 
@@ -176,6 +178,7 @@ L'écran de confirmation affiche le nom du document et indique que la suppressio
 | Profil local | Nom affiché sur le tableau de bord (facultatif, stocké uniquement sur le téléphone) |
 | Sécurité (17) | Changer le PIN · Biométrie · Délai de verrouillage · Captures d'écran · Nouvelle clé de récupération · Verrouiller maintenant · Effacer le coffre |
 | Notifications | Voir §9 |
+| Autorisations | État des notifications (toucher : autoriser, ou ouvrir les réglages) et de la numérisation : « aucune autorisation nécessaire » sur Android, appareil photo sur iPhone. Bouton « Ouvrir les réglages du téléphone ». |
 | Stockage (19) | Espace occupé, nombre de documents, répartition par catégorie, nettoyage des fichiers temporaires |
 | Exportation des données | Exporter tous les documents en clair vers un dossier choisi (authentification et avertissement) |
 | Aide et assistance | Réponses aux questions courantes, lisibles sans Internet (code oublié, changement de téléphone, rappels, scanner, biométrie, partage, effacement). Contact de l'assistance affiché seulement quand une adresse est configurée. |

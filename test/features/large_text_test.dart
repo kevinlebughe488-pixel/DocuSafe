@@ -57,7 +57,7 @@ void main() {
       ),
     );
     await settle(tester, rounds: 8);
-    expect(find.text('Saisissez votre code'), findsOneWidget);
+    expect(find.text('Coffre verrouillé'), findsOneWidget);
     final container = ProviderScope.containerOf(tester.element(find.byType(Scaffold).first));
     late String id;
     await tester.runAsync(() async {

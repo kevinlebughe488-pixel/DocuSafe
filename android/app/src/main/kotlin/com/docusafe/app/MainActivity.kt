@@ -1,6 +1,7 @@
 package com.docusafe.app
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.os.Looper
 import android.os.StatFs
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.provider.Settings
 import android.view.WindowManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -105,6 +107,9 @@ class MainActivity : FlutterFragmentActivity() {
                 when (call.method) {
                     "androidSdkInt" -> result.success(Build.VERSION.SDK_INT)
                     "freeBytes" -> result.success(StatFs(filesDir.path).availableBytes)
+                    "openAppSettings" -> result.success(
+                        openAppSettings(call.argument<Boolean>("notifications") == true),
+                    )
                     "saveFile" -> saveFile(
                         call.argument<String>("path"),
                         call.argument<String>("name"),
@@ -114,6 +119,26 @@ class MainActivity : FlutterFragmentActivity() {
                     else -> result.notImplemented()
                 }
             }
+    }
+
+    /**
+     * Page de DocSafe dans les réglages du téléphone (Paramètres →
+     * Autorisations). [notifications] : directement la page des
+     * notifications (Android 8 et plus). Réponse : true si ouverte.
+     */
+    private fun openAppSettings(notifications: Boolean): Boolean {
+        val intent = if (notifications && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        } else {
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null))
+        }
+        return try {
+            startActivity(intent)
+            true
+        } catch (e: ActivityNotFoundException) {
+            false
+        }
     }
 
     /**

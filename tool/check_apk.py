@@ -35,6 +35,9 @@ FORBIDDEN = {
     "android.permission.RECORD_AUDIO",
     "android.permission.SCHEDULE_EXACT_ALARM",
     "android.permission.USE_EXACT_ALARM",
+    # Déclarée sans être accordée, elle empêche le scanner de secours d'ouvrir
+    # l'application Appareil photo (SecurityException) : aucune n'est utile.
+    "android.permission.CAMERA",
 }
 MIN_TARGET_SDK = 35
 

@@ -33,6 +33,7 @@ import '../../features/settings/presentation/about_screen.dart';
 import '../../features/settings/presentation/change_pin_screen.dart';
 import '../../features/settings/presentation/help/help_screen.dart';
 import '../../features/settings/presentation/notification_settings_screen.dart';
+import '../../features/settings/presentation/permissions/permissions_screen.dart';
 import '../../features/settings/presentation/recovery_key_screen.dart';
 import '../../features/settings/presentation/security_settings_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
@@ -201,6 +202,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.settingsHelp,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const HelpScreen(),
+      ),
+      GoRoute(
+        path: Routes.settingsPermissions,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const PermissionsScreen(),
       ),
       GoRoute(
         path: Routes.restore,

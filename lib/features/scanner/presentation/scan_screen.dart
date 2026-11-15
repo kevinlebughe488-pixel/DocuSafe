@@ -7,10 +7,12 @@ import 'package:material_ui/material_ui.dart';
 import '../../../app/l10n/generated/app_localizations.dart';
 import '../../../app/router/routes.dart';
 import '../../../app/theme/app_spacing.dart';
+import '../../../core/errors/app_exception.dart';
 import '../../../core/utils/error_messages.dart';
 import '../../../core/widgets/bottom_actions.dart';
 import '../../../core/widgets/illustration_circle.dart';
 import '../../documents/presentation/import/import_view_model.dart';
+import '../../settings/presentation/permissions/open_phone_settings.dart';
 import 'scan_view_model.dart';
 
 /// Onglet Scanner (écran 8) : « Numériser » ouvre le scanner du système ;
@@ -63,6 +65,16 @@ final class ScanScreen extends ConsumerWidget {
                 ErrorMessages.of(l10n, state.error!),
                 textAlign: TextAlign.center,
                 style: TextStyle(color: theme.colorScheme.error),
+              ),
+            ),
+          // iPhone : appareil photo refusé, accès direct aux réglages.
+          if (state.error case ScannerException(cameraDenied: true))
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.md),
+              child: TextButton.icon(
+                onPressed: () => openPhoneSettings(ref),
+                icon: const Icon(Icons.open_in_new_rounded),
+                label: Text(l10n.permissionsOpenSettings),
               ),
             ),
           LargeFilledButton(

@@ -40,10 +40,8 @@ void main() {
     await tester.tap(find.text('Passer'));
     await settle(tester, rounds: 5);
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await tester.pump();
     await typePin(tester, '204915');
-    await tester.tap(find.text('Continuer'));
     await settle(tester, rounds: 40);
     expect(find.text('Votre coffre est vide'), findsOneWidget);
   }

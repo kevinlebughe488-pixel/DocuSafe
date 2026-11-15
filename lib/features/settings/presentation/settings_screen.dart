@@ -11,7 +11,8 @@ import 'about_view_model.dart';
 import 'profile_name.dart';
 import 'storage/storage_screen.dart';
 
-/// Paramètres (écran 18) : profil local, sécurité, notifications, catégories, stockage,
+/// Paramètres (écran 18) : profil local, sécurité, notifications,
+/// autorisations, catégories, stockage,
 /// export des données, sauvegarde, textes légaux, aide et assistance, à
 /// propos.
 final class SettingsScreen extends ConsumerWidget {
@@ -43,6 +44,12 @@ final class SettingsScreen extends ConsumerWidget {
             icon: Icons.notifications_none_rounded,
             title: l10n.settingsNotifications,
             onTap: () => context.push(Routes.settingsNotifications),
+          ),
+          SettingsTile(
+            icon: Icons.verified_user_outlined,
+            title: l10n.permissionsTitle,
+            subtitle: l10n.permissionsSubtitle,
+            onTap: () => context.push(Routes.settingsPermissions),
           ),
           SettingsTile(
             icon: Icons.category_outlined,

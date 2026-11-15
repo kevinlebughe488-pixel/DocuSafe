@@ -89,8 +89,9 @@ Le stockage sécurisé est fourni par `flutter_secure_storage`. Sur Android, les
 
 | Règle | Valeur |
 |---|---|
-| Longueur | 6 à 12 chiffres |
-| Codes refusés | Suites et répétitions évidentes (`000000`, `123456`, `111111`…) |
+| Longueur | **6 chiffres exactement**, validés tout seuls dès le sixième (D5 révisée le 15/11/2026). Coffres créés avant : 6 à 12 chiffres, bouton « Confirmer ». |
+| Codes refusés | Six chiffres identiques (`000000`, `111111`…) et suites (`123456`, `654321`…). Les autres sont acceptés (`112233`, `121212`…). |
+| Longueur enregistrée | La serrure du code note la longueur (`len`) pour la validation automatique. Information non secrète : tous les nouveaux codes ont 6 chiffres. Absente des anciennes serrures (bouton). |
 | Saisie | Clavier numérique dessiné par l'application (pas le clavier du système), chiffres masqués |
 | Stockage | **Le PIN n'est jamais stocké**, ni son empreinte |
 | Vérification | On tente d'ouvrir la serrure avec la clé calculée à partir du PIN. Si le PIN est faux, l'ouverture échoue. |
@@ -304,14 +305,16 @@ Code : `lib/core/backup/backup_service.dart`, `VaultService.restore`, écrans da
 
 | Permission | Pourquoi | Moment de la demande |
 |---|---|---|
-| `CAMERA` | Scanner de secours (recadrage manuel) quand le scanner ML Kit n'est pas disponible. Le scanner ML Kit lui-même n'en a pas besoin. | Au premier scan concerné |
+| `CAMERA` | **Aucune** (retirée le 15/11/2026). Le scanner ML Kit tourne dans les services Google Play ; le scanner de secours passe par l'application Appareil photo du téléphone. Déclarée sans être accordée, elle empêchait ce scanner de s'ouvrir (Android refuse alors l'appareil photo du système). Retirée explicitement dans le manifeste, contrôlée par `tool/check_apk.py`. | — |
 | `POST_NOTIFICATIONS` (Android 13+) | Rappels d'échéance | À la première date d'expiration |
 | `RECEIVE_BOOT_COMPLETED` | Reprogrammer les rappels après un redémarrage | Automatique |
 | `USE_BIOMETRIC` | Déverrouillage biométrique | Automatique |
 | `VIBRATE` | Ajoutée par le paquet de notifications | Automatique |
 | `INTERNET` | **Retirée de la version publiée** | — |
 
-**Non demandées :** accès au stockage ou aux photos (les sélecteurs du système donnent accès au seul fichier choisi), localisation, contacts, microphone, alarmes exactes.
+**Non demandées :** appareil photo, accès au stockage ou aux photos (les sélecteurs du système donnent accès au seul fichier choisi), localisation, contacts, microphone, alarmes exactes.
+
+**Paramètres → Autorisations** montre l'état des notifications et, sur iPhone, de l'appareil photo, avec un bouton qui ouvre la page de DocSafe dans les réglages du téléphone. Ce passage par les réglages compte comme une opération externe (§10) : pas de verrouillage immédiat, mais verrouillage au-delà de 5 minutes d'absence. Sur iPhone, si l'appareil photo est refusé, l'écran du scanner propose le même bouton.
 
 ### iOS (à vérifier sur iOS)
 

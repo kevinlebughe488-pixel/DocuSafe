@@ -122,11 +122,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get setupPinTitle => 'Choisissez votre code';
 
   @override
-  String get setupPinBody =>
-      '6 chiffres ou plus. Ce code protège tous vos documents.';
+  String get setupPinBody => '6 chiffres. Ce code protège tous vos documents.';
 
   @override
-  String get setupPinHint => 'Évitez les suites simples comme 123456.';
+  String get setupPinHint => 'Évitez 123456 ou 111111.';
 
   @override
   String get setupPinConfirmTitle => 'Confirmez votre code';
@@ -135,11 +134,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get setupPinConfirmBody => 'Saisissez le même code une seconde fois.';
 
   @override
-  String get setupPinTooSimple =>
-      'Ce code est trop simple. Choisissez-en un autre.';
+  String get setupPinTooSimple => 'Code trop simple : évitez 123456 ou 111111.';
 
   @override
-  String get setupPinTooShort => 'Le code doit avoir au moins 6 chiffres.';
+  String get setupPinTooShort => 'Le code doit avoir 6 chiffres.';
 
   @override
   String get setupPinMismatch =>
@@ -219,7 +217,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get biometricGenericTitle => 'Déverrouillage biométrique';
 
   @override
-  String get unlockTitle => 'Saisissez votre code';
+  String get unlockTitle => 'Coffre verrouillé';
+
+  @override
+  String get unlockBody => 'Saisissez votre code pour l\'ouvrir.';
 
   @override
   String get unlockBiometricReason => 'Déverrouiller DocSafe';
@@ -296,8 +297,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get recoveryNewPinTitle => 'Choisissez un nouveau code';
 
   @override
-  String get recoveryNewPinBody =>
-      '6 chiffres ou plus. Il remplace l\'ancien code.';
+  String get recoveryNewPinBody => '6 chiffres. Il remplace l\'ancien code.';
 
   @override
   String durationSeconds(int count) {
@@ -459,7 +459,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get changePinTitle => 'Nouveau code';
 
   @override
-  String get changePinBody => '6 chiffres ou plus. Il remplace l\'ancien code.';
+  String get changePinBody => '6 chiffres. Il remplace l\'ancien code.';
 
   @override
   String get reauthTitle => 'Confirmez votre identité';
@@ -900,7 +900,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get helpScannerA =>
-      'Autorisez l\'appareil photo pour DocSafe dans les réglages du téléphone. Sans les services Google Play, le scanner passe en mode simple : prise de photo puis recadrage à la main.';
+      'À la première utilisation, le téléphone prépare l\'outil de numérisation de Google : patientez une minute, puis réessayez. Sans les services Google Play, DocSafe ouvre l\'appareil photo du téléphone, puis vous recadrez la photo à la main. Sur iPhone, autorisez l\'appareil photo dans Paramètres, puis Autorisations.';
 
   @override
   String get helpBiometricQ => 'L\'empreinte ou le visage ne fonctionne plus';
@@ -1340,10 +1340,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get scanTipContrast => 'Fond d\'une couleur différente';
 
   @override
-  String get scanFailed =>
-      'Le scanner n\'a pas pu s\'ouvrir. Vérifiez que DocSafe a accès à l\'appareil photo dans les réglages du téléphone.';
-
-  @override
   String get scanPreviewTitle => 'Aperçu du scan';
 
   @override
@@ -1637,6 +1633,48 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsNotifications => 'Notifications';
 
   @override
+  String get permissionsTitle => 'Autorisations';
+
+  @override
+  String get permissionsSubtitle => 'Numérisation, notifications';
+
+  @override
+  String get permissionsIntro =>
+      'DocSafe ne demande que ce qui lui est utile. Rien ne quitte votre téléphone.';
+
+  @override
+  String get permissionsScanTitle => 'Numérisation';
+
+  @override
+  String get permissionsScanNotNeeded =>
+      'Aucune autorisation nécessaire : l\'outil de numérisation du téléphone prend la photo.';
+
+  @override
+  String get permissionsCameraGranted => 'Appareil photo autorisé.';
+
+  @override
+  String get permissionsCameraDenied =>
+      'Appareil photo refusé. Touchez pour ouvrir les réglages du téléphone.';
+
+  @override
+  String get permissionsCameraAsk =>
+      'Touchez pour autoriser l\'appareil photo.';
+
+  @override
+  String get permissionsNotificationsTitle => 'Notifications';
+
+  @override
+  String get permissionsNotificationsGranted =>
+      'Autorisées, pour les rappels d\'échéance.';
+
+  @override
+  String get permissionsNotificationsDenied =>
+      'Désactivées : aucun rappel ne s\'affichera. Touchez pour les autoriser.';
+
+  @override
+  String get permissionsOpenSettings => 'Ouvrir les réglages du téléphone';
+
+  @override
   String get notifSettingsEnabled => 'Rappels d\'échéance';
 
   @override
@@ -1705,7 +1743,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get errorScanner =>
-      'Le scanner n\'a pas pu s\'ouvrir. Vérifiez l\'accès à l\'appareil photo dans les réglages du téléphone.';
+      'Le scanner n\'a pas pu s\'ouvrir. Réessayez dans une minute : à la première utilisation, le téléphone prépare l\'outil de numérisation.';
+
+  @override
+  String get errorScannerCamera =>
+      'DocSafe n\'a pas accès à l\'appareil photo. Autorisez-le dans les réglages du téléphone.';
 
   @override
   String get errorUnexpected =>

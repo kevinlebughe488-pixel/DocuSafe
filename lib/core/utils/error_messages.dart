@@ -26,6 +26,7 @@ abstract final class ErrorMessages {
     StorageException(code: 'storage.insufficient') => l10n.storageInsufficient,
     StorageException() => l10n.errorStorage,
     VaultLockedException() => l10n.errorVaultLocked,
+    ScannerException(cameraDenied: true) => l10n.errorScannerCamera,
     ScannerException() => l10n.errorScanner,
     _ => l10n.errorUnexpected,
   };
