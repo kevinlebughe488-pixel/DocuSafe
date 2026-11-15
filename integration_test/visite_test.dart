@@ -121,7 +121,7 @@ void main() {
     final ingest = container.read(ingestDocumentProvider);
     final today = DateTime.now();
     final samples = [
-      ('Passeport', 'default-identity', const Color(0xFF1F5FAF), today.add(const Duration(days: 40))),
+      ('Passeport', 'default-identity', const Color(0xFF1F5FAF), today.add(const Duration(days: 21))),
       ('Contrat de bail', 'default-housing', const Color(0xFF2E7D6B), null),
       ('Diplôme de licence', 'default-education', const Color(0xFF8A5A9E), null),
     ];
@@ -145,7 +145,8 @@ void main() {
         .read(databaseProvider)
         .settingsDao
         .writeConfig(VaultConfigKeys.profileName, 'Awa');
-    await waitFor(tester, find.text('Passeport'));
+    // L'accueil montre le nombre de documents et les échéances proches.
+    await waitFor(tester, find.text('3 documents'));
     await capture(tester, '05-accueil');
 
     // Cadenas : le coffre se ferme, puis le code le rouvre.
@@ -153,7 +154,7 @@ void main() {
     await waitFor(tester, find.text('Coffre verrouillé'));
     await capture(tester, '06-coffre-verrouille');
     await typePin(tester, '204915');
-    await waitFor(tester, find.text('Passeport'), seconds: 180);
+    await waitFor(tester, find.text('3 documents'), seconds: 180);
 
     final router = container.read(routerProvider);
     Future<void> visit(String route, Finder expected, String name) async {
