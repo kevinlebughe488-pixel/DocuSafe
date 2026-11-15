@@ -24,9 +24,6 @@ Future<void> main() async {
     return true;
   };
 
-  // AES-GCM passe par les API natives d'Android et d'iOS quand elles
-  // existent : le paquet cryptography_flutter s'active tout seul.
-
   final paths = await VaultPaths.resolve();
   AppLog.event('app.started');
 

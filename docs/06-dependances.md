@@ -40,8 +40,8 @@ Les versions seront figées dans `pubspec.lock` au moment de l'installation (pha
 
 | Paquet | Version | Rôle | Licence | Éditeur |
 |---|---|---|---|---|
-| `cryptography` | 2.9.0 | AES-256-GCM, HKDF, Argon2id | Apache-2.0 | dint.dev |
-| `cryptography_flutter` | 2.3.4 | Accélération native de `cryptography` | Apache-2.0 | dint.dev |
+| `cryptography` | 2.9.0 | AES-256-GCM, HKDF, Argon2id, **en Dart pur** (classes `Dart…` nommées explicitement) | Apache-2.0 | dint.dev |
+| ~~`cryptography_flutter`~~ | retiré le 15/11/2026 | Accélération native de `cryptography`. Son calcul HMAC natif échouait sur Android (exception de la plateforme) et bloquait la création du coffre ; il n'est plus utilisé. | — | — |
 | `crypto` | 3.0.8 | Empreinte SHA-256 calculée au fil de la lecture | BSD-3 | dart.dev |
 | `flutter_secure_storage` | 11.2.0 | Android Keystore et Trousseau iOS, zone protégée par biométrie | BSD-3 | steenbakker.dev |
 | `local_auth` | 3.0.2 | Détection de la biométrie, confirmation des opérations sensibles | BSD-3 | flutter.dev |
@@ -135,7 +135,7 @@ Composants natifs embarqués : SQLite (domaine public), SQLite3MultipleCiphers (
 
 | Paquet | Constat | Mesure |
 |---|---|---|
-| `cryptography`, `cryptography_flutter` | Dernière version en novembre 2025 : paquets stables mais peu actifs. La partie Android utilise une configuration Gradle ancienne. `FlutterCryptography.enable()` est déprécié : le paquet s'active seul. | Chiffrement isolé derrière l'interface `CryptoEngine` (phase 3 : fait). Mesure de vitesse sur téléphone encore à faire (P4). **Plan B : `webcrypto`** (éditeur google.dev, mis à jour le 11/11/2026), sans Argon2id mais avec PBKDF2 natif. |
+| `cryptography` | Dernière version en novembre 2025 : paquet stable mais peu actif. Son complément natif `cryptography_flutter` a été retiré le 15/11/2026 (calcul HMAC natif en échec sur Android). Tout est en Dart pur. | Chiffrement isolé derrière l'interface `CryptoEngine` (phase 3 : fait). Mesure de vitesse sur téléphone encore à faire (P4). **Plan B : `webcrypto`** (éditeur google.dev, mis à jour le 11/11/2026), sans Argon2id mais avec PBKDF2 natif. |
 | `sqlite3` | Télécharge un binaire précompilé pendant la compilation (contrôlé par empreinte SHA-256). | **La première compilation exige une connexion Internet.** |
 | `flutter_local_notifications` | Exige `compileSdk` 37 et l'option Gradle « desugaring ». | Configuration Android en phase 3. La plateforme Android 37 est déjà installée sur le PC. |
 | `cunning_document_scanner` | Déclare ses propres règles de sauvegarde Android, qui entrent en conflit avec celles de DocuSafe. Écrit ses images dans un dossier externe privé. | Attribut `tools:replace` dans le manifeste. Purge du dossier après chaque scan. |

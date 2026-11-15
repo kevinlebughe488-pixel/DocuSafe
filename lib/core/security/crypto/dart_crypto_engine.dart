@@ -2,23 +2,28 @@ import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:cryptography/cryptography.dart' hide SecureRandom;
-import 'package:cryptography/dart.dart' show DartArgon2id;
+import 'package:cryptography/dart.dart'
+    show DartAesGcm, DartArgon2id, DartHkdf, DartHmac, DartSha256;
 
 import '../../errors/app_exception.dart';
 import '../../utils/secure_random.dart';
 import 'argon2_params.dart';
 import 'crypto_engine.dart';
 
-/// Implémentation de [CryptoEngine] avec le paquet `cryptography`.
+/// Implémentation de [CryptoEngine] avec le paquet `cryptography`, **en Dart
+/// pur uniquement**.
 ///
-/// Dans l'application, `FlutterCryptography.enable()` (paquet
-/// `cryptography_flutter`) est appelé au démarrage : AES-GCM passe alors par
-/// les API natives d'Android et d'iOS quand elles existent. Argon2id est
-/// calculé en Dart pur dans un isolate séparé.
+/// Les classes « Dart » sont nommées explicitement : le comportement est
+/// identique dans les tests, dans les isolates et sur le téléphone. (Le paquet
+/// `cryptography_flutter`, qui remplaçait certains calculs par du code natif,
+/// faisait échouer la dérivation de clés sur Android : il a été retiré le
+/// 15/11/2026, voir docs/08-tests-et-risques.md §3.) Les calculs longs
+/// (Argon2id, fichiers) s'exécutent dans des isolates.
 final class DartCryptoEngine implements CryptoEngine {
   const DartCryptoEngine();
 
-  static final AesGcm _aesGcm = AesGcm.with256bits();
+  static final AesGcm _aesGcm = DartAesGcm.with256bits();
+  static const Hmac _hmacSha256 = DartHmac(DartSha256());
 
   @override
   Uint8List randomBytes(int length) => SecureRandom.bytes(length);
@@ -79,7 +84,7 @@ final class DartCryptoEngine implements CryptoEngine {
     required Uint8List info,
     int length = CryptoEngine.keyLength,
   }) async {
-    final hkdf = Hkdf(hmac: Hmac.sha256(), outputLength: length);
+    final hkdf = DartHkdf(hmac: _hmacSha256, outputLength: length);
     final derived = await hkdf.deriveKey(
       secretKey: SecretKey(inputKey),
       nonce: salt,

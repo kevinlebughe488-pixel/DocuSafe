@@ -89,6 +89,37 @@ final class VaultPaths {
     }
   }
 
+  /// Contrôle de cohérence (docs/03-modele-de-donnees.md §5) : supprime les
+  /// fichiers chiffrés et les miniatures qu'aucun document ne référence
+  /// plus (suppression ou enregistrement interrompu). Retourne le nombre de
+  /// fichiers supprimés.
+  ///
+  /// [referenced] : chemins relatifs à [vaultDir] encore utilisés.
+  ///
+  /// Parcours synchrone : quelques millisecondes même pour des milliers de
+  /// fichiers, et aucune dépendance au temps simulé des tests d'écrans.
+  int removeOrphans(Set<String> referenced) {
+    var removed = 0;
+    for (final dir in [filesDir, thumbsDir]) {
+      if (!dir.existsSync()) {
+        continue;
+      }
+      for (final entity in dir.listSync(recursive: true)) {
+        if (entity is! File) {
+          continue;
+        }
+        final relative = p
+            .relative(entity.path, from: vaultDir.path)
+            .replaceAll(r'\', '/');
+        if (!referenced.contains(relative)) {
+          entity.deleteSync();
+          removed++;
+        }
+      }
+    }
+    return removed;
+  }
+
   /// Efface tout le coffre (base, fichiers, miniatures, serrure, temporaires).
   Future<void> deleteEverything() async {
     for (final dir in [vaultDir, secureTempDir]) {

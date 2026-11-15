@@ -7,7 +7,7 @@ Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera te
 | P1 | Le PC de développement est infecté par un virus (« Expiro ») | **Bloquant** | Ouvert depuis le 13/11/2026 |
 | P2 | Flutter est installé mais ne peut pas s'exécuter | Bloquant (conséquence de P1) | Ouvert depuis le 13/11/2026 |
 | P3 | La session en ligne ne peut pas compiler d'APK Android | Gênant | Ouvert depuis le 13/11/2026 |
-| P4 | Les phases 3 et 4 (lots a et b) n'ont jamais été lancées sur un téléphone | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
+| P4 | L'application n'a jamais été lancée sur un vrai téléphone (seulement sur le téléphone simulé de GitHub et sur Appetize) | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
 | P5 | Miniatures et lecture des PDF (PDFium), scanner du système (ML Kit, VisionKit) non vérifiés hors des tests | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
 | P6 | Partage, « Enregistrer sous », sauvegarde et restauration non vérifiés sur téléphone | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
 

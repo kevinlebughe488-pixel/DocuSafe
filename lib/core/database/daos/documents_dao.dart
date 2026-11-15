@@ -60,6 +60,21 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
             ..limit(1))
           .getSingleOrNull();
 
+  /// Identifiant et chemin du fichier chiffré de chaque document (contrôle
+  /// de cohérence au déverrouillage).
+  Future<List<(String id, String path)>> allFileReferences() {
+    final query = selectOnly(documents)
+      ..addColumns([documents.id, documents.encryptedFilePath]);
+    return query
+        .map(
+          (r) => (
+            r.read(documents.id)!,
+            r.read(documents.encryptedFilePath)!,
+          ),
+        )
+        .get();
+  }
+
   /// Tous les documents, du plus récent au plus ancien.
   Future<List<DocumentRow>> getAll() => (select(
     documents,

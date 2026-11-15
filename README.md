@@ -15,8 +15,8 @@ Android en priorité (MVP), puis iPhone avec le même code.
 | 3 – Socle | Projet Flutter, chiffrement, base de données, authentification | Validée le 14/11/2026 |
 | 4 – Fonctionnel, lot a | Importation, documents (liste, fiche, lecture, modification, favoris, suppression), catégories, navigation, paramètres | Validé le 14/11/2026 |
 | 4 – Fonctionnel, lot b | Scanner (aperçu, pages, PDF), recherche avec filtres | Validé le 14/11/2026 |
-| 4 – Fonctionnel, lot c | Échéances et notifications (fait) · partage, export (fait) · sauvegarde, stockage (fait) | **En cours** |
-| 5 – Sécurité et optimisation | Tests, corrections, optimisation | À venir |
+| 4 – Fonctionnel, lot c | Échéances et notifications · partage, export · sauvegarde, stockage · profil local | Terminé le 15/11/2026 |
+| 5 – Sécurité et optimisation | Tests de sécurité, corrections, analyse des risques, optimisation ([docs/08-tests-et-risques.md](docs/08-tests-et-risques.md)) | **En cours** depuis le 15/11/2026 |
 | 6 – Publication | Builds, fiches des magasins, documents légaux | À venir |
 
 ## Voir l'application sur un téléphone

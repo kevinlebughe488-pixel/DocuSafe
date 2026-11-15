@@ -15,7 +15,7 @@ Le document de référence est [docs/cahier-des-charges.md](docs/cahier-des-char
 - Tenir à jour le tableau d'avancement de [README.md](README.md) et [docs/problemes-connus.md](docs/problemes-connus.md).
 - Chaque session en ligne travaille sur sa propre branche : rappeler au développeur de créer puis de fusionner la pull request.
 
-## Avancement au 13/11/2026
+## Avancement au 15/11/2026
 
 | Phase | État |
 |---|---|
@@ -24,8 +24,9 @@ Le document de référence est [docs/cahier-des-charges.md](docs/cahier-des-char
 | 3 – Socle : projet Flutter, chiffrement, base de données, authentification | Validée le 14/11/2026 |
 | 4 – lot a : importation, documents, catégories, navigation, paramètres | Validé le 14/11/2026 |
 | 4 – lot b : scanner, recherche | Validé le 14/11/2026 |
-| 4 – lot c : échéances et notifications (fait), partage et export (fait), sauvegarde et stockage (fait) | **En cours** |
-| 5, 6 | À venir |
+| 4 – lot c : échéances et notifications, partage et export, sauvegarde et stockage, profil local | Terminé le 15/11/2026 (le développeur a demandé d'enchaîner) |
+| 5 – Sécurité et optimisation : tests de sécurité, corrections, analyse des risques | **En cours** |
+| 6 | À venir |
 
 Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session en ligne, lancer d'abord `bash tool/setup_cloud.sh` puis `export PATH="/home/user/sdk/flutter/bin:$PATH"`.
 
@@ -40,6 +41,7 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 | Parcours écran par écran | [docs/05-parcours-utilisateurs.md](docs/05-parcours-utilisateurs.md) |
 | Paquets retenus et versions | [docs/06-dependances.md](docs/06-dependances.md) |
 | Couleurs exactes, typographie, composants | [docs/07-design.md](docs/07-design.md) et [docs/maquettes/index.html](docs/maquettes/index.html) |
+| Matrice de tests, défauts corrigés, risques à jour | [docs/08-tests-et-risques.md](docs/08-tests-et-risques.md) |
 
 ## Choix structurants
 
@@ -49,12 +51,15 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 - Riverpod sans génération de code, go_router, drift.
 - Base entièrement chiffrée avec **SQLite3MultipleCiphers**, activé par les hooks du paquet `sqlite3` dans `pubspec.yaml` (`hooks` → `user_defines` → `sqlite3` → `source: sqlite3mc`). Ne pas utiliser `sqlcipher_flutter_libs`, `sqlite3_flutter_libs` ni `drift_flutter`.
 - Scanner : `cunning_document_scanner` (ML Kit sur Android, VisionKit sur iOS, repli intégré).
+- Chiffrement **en Dart pur** (`DartAesGcm`, `DartHkdf`, `DartHmac`, `DartArgon2id` nommés explicitement dans `DartCryptoEngine`). Ne pas réintroduire `cryptography_flutter` : son HMAC natif fait échouer la création du coffre sur Android.
 - Fichiers chiffrés en AES-256-GCM par blocs de 1 Mo (format `DSF1`). Code PIN de 6 chiffres minimum dérivé avec Argon2id. Clé de récupération créée en silence, proposée par un rappel sur l'accueil (D6 révisée le 14/11/2026). Biométrie liée au Keystore à partir d'Android 9 ; mots « Face ID » / « Touch ID » sur iPhone.
 - Aucune permission `INTERNET` dans l'application publiée. Notifications au texte générique, alarmes inexactes.
 - Sauvegarde chiffrée manuelle incluse dans le MVP.
 - Textes en fichiers ARB (français seul) dans `lib/app/l10n/app_fr.arb`, classe générée `AppLocalizations` (régénérée par `flutter pub get`). Identifiants de code en anglais ; commentaires et documentation en français.
 - Après toute modification des tables drift : `dart run build_runner build`.
 - Tests de widgets : utiliser `test/support/test_app.dart` (stockage sécurisé en mémoire, base ouverte dans l'isolate du test, Argon2id léger). Toute entrée-sortie réelle dans le corps d'un test (copie de fichier, création de dossier) doit être faite dans `tester.runAsync`, sinon le test se fige. Ne pas utiliser `pumpAndSettle` (animations sans fin) : utiliser `settle()`. Pour ajouter des documents dans un test de widgets, créer et ouvrir le coffre hors de l'interface (`tester.runAsync` + `unlockWithPin`, voir `test/features/deadlines_flow_test.dart`) : une base ouverte par l'interface du test se bloque avec les isolates. Dans le code appelé depuis l'interface, lire la base avec des requêtes simples (`get()`) et non `watch(...).first`, qui se fige dans les tests. Revenir en arrière avec `routerProvider.pop()` (`pageBack` ne reconnaît pas le bouton de `material_ui`).
+- Écrans avec le clavier du code : tester aussi en petit écran (`useSmallPhoneSize`, 320 × 640 points). Ne jamais utiliser `ref` dans `dispose()` : lire le service dans un champ `late final` avant.
+- Une fermeture envoyée à `Isolate.run` depuis une méthode qui a la base ou la session à portée doit être créée dans une fonction de premier niveau (sinon la base est capturée et l'envoi échoue).
 - Tout ajout de document passe par `IngestDocument` (`lib/core/documents/`) : ne jamais écrire un fichier dans le coffre autrement. Le scanner assemble ses pages en PDF (`PdfBuilder`) puis rejoint l'importation (`ImportViewModel.addScannedPdf`) ; ses images sont copiées dans `secure_tmp/` et son dossier est vidé aussitôt (`ScannerService.cleanCache`). Le lecteur PDF, les sélecteurs et le partage sont derrière des interfaces (`ThumbnailService`, `FilePickerService`, `ShareService`) avec des versions simulées pour les tests.
 - Couleurs : recopier les valeurs de `docs/07-design.md`, ne pas les recalculer.
 - Versions des paquets vérifiées le 13/11/2026 : les revérifier sur pub.dev avant de les ajouter.
@@ -70,7 +75,7 @@ Le code Flutter existe (`lib/`, `test/`, `android/`, `ios/`). Dans une session e
 
 - **PC du développeur : infecté par un virus (Expiro) depuis le 13/11/2026.** Flutter y est inutilisable tant que le PC n'est pas nettoyé. Ne jamais conseiller de désactiver Microsoft Defender, d'ajouter une exclusion ou de restaurer un fichier signalé. Voir [docs/problemes-connus.md](docs/problemes-connus.md).
 - **Session en ligne (claude.ai/code)** : machine Ubuntu 24.04. Le SDK Flutter n'est pas dans le dépôt : `bash tool/setup_cloud.sh` l'installe dans `/home/user/sdk/flutter` (archive Linux officielle, empreinte SHA-256 vérifiée, environ 2 minutes). `flutter analyze` et `flutter test` y fonctionnent ; l'émulateur et le téléphone, non. L'hôte `dl.google.com` (SDK Android, dépôt Maven de Google) est bloqué par le réseau de l'environnement : aucun APK ne peut y être compilé (voir docs/problemes-connus.md, P3).
-- **Aperçu sur téléphone** : `.github/workflows/apercu-android.yml` compile un APK (`DOCUSAFE_APERCU=1` : identifiant `com.docusafe.app.apercu`, clé de test `android/app/apercu.keystore`) à chaque envoi et le publie dans la release `apercu`. Mode d'emploi : docs/apercu-telephone.md. Après un envoi, vérifier que la compilation GitHub réussit.
+- **Aperçu sur téléphone** : `.github/workflows/apercu-android.yml` compile un APK (`DOCUSAFE_APERCU=1` : identifiant `com.docusafe.app.apercu`, clé de test `android/app/apercu.keystore`) à chaque envoi et le publie dans la release `apercu`. Mode d'emploi : docs/apercu-telephone.md. Le job « emulateur » lance ensuite `tool/smoke_test.py` sur un émulateur Android à petit écran (création du coffre, verrouillage, réouverture, relance) : son verdict est à la fin du journal du job. Après un envoi, vérifier que la compilation **et** ce test réussissent. Les journaux GitHub ne sont pas téléchargeables depuis la session (hôte bloqué) : les lire avec l'outil `get_job_logs` (`return_content`, grand `tail_lines`), qui les enregistre dans un fichier à fouiller.
 
 ## graphify
 

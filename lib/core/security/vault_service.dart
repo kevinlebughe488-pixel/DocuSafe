@@ -315,6 +315,7 @@ final class VaultService {
       try {
         await database.ensureOpened();
         AppLog.event('vault.session.database_opened');
+        await _removeOrphanFiles(database);
       } on Object {
         await session.close();
         rethrow;
@@ -322,6 +323,26 @@ final class VaultService {
       return session;
     } finally {
       Bytes.wipe(dbKey);
+    }
+  }
+
+  /// Contrôle de cohérence, avant que la session ne soit utilisée : aucun
+  /// enregistrement ne peut donc être en cours. Un échec n'empêche jamais
+  /// d'ouvrir le coffre.
+  Future<void> _removeOrphanFiles(AppDatabase database) async {
+    try {
+      final references = await database.documentsDao.allFileReferences();
+      final removed = _paths.removeOrphans({
+        for (final (id, path) in references) ...[
+          path,
+          VaultPaths.thumbnailRelativePath(id),
+        ],
+      });
+      if (removed > 0) {
+        AppLog.event('vault.orphans_removed');
+      }
+    } on Object catch (e, s) {
+      AppLog.error('vault.consistency', e, s);
     }
   }
 

@@ -3,8 +3,9 @@
 
 Installe l'APK, lance l'application, crée un coffre comme le ferait une
 personne (en touchant les éléments repérés par leur texte d'accessibilité),
-puis écrit dans le journal ce qui est affiché et les messages de
-l'application. Utilisé par .github/workflows/apercu-android.yml.
+le verrouille, le rouvre avec le code, arrête et relance l'application,
+puis écrit dans le journal les écrans traversés, les messages de
+l'application et un verdict. Utilisé par .github/workflows/apercu-android.yml.
 
 Usage : python3 tool/smoke_test.py <chemin de l'APK> <dossier de sortie>
 """
@@ -73,11 +74,22 @@ def tap(label, timeout=30, exact=True):
     return False
 
 
-def type_pin():
+def type_pin(submit="Continuer"):
     for digit in PIN:
         if not tap(digit, timeout=15):
             return False
-    return tap("Continuer", timeout=10)
+    return tap(submit, timeout=10)
+
+
+def wait_for(texts, seconds, step):
+    """Attend qu'un des textes apparaisse à l'écran. Retourne True si vu."""
+    deadline = time.time() + seconds
+    while time.time() < deadline:
+        time.sleep(4)
+        labels = show(step)
+        if any(t in label for t in texts for label in labels):
+            return True
+    return False
 
 
 def main():
@@ -98,15 +110,30 @@ def main():
     show("après le choix du code")
     ok = ok and type_pin()
 
-    # Création du coffre : Argon2id, base chiffrée. On observe 60 secondes.
-    created = False
-    for i in range(6):
-        time.sleep(10)
-        labels = show(f"création, {10 * (i + 1)} s")
-        if any("Plus tard" in l or "Accueil" in l or "Déverrouiller plus vite" in l
-               for l in labels):
-            created = True
-            break
+    # Création du coffre : Argon2id, base chiffrée (60 secondes au plus).
+    created = wait_for(["Plus tard", "Votre coffre est vide"], 60, "création")
+    if created:
+        tap("Plus tard", timeout=3)  # proposition de la biométrie, si affichée
+        created = wait_for(["Votre coffre est vide"], 20, "accueil")
+
+    # Verrouiller, puis rouvrir avec le code : la serrure du code (stockage
+    # sécurisé d'Android) et la base chiffrée sont relues pour de vrai.
+    relocked = reopened = restarted = False
+    if created:
+        relocked = tap("Verrouiller", timeout=10) and wait_for(
+            ["Saisissez votre code"], 20, "verrouillé")
+    if relocked:
+        reopened = type_pin("Confirmer") and wait_for(
+            ["Votre coffre est vide"], 40, "rouvert")
+    if reopened:
+        # Application arrêtée puis relancée : le coffre doit être verrouillé,
+        # et le même code doit le rouvrir.
+        adb("shell", "am", "force-stop", PACKAGE)
+        adb("shell", "monkey", "-p", PACKAGE, "-c",
+            "android.intent.category.LAUNCHER", "1")
+        restarted = (wait_for(["Saisissez votre code"], 30, "relancé")
+                     and type_pin("Confirmer")
+                     and wait_for(["Votre coffre est vide"], 40, "rouvert après relance"))
 
     adb("shell", "screencap", "-p", "/sdcard/ecran.png", check=False)
     adb("pull", "/sdcard/ecran.png", str(out / "ecran.png"), check=False)
@@ -129,10 +156,18 @@ def main():
     print("=== Écrans traversés ===")
     for step, labels in SCREENS:
         print(f"[{step}] {' | '.join(labels)[:400]}")
-    verdict = "COFFRE CRÉÉ" if created else "COFFRE NON CRÉÉ"
-    print(f"=== Verdict : {verdict} (saisies {'faites' if ok else 'interrompues'}) ===",
-          flush=True)
-    sys.exit(0 if created else 1)
+    steps = [
+        ("saisie du code", ok),
+        ("coffre créé", created),
+        ("verrouillage", relocked),
+        ("réouverture avec le code", reopened),
+        ("réouverture après arrêt de l'application", restarted),
+    ]
+    for name, passed in steps:
+        print(f"=== {'RÉUSSI' if passed else 'ÉCHEC '} : {name}")
+    success = all(passed for _, passed in steps)
+    print(f"=== Verdict : {'TOUT RÉUSSI' if success else 'ÉCHEC'} ===", flush=True)
+    sys.exit(0 if success else 1)
 
 
 if __name__ == "__main__":
