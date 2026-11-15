@@ -1,0 +1,165 @@
+# Aperçu iPhone sans Mac ni compte Apple (phase 6). Sur un Mac de GitHub, la
+# vraie application tourne sur un iPhone simulé :
+# - visite en captures (integration_test/visite_test.dart) : création du
+#   coffre, documents d'exemple, verrouillage, écrans principaux ;
+# - application compilée pour le simulateur, zippée, à essayer dans le
+#   navigateur sur Appetize.io (docs/apercu-telephone.md).
+# Résultat dans la page « apercu-ios » des Releases.
+# Dépôt public : minutes gratuites. Dépôt privé : une minute de Mac compte
+# pour dix (environ 15 minutes par passage).
+name: Aperçu iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['**']
+    paths:
+      - 'lib/**'
+      - 'ios/**'
+      - 'assets/**'
+      - 'integration_test/**'
+      - 'test_driver/**'
+      - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - '.github/workflows/apercu-ios.yml'
+
+# Seule la dernière version compte.
+concurrency:
+  group: apercu-ios-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  iphone:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.50.0'
+          channel: stable
+          cache: true
+
+      - name: Dépendances
+        run: flutter pub get
+
+      # Le plus récent iPhone « simple » disponible (sinon le premier iPhone).
+      - name: iPhone simulé
+        run: |
+          UDID=$(xcrun simctl list devices available --json | python3 -c '
+          import json, re, sys
+          devices = json.load(sys.stdin)["devices"]
+          def version(runtime):
+              m = re.search(r"iOS-(\d+)-(\d+)", runtime)
+              return (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+          for runtime in sorted(devices, key=version, reverse=True):
+              phones = [d for d in devices[runtime] if re.fullmatch(r"iPhone \d+", d["name"])]
+              phones += [d for d in devices[runtime] if d["name"].startswith("iPhone")]
+              if phones:
+                  print(phones[0]["udid"])
+                  break
+          ')
+          if [ -z "$UDID" ]; then
+            echo "::error::Aucun iPhone simulé disponible."
+            exit 1
+          fi
+          echo "UDID=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl list devices | grep "$UDID"
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
+
+      - name: Visite en captures
+        run: |
+          flutter drive --driver=test_driver/integration_test.dart \
+            --target=integration_test/visite_test.dart -d "$UDID"
+          ls -la captures-ios
+
+      # Application normale (lib/main.dart), compilée pour le simulateur : le
+      # mode « release » n'existe pas sur simulateur, d'où « debug ».
+      - name: Application pour Appetize (iPhone simulé)
+        run: |
+          flutter build ios --simulator --debug \
+            --dart-define=DOCUSAFE_APERCU=true \
+            --build-number=${{ github.run_number }}
+          mkdir -p sortie-ios
+          (cd build/ios/iphonesimulator && zip -qry "$GITHUB_WORKSPACE/sortie-ios/DocSafe-iphone-simulateur.zip" Runner.app)
+          du -h sortie-ios/*
+
+      - name: Copie téléchargeable (30 jours)
+        uses: actions/upload-artifact@v4
+        with:
+          name: DocSafe-ios-${{ github.run_number }}
+          path: |
+            captures-ios
+            sortie-ios
+          retention-days: 30
+
+      # Seulement si le secret APPETIZE_API_TOKEN existe. Un échec ici ne
+      # bloque rien.
+      - name: Aperçu dans le navigateur (Appetize)
+        continue-on-error: true
+        env:
+          APPETIZE_API_TOKEN: ${{ secrets.APPETIZE_API_TOKEN }}
+        run: |
+          if [ -z "$APPETIZE_API_TOKEN" ]; then
+            echo "Pas de jeton Appetize : étape ignorée (voir docs/apercu-telephone.md)."
+            exit 0
+          fi
+          API=https://api.appetize.io/v1/apps
+          KEY=$(curl -sSf -H "X-API-KEY: $APPETIZE_API_TOKEN" "$API" \
+            | jq -r '.data[]? | select(.note == "docsafe-apercu-ios") | .publicKey' | head -n 1)
+          TARGET="$API${KEY:+/$KEY}"
+          RESP=$(curl -sSf -X POST -H "X-API-KEY: $APPETIZE_API_TOKEN" \
+            -F "file=@sortie-ios/DocSafe-iphone-simulateur.zip" -F "platform=ios" \
+            -F "note=docsafe-apercu-ios" "$TARGET")
+          KEY=$(echo "$RESP" | jq -r '.publicKey')
+          if [ -z "$KEY" ] || [ "$KEY" = "null" ]; then
+            echo "::warning::Réponse inattendue d'Appetize."
+            exit 1
+          fi
+          echo "APPETIZE_URL=https://appetize.io/app/$KEY" >> "$GITHUB_ENV"
+          echo "### iPhone dans le navigateur : https://appetize.io/app/$KEY" >> "$GITHUB_STEP_SUMMARY"
+
+      # Page « apercu-ios » : captures affichées directement, et fichier pour
+      # Appetize. La page et son étiquette sont gardées, les fichiers
+      # remplacés (même méthode que l'aperçu Android).
+      - name: Publication dans « Releases »
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BASE="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/download/apercu-ios"
+          {
+            if [ -n "${APPETIZE_URL:-}" ]; then
+              echo "**Essayer dans le navigateur : ${APPETIZE_URL}**"
+              echo
+            fi
+            echo "Vraie application DocSafe sur un iPhone simulé (Mac de GitHub), branche ${GITHUB_REF_NAME}, commit ${GITHUB_SHA::7}."
+            echo "Pour l'essayer : fichier DocSafe-iphone-simulateur.zip, à envoyer sur appetize.io (voir docs/apercu-telephone.md). Ne pas diffuser."
+            echo
+            for f in captures-ios/*.png; do
+              n=$(basename "$f")
+              echo "<img src=\"$BASE/$n\" width=\"240\" alt=\"${n%.png}\">"
+            done
+          } > notes.md
+          {
+            echo "### Captures iPhone"
+            for f in captures-ios/*.png; do echo "- $(basename "$f")"; done
+          } >> "$GITHUB_STEP_SUMMARY"
+          TITLE="Aperçu iPhone n°${{ github.run_number }} (${GITHUB_REF_NAME})"
+          if gh release view apercu-ios > /dev/null 2>&1; then
+            for asset in $(gh release view apercu-ios --json assets -q '.assets[].name'); do
+              gh release delete-asset apercu-ios "$asset" --yes
+            done
+            gh release upload apercu-ios captures-ios/*.png sortie-ios/*.zip
+            gh release edit apercu-ios --prerelease --title "$TITLE" --notes-file notes.md
+          else
+            gh release create apercu-ios captures-ios/*.png sortie-ios/*.zip \
+              --prerelease \
+              --target "${{ github.event.repository.default_branch }}" \
+              --title "$TITLE" \
+              --notes-file notes.md
+          fi

@@ -64,6 +64,12 @@ Ensuite, le lien « **Essayer dans le navigateur** » apparaît en haut de la pa
 
 L'émulateur d'Android Studio (un téléphone Android simulé sur le PC) affichera l'application sans limite de temps : glissez l'APK sur la fenêtre de l'émulateur pour l'installer.
 
-## iPhone
+## iPhone, sans Mac ni compte Apple
 
-Impossible pour l'instant d'installer la version iPhone : il faut un compte développeur Apple et une compilation sur Mac, prévus en phase 6 (service Codemagic ou GitHub sur machine macOS).
+À chaque envoi qui touche l'application, la recette `.github/workflows/apercu-ios.yml` (« Aperçu iOS ») fait tourner **la vraie application sur un iPhone simulé**, sur un Mac de GitHub (environ 15 minutes). Résultat dans la page : https://github.com/kevinlebughe488-pixel/DocuSafe/releases/tag/apercu-ios
+
+1. **Les captures** s'affichent directement sur cette page : bienvenue, choix du code, accueil avec trois documents d'exemple, coffre verrouillé, liste, fiche, échéances, scanner, paramètres, sécurité, autorisations, aide. Elles sont prises par une visite automatique (`integration_test/visite_test.dart`), qui vérifie au passage que tout fonctionne sur iPhone.
+2. **Pour l'essayer dans le navigateur** : sur la même page, téléchargez `DocSafe-iphone-simulateur.zip`, puis sur https://appetize.io envoyez ce fichier (« Upload »). Un iPhone apparaît dans la page. Avec le secret `APPETIZE_API_TOKEN` (voir plus haut), l'envoi est automatique et le lien s'affiche en haut de la page. Faites-le depuis un appareil sain, jamais depuis le PC infecté.
+   - Un iPhone simulé n'a ni appareil photo ni Face ID : le scanner et Face ID ne s'y essaient pas.
+   - C'est une version « debug » (le simulateur n'accepte pas la version finale) : un peu plus lente que la vraie.
+3. **Sur un vrai iPhone** : il faut un compte développeur Apple (99 $ par an), puis TestFlight, l'application d'Apple pour installer une version de test. C'est l'étape de publication (docs/publication/app-store.md).

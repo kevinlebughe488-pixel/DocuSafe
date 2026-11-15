@@ -51,4 +51,6 @@ jobs:
           target: google_apis
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
-          script: flutter test integration_test -d emulator-5554 --reporter expanded
+          # Seulement le parcours fonctionnel : la visite en captures
+          # (visite_test.dart) est lancée par la recette « Aperçu iOS ».
+          script: flutter test integration_test/app_test.dart -d emulator-5554 --reporter expanded
