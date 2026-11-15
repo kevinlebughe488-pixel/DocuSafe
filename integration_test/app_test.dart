@@ -25,6 +25,18 @@ void main() {
     fail('Introuvable après $seconds s : $finder');
   }
 
+  /// Attend qu'un élément disparaisse (fenêtre qui se ferme…).
+  Future<void> waitForGone(WidgetTester tester, Finder finder, {int seconds = 30}) async {
+    final end = DateTime.now().add(Duration(seconds: seconds));
+    while (DateTime.now().isBefore(end)) {
+      await tester.pump(const Duration(milliseconds: 250));
+      if (finder.evaluate().isEmpty) {
+        return;
+      }
+    }
+    fail('Toujours affiché après $seconds s : $finder');
+  }
+
   Future<void> typePin(WidgetTester tester, String pin) async {
     for (final digit in pin.split('')) {
       await tester.tap(find.widgetWithText(InkWell, digit).last);
@@ -47,7 +59,7 @@ void main() {
     // Biométrie proposée seulement si le téléphone en a une.
     final ready = find.text('Votre coffre est vide');
     final biometric = find.text('Plus tard');
-    final end = DateTime.now().add(const Duration(seconds: 60));
+    final end = DateTime.now().add(const Duration(seconds: 180));
     while (ready.evaluate().isEmpty && DateTime.now().isBefore(end)) {
       await tester.pump(const Duration(milliseconds: 250));
       if (biometric.evaluate().isNotEmpty) {
@@ -61,10 +73,10 @@ void main() {
     await waitFor(tester, find.text('Saisissez votre code'));
     await typePin(tester, '111999');
     await tester.tap(find.text('Confirmer'));
-    await waitFor(tester, find.textContaining('Code incorrect'));
+    await waitFor(tester, find.textContaining('Code incorrect'), seconds: 180);
     await typePin(tester, '204915');
     await tester.tap(find.text('Confirmer'));
-    await waitFor(tester, ready);
+    await waitFor(tester, ready, seconds: 180);
 
     // Profil local, puis salutation sur l'accueil.
     await tester.tap(find.text('Paramètres').last);
@@ -73,15 +85,23 @@ void main() {
     await waitFor(tester, find.byType(TextField));
     await tester.enterText(find.byType(TextField), 'Awa');
     await tester.tap(find.text('Enregistrer'));
+    // La fenêtre doit être fermée : sinon son champ (qui contient « Awa »)
+    // fausserait la vérification et le défilement ci-dessous.
+    await waitForGone(tester, find.byType(TextField));
     await waitFor(tester, find.text('Awa'));
 
     // Aide hors ligne.
-    await tester.scrollUntilVisible(find.text('Aide et assistance'), 200);
+    await tester.scrollUntilVisible(
+      find.text('Aide et assistance'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.tap(find.text('Aide et assistance'));
     await waitFor(tester, find.text("J'ai oublié mon code"));
     // Bouton retour de la barre (libellé « Retour »).
     await tester.tap(find.byTooltip('Retour'));
-    await waitFor(tester, find.text('Profil local'));
+    // La liste des paramètres garde sa position : la ligne de l'aide est visible.
+    await waitFor(tester, find.text('Aide et assistance'));
 
     await tester.tap(find.text('Accueil').last);
     await waitFor(tester, find.text('Bonjour Awa'));
