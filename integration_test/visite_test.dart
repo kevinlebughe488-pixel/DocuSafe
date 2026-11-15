@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -16,15 +17,22 @@ import 'package:material_ui/material_ui.dart';
 /// Visite en captures de la vraie application (aperçu iOS, recette
 /// « Aperçu iOS ») : sur un iPhone simulé, elle crée le coffre, ajoute trois
 /// documents d'exemple, verrouille, rouvre et parcourt les écrans principaux.
-/// Chaque capture est enregistrée par `test_driver/integration_test.dart`.
+/// Chaque capture est écrite dans le dossier `CAPTURES_DIR` (sur un iPhone
+/// simulé, l'application peut écrire dans un dossier du Mac), sinon dans le
+/// dossier temporaire de l'application.
 ///
-/// Lancement (simulateur ou téléphone, installation neuve) :
-/// `flutter drive --driver=test_driver/integration_test.dart --target=integration_test/visite_test.dart -d <appareil>`
+/// Lancement (simulateur, installation neuve) :
+/// `flutter test integration_test/visite_test.dart -d <appareil> --dart-define=CAPTURES_DIR=<dossier>`
 ///
 /// Les documents d'exemple sont des images dessinées ici, pour les captures
 /// seulement : ils n'existent que dans ce coffre de test.
+const String _capturesDir = String.fromEnvironment('CAPTURES_DIR');
+
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  /// Étapes affichées dans le journal de la recette (aucune donnée).
+  void step(String message) => debugPrint('VISITE : $message');
 
   /// Attend qu'un élément apparaisse (temps réel, au plus [seconds]).
   Future<void> waitFor(WidgetTester tester, Finder finder, {int seconds = 60}) async {
@@ -38,12 +46,28 @@ void main() {
     fail('Introuvable après $seconds s : $finder');
   }
 
-  /// Laisse finir les animations, puis prend la capture.
+  /// Laisse finir les animations, puis prend la capture et l'écrit.
   Future<void> capture(WidgetTester tester, String name) async {
     for (var i = 0; i < 6; i++) {
       await tester.pump(const Duration(milliseconds: 150));
     }
-    await binding.takeScreenshot(name);
+    final List<int> bytes;
+    try {
+      bytes = await binding.takeScreenshot(name).timeout(const Duration(seconds: 30));
+    } on TimeoutException {
+      step('capture $name ignorée (délai dépassé)');
+      return;
+    }
+    var dir = Directory(_capturesDir.isNotEmpty ? _capturesDir : '${Directory.systemTemp.path}/captures');
+    try {
+      await dir.create(recursive: true);
+      await File('${dir.path}/$name.png').writeAsBytes(bytes);
+    } on FileSystemException {
+      dir = Directory('${Directory.systemTemp.path}/captures');
+      await dir.create(recursive: true);
+      await File('${dir.path}/$name.png').writeAsBytes(bytes);
+    }
+    step('capture $name (${bytes.length} octets) dans ${dir.path}');
   }
 
   Future<void> typePin(WidgetTester tester, String digits) async {
@@ -84,6 +108,7 @@ void main() {
       await binding.convertFlutterSurfaceToImage();
     }
 
+    step('application lancée');
     await waitFor(tester, find.text('Bienvenue dans DocSafe'));
     await capture(tester, '01-bienvenue');
 
@@ -112,6 +137,7 @@ void main() {
       }
     }
     expect(ready, findsOneWidget);
+    step('coffre créé');
     await capture(tester, '04-accueil-vide');
 
     // Trois documents d'exemple, par le chemin normal de l'importation.
@@ -146,6 +172,7 @@ void main() {
         .settingsDao
         .writeConfig(VaultConfigKeys.profileName, 'Awa');
     // L'accueil montre le nombre de documents et les échéances proches.
+    step('documents d\'exemple ajoutés');
     await waitFor(tester, find.text('3 documents'));
     await capture(tester, '05-accueil');
 
@@ -155,6 +182,7 @@ void main() {
     await capture(tester, '06-coffre-verrouille');
     await typePin(tester, '204915');
     await waitFor(tester, find.text('3 documents'), seconds: 180);
+    step('coffre rouvert');
 
     final router = container.read(routerProvider);
     Future<void> visit(String route, Finder expected, String name) async {
@@ -171,5 +199,6 @@ void main() {
     await visit(Routes.settingsSecurity, find.text('Changer le code'), '12-securite');
     await visit(Routes.settingsPermissions, find.text('Numérisation'), '13-autorisations');
     await visit(Routes.settingsHelp, find.text("J'ai oublié mon code"), '14-aide');
-  });
+    step('visite terminée');
+  }, timeout: const Timeout(Duration(minutes: 10)));
 }

@@ -18,7 +18,6 @@ on:
       - 'ios/**'
       - 'assets/**'
       - 'integration_test/**'
-      - 'test_driver/**'
       - 'pubspec.yaml'
       - 'pubspec.lock'
       - '.github/workflows/apercu-ios.yml'
@@ -71,12 +70,62 @@ jobs:
           xcrun simctl list devices | grep "$UDID"
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
+          # Réveil complet (écran d'accueil prêt) avant d'installer DocSafe :
+          # sinon l'installation reste parfois bloquée.
+          xcrun simctl launch "$UDID" com.apple.Preferences || true
+          sleep 10
+          xcrun simctl terminate "$UDID" com.apple.Preferences || true
 
+      # La visite écrit elle-même ses captures dans captures-ios/. Si l'outil
+      # du simulateur se bloque (constaté le 15/11/2026), elle est arrêtée au
+      # bout de 15 minutes et relancée une fois sur un iPhone remis à neuf.
       - name: Visite en captures
+        timeout-minutes: 40
         run: |
-          flutter drive --driver=test_driver/integration_test.dart \
-            --target=integration_test/visite_test.dart -d "$UDID"
-          ls -la captures-ios
+          set -m
+          visite() {
+            flutter test integration_test/visite_test.dart -d "$UDID" \
+              --dart-define=CAPTURES_DIR="$GITHUB_WORKSPACE/captures-ios" \
+              --reporter expanded &
+            local pid=$! waited=0
+            while kill -0 "$pid" 2>/dev/null; do
+              if [ "$waited" -ge 900 ]; then
+                echo "::warning::Visite bloquée depuis 15 minutes : arrêt."
+                kill -TERM -- "-$pid" 2>/dev/null || kill -TERM "$pid" || true
+                wait "$pid" 2>/dev/null || true
+                return 124
+              fi
+              sleep 10
+              waited=$((waited + 10))
+            done
+            wait "$pid"
+          }
+          ok=0
+          for essai in 1 2; do
+            echo "=== Visite, essai $essai ==="
+            if visite; then ok=1; break; fi
+            if [ "$essai" = 1 ]; then
+              echo "=== iPhone simulé remis à neuf ==="
+              xcrun simctl shutdown "$UDID" || true
+              xcrun simctl erase "$UDID"
+              xcrun simctl boot "$UDID"
+              xcrun simctl bootstatus "$UDID" -b
+              xcrun simctl launch "$UDID" com.apple.Preferences || true
+              sleep 10
+              xcrun simctl terminate "$UDID" com.apple.Preferences || true
+              rm -rf captures-ios
+            fi
+          done
+          # Repli : captures écrites dans le dossier temporaire de l'application.
+          if ! ls captures-ios/*.png > /dev/null 2>&1; then
+            DATA=$(xcrun simctl get_app_container "$UDID" com.docsafe.app data 2>/dev/null || true)
+            if [ -n "$DATA" ] && ls "$DATA"/tmp/captures/*.png > /dev/null 2>&1; then
+              mkdir -p captures-ios
+              cp "$DATA"/tmp/captures/*.png captures-ios/
+            fi
+          fi
+          ls -la captures-ios || true
+          [ "$ok" = 1 ]
 
       # Application normale (lib/main.dart), compilée pour le simulateur : le
       # mode « release » n'existe pas sur simulateur, d'où « debug ».
