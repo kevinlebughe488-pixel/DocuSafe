@@ -17,6 +17,28 @@ void main() {
 
   tearDown(() => env.dispose());
 
+  testWidgets('petit écran : le bouton Continuer reste atteignable', (
+    tester,
+  ) async {
+    // Régression (15/11/2026) : sur 320 × 640, le bouton passait sous le
+    // clavier et le toucher ajoutait un chiffre au lieu de valider.
+    useSmallPhoneSize(tester);
+    await tester.pumpWidget(testApp(env));
+    await settle(tester);
+    await tester.tap(find.text('Passer'));
+    await settle(tester, rounds: 5);
+    expect(find.text('Choisissez votre code'), findsOneWidget);
+    await typePin(tester, '204915');
+    await tester.tap(find.text('Continuer'));
+    await tester.pump();
+    expect(find.text('Confirmez votre code'), findsOneWidget);
+    await typePin(tester, '204915');
+    await tester.tap(find.text('Continuer'));
+    await settle(tester, rounds: 40);
+    expect(find.text('Votre coffre est vide'), findsOneWidget);
+    await teardownApp(tester);
+  });
+
   testWidgets('création du coffre puis verrouillage et déverrouillage', (
     tester,
   ) async {

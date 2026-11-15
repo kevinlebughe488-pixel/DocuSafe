@@ -83,51 +83,114 @@ final class _PinEntryState extends State<PinEntry> {
     final theme = Theme.of(context);
     final canSubmit =
         widget.enabled && !widget.busy && _pin.length >= AppConfig.pinMinLength;
+    return LayoutBuilder(
+      builder: (context, constraints) => _layout(
+        context,
+        theme,
+        canSubmit,
+        _keypadMetrics(constraints.maxHeight),
+      ),
+    );
+  }
+
+  /// Hauteur réservée au-dessus du clavier (points, message, bouton) :
+  /// disposition ordinaire, puis disposition compacte des petits écrans.
+  static const double _topHeight = 140;
+  static const double _compactTopHeight = 100;
+
+  /// Taille des touches selon la hauteur disponible : 72 points sur un écran
+  /// ordinaire, moins sur un petit écran (jamais sous 44), pour que le
+  /// bouton de validation ne passe jamais sous le clavier.
+  ({double keySize, double rowGap, bool compact}) _keypadMetrics(
+    double maxHeight,
+  ) {
+    if (!maxHeight.isFinite) {
+      return (keySize: AppSpacing.keypadKeySize, rowGap: 7, compact: false);
+    }
+    final extras =
+        (widget.hint != null ? 28.0 : 0.0) +
+        (widget.below != null ? 48.0 : 0.0) +
+        AppSpacing.sm;
+    final perRow = (maxHeight - _topHeight - extras) / 4;
+    if (perRow >= 58) {
+      final gap = perRow >= AppSpacing.keypadKeySize + 14 ? 7.0 : 3.0;
+      return (
+        keySize: (perRow - 2 * gap).clamp(44.0, AppSpacing.keypadKeySize),
+        rowGap: gap,
+        compact: false,
+      );
+    }
+    // Petit écran : espacements réduits au-dessus, touches resserrées.
+    final compactRow = (maxHeight - _compactTopHeight - extras) / 4;
+    return (
+      keySize: (compactRow - 4).clamp(44.0, AppSpacing.keypadKeySize),
+      rowGap: 2,
+      compact: true,
+    );
+  }
+
+  Widget _layout(
+    BuildContext context,
+    ThemeData theme,
+    bool canSubmit,
+    ({double keySize, double rowGap, bool compact}) keypad,
+  ) {
+    final compact = keypad.compact;
     return Column(
       children: [
         Expanded(
+          // Défilable en dernier recours : rien ne déborde sur le clavier.
           child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                PinDots(filled: _pin.length, hasError: widget.messageIsError),
-                const SizedBox(height: AppSpacing.lg),
-                SizedBox(
-                  height: 40,
-                  child: widget.busy
-                      ? const Center(
-                          child: SizedBox.square(
-                            dimension: 20,
-                            child: CircularProgressIndicator.adaptive(
-                              strokeWidth: 2,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  PinDots(filled: _pin.length, hasError: widget.messageIsError),
+                  SizedBox(height: compact ? AppSpacing.sm : AppSpacing.lg),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: compact ? 28 : 40),
+                    child: widget.busy
+                        ? const Center(
+                            child: SizedBox.square(
+                              dimension: 20,
+                              child: CircularProgressIndicator.adaptive(
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.xxl,
+                            ),
+                            child: Text(
+                              widget.message ?? '',
+                              textAlign: TextAlign.center,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: widget.messageIsError
+                                    ? theme.colorScheme.error
+                                    : theme.colorScheme.onSurfaceVariant,
+                              ),
                             ),
                           ),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.xxl,
-                          ),
-                          child: Text(
-                            widget.message ?? '',
-                            textAlign: TextAlign.center,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: widget.messageIsError
-                                  ? theme.colorScheme.error
-                                  : theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                FilledButton.tonal(
-                  onPressed: canSubmit ? _submit : null,
-                  child: Text(widget.submitLabel),
-                ),
-              ],
+                  ),
+                  SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
+                  FilledButton.tonal(
+                    style: compact
+                        ? FilledButton.styleFrom(
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          )
+                        : null,
+                    onPressed: canSubmit ? _submit : null,
+                    child: Text(widget.submitLabel),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
         PinKeypad(
+          keySize: keypad.keySize,
+          rowGap: keypad.rowGap,
           onDigit: _digit,
           onBackspace: _backspace,
           onBiometric: widget.onBiometric,

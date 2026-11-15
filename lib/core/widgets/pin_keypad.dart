@@ -16,6 +16,8 @@ final class PinKeypad extends StatelessWidget {
     this.biometricIcon = Icons.fingerprint_rounded,
     this.biometricLabel,
     this.enabled = true,
+    this.keySize = AppSpacing.keypadKeySize,
+    this.rowGap = 7,
   });
 
   final ValueChanged<String> onDigit;
@@ -26,6 +28,11 @@ final class PinKeypad extends StatelessWidget {
   final IconData biometricIcon;
   final String? biometricLabel;
   final bool enabled;
+
+  /// Diamètre d'une touche et demi-espace entre deux rangées. Réduits par
+  /// [PinEntry] sur les petits écrans, sans descendre sous 44 points.
+  final double keySize;
+  final double rowGap;
 
   @override
   Widget build(BuildContext context) {
@@ -43,22 +50,28 @@ final class PinKeypad extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             for (final row in rows)
-              _KeyRow(children: [for (final d in row) _DigitKey(d, onDigit)]),
+              _KeyRow(
+                gap: rowGap,
+                children: [for (final d in row) _DigitKey(d, onDigit, keySize)],
+              ),
             _KeyRow(
+              gap: rowGap,
               children: [
                 if (onBiometric != null)
                   _IconKey(
                     icon: biometricIcon,
                     label: biometricLabel ?? 'Biométrie',
                     onTap: onBiometric!,
+                    size: keySize,
                   )
                 else
-                  const SizedBox.square(dimension: AppSpacing.keypadKeySize),
-                _DigitKey('0', onDigit),
+                  SizedBox.square(dimension: keySize),
+                _DigitKey('0', onDigit, keySize),
                 _IconKey(
                   icon: Icons.backspace_outlined,
                   label: 'Effacer le dernier chiffre',
                   onTap: onBackspace,
+                  size: keySize,
                 ),
               ],
             ),
@@ -70,13 +83,14 @@ final class PinKeypad extends StatelessWidget {
 }
 
 final class _KeyRow extends StatelessWidget {
-  const _KeyRow({required this.children});
+  const _KeyRow({required this.children, required this.gap});
 
   final List<Widget> children;
+  final double gap;
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 7),
+    padding: EdgeInsets.symmetric(vertical: gap),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -90,10 +104,11 @@ final class _KeyRow extends StatelessWidget {
 }
 
 final class _DigitKey extends StatelessWidget {
-  const _DigitKey(this.digit, this.onDigit);
+  const _DigitKey(this.digit, this.onDigit, this.size);
 
   final String digit;
   final ValueChanged<String> onDigit;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +123,7 @@ final class _DigitKey extends StatelessWidget {
           onDigit(digit);
         },
         child: SizedBox.square(
-          dimension: AppSpacing.keypadKeySize,
+          dimension: size,
           child: Center(
             child: Text(
               digit,
@@ -128,11 +143,13 @@ final class _IconKey extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    required this.size,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +164,7 @@ final class _IconKey extends StatelessWidget {
           customBorder: const CircleBorder(),
           onTap: onTap,
           child: SizedBox.square(
-            dimension: AppSpacing.keypadKeySize,
+            dimension: size,
             child: Center(
               child: Icon(icon, size: 28, color: scheme.onSurfaceVariant),
             ),

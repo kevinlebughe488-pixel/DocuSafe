@@ -140,6 +140,16 @@ void useIphoneSize(WidgetTester tester) {
 }
 
 /// Taille d'un téléphone courant (360 × 800 points).
+/// Petit téléphone d'entrée de gamme : 320 × 640 points, barre d'état et
+/// barre de navigation à trois boutons (celui de l'émulateur de GitHub).
+void useSmallPhoneSize(WidgetTester tester) {
+  tester.view.physicalSize = const Size(320, 640);
+  tester.view.devicePixelRatio = 1;
+  tester.view.padding = const FakeViewPadding(top: 24, bottom: 48);
+  tester.view.viewPadding = const FakeViewPadding(top: 24, bottom: 48);
+  addTearDown(tester.view.reset);
+}
+
 void usePhoneSize(WidgetTester tester) {
   tester.view.physicalSize = const Size(1080, 2400);
   tester.view.devicePixelRatio = 3;
