@@ -132,7 +132,9 @@ final class VaultService {
       pending.recoverySlot.encode(),
       flush: true,
     );
+    AppLog.event('vault.commit.recovery_slot_written');
     await _store.write(SecureStoreKeys.pinSlot, pending.pinSlot.encode());
+    AppLog.event('vault.commit.pin_slot_stored');
     await _store.write(SecureStoreKeys.biometricEnabled, '0');
     await _store.write(SecureStoreKeys.screenSecure, '1');
     await attempts.reset();
@@ -331,6 +333,7 @@ final class VaultService {
       salt: salt,
       params: argon2Params,
     );
+    AppLog.event('vault.pin_slot.key_derived');
     try {
       final wrapped = await _crypto.aesGcmEncrypt(
         key: pinKey,
@@ -338,6 +341,7 @@ final class VaultService {
         plaintext: vaultKey,
         aad: VaultKeySlot.aadPin,
       );
+      AppLog.event('vault.pin_slot.wrapped');
       return VaultKeySlot(
         kdf: VaultKeySlot.kdfArgon2id,
         argon2: argon2Params,

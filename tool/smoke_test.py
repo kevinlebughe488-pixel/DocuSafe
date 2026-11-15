@@ -47,9 +47,13 @@ def nodes():
     return found
 
 
+SCREENS = []
+
+
 def show(step):
     labels = [label.replace("\n", " ") for label, _, _ in nodes()]
     print(f"--- Écran ({step}) : {labels}", flush=True)
+    SCREENS.append((step, labels))
     return labels
 
 
@@ -94,25 +98,41 @@ def main():
     show("après le choix du code")
     ok = ok and type_pin()
 
-    # Création du coffre : Argon2id, base chiffrée. On observe 90 secondes.
-    for i in range(9):
+    # Création du coffre : Argon2id, base chiffrée. On observe 60 secondes.
+    created = False
+    for i in range(6):
         time.sleep(10)
         labels = show(f"création, {10 * (i + 1)} s")
         if any("Plus tard" in l or "Accueil" in l or "Déverrouiller plus vite" in l
                for l in labels):
-            print("Coffre créé : écran suivant atteint.", flush=True)
+            created = True
             break
 
     adb("shell", "screencap", "-p", "/sdcard/ecran.png", check=False)
     adb("pull", "/sdcard/ecran.png", str(out / "ecran.png"), check=False)
     log = adb("logcat", "-d", "-v", "time", check=False)
     (out / "logcat.txt").write_text(log)
-    print("=== Journal de l'application (flutter, erreurs) ===")
-    for line in log.splitlines():
-        if ("flutter" in line or "docusafe" in line or " E/" in line
-                or "AndroidRuntime" in line or "FATAL" in line):
-            print(line)
-    print("Parcours d'accueil terminé" if ok else "Parcours d'accueil interrompu")
+
+    # Résumé compact, en toute fin de journal : messages de l'application
+    # seule (processus de l'application, étiquette flutter), puis les écrans.
+    pid = adb("shell", "pidof", PACKAGE, check=False).strip()
+    own = [
+        line for line in log.splitlines()
+        if "flutter" in line or "docusafe" in line.lower()
+        or "FATAL" in line or "E/AndroidRuntime" in line
+        or (pid and f"({pid.rjust(5)})" in line and (" E/" in line or " W/" in line))
+    ]
+    print(f"=== Journal de l'application (pid {pid or 'absent'}, "
+          f"{len(own)} lignes, 120 dernières) ===")
+    for line in own[-120:]:
+        print(line[:300])
+    print("=== Écrans traversés ===")
+    for step, labels in SCREENS:
+        print(f"[{step}] {' | '.join(labels)[:400]}")
+    verdict = "COFFRE CRÉÉ" if created else "COFFRE NON CRÉÉ"
+    print(f"=== Verdict : {verdict} (saisies {'faites' if ok else 'interrompues'}) ===",
+          flush=True)
+    sys.exit(0 if created else 1)
 
 
 if __name__ == "__main__":

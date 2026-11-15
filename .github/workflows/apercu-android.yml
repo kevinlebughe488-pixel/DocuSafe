@@ -16,7 +16,9 @@ permissions:
 
 concurrency:
   group: apercu-android
-  cancel-in-progress: true
+  # Un envoi pendant une compilation attend son tour : le test sur émulateur
+  # en cours va au bout.
+  cancel-in-progress: false
 
 jobs:
   apk:

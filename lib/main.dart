@@ -28,6 +28,7 @@ Future<void> main() async {
   // existent : le paquet cryptography_flutter s'active tout seul.
 
   final paths = await VaultPaths.resolve();
+  AppLog.event('app.started');
 
   runApp(
     ProviderScope(

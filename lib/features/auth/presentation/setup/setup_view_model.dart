@@ -61,25 +61,40 @@ base class SetupViewModel extends Notifier<SetupState> {
   /// Code choisi et confirmé : le coffre est créé et ouvert aussitôt.
   Future<void> choosePin(String pin) async {
     state = state.copyWith(stage: SetupStage.creating);
+    AppLog.event('setup.choose_pin');
     try {
       final controller = ref.read(vaultControllerProvider.notifier);
       final pending = await controller.prepareSetup(pin);
+      AppLog.event('setup.prepared');
       await controller.commitSetup(pending);
-      final kind = await ref.read(biometricServiceProvider).availableKind();
-      state = state.copyWith(
-        stage: kind == BiometricKind.none
-            ? SetupStage.done
-            : SetupStage.biometric,
-        biometricKind: kind,
-      );
+      AppLog.event('setup.committed');
     } on AppException catch (e, s) {
       AppLog.error('setup.create', e, s);
       state = state.copyWith(stage: SetupStage.pin, error: e);
+      return;
     } on Object catch (e, s) {
       // Erreur imprévue : jamais de roue qui tourne sans fin.
       AppLog.error('setup.create.unexpected', e, s);
       state = state.copyWith(stage: SetupStage.pin, error: e);
+      return;
     }
+    // Le coffre existe : la suite ne doit plus pouvoir bloquer l'entrée.
+    var kind = BiometricKind.none;
+    try {
+      kind = await ref
+          .read(biometricServiceProvider)
+          .availableKind()
+          .timeout(const Duration(seconds: 5));
+    } on Object catch (e, s) {
+      AppLog.error('setup.biometric_check', e, s);
+    }
+    AppLog.event('setup.done.${kind.name}');
+    state = state.copyWith(
+      stage: kind == BiometricKind.none
+          ? SetupStage.done
+          : SetupStage.biometric,
+      biometricKind: kind,
+    );
   }
 
   Future<void> enableBiometrics() async {
