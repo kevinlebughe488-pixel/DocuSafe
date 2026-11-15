@@ -1,6 +1,6 @@
 # App Store (iPhone)
 
-L'iPhone vient après Google Play (cahier des charges §13). Le projet iOS est configuré (identifiant `com.docusafe.app`, iOS 15 minimum, textes des permissions) et la recette « Compilation iOS » vérifie qu'il compile : **réussie le 15/11/2026** (34,7 Mo, iOS 15 minimum).
+L'iPhone vient après Google Play (cahier des charges §13). Le projet iOS est configuré (identifiant `com.docsafe.app`, iOS 15 minimum, textes des permissions) et la recette « Compilation iOS » vérifie qu'il compile : **réussie le 15/11/2026** (34,7 Mo, iOS 15 minimum).
 
 ## Ce qu'il faut (vous)
 

@@ -17,7 +17,7 @@ import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-PACKAGE = "com.docusafe.app.apercu"
+PACKAGE = "com.docsafe.app.apercu"
 PIN = "204915"
 
 

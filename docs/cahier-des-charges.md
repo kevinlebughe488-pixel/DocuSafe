@@ -1,6 +1,6 @@
 # CAHIER DES CHARGES FONCTIONNEL ET TECHNIQUE
 
-> **Nom de l'application : DocSafe** (correction du développeur le 15/11/2026 ; les premières versions de ce document disaient « DocuSafe »). Les identifiants techniques internes (`com.docusafe.app`, paquet Dart `docusafe`, nom du dépôt) ne sont pas visibles des utilisateurs et restent inchangés sauf décision contraire.
+> **Nom de l'application : DocSafe** (correction du développeur le 15/11/2026 ; les premières versions de ce document disaient « DocuSafe »). L'identifiant public de l'application devient `com.docsafe.app` (Android et iPhone). Les noms techniques internes (paquet Dart `docusafe`, espace de noms du code, nom du dépôt) ne sont pas visibles des utilisateurs et restent inchangés.
 
 ## DOCSAFE – Application mobile Flutter de gestion et de sécurisation documentaire
 

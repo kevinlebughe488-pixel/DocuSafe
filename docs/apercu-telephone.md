@@ -24,7 +24,7 @@ Refaites les étapes 2 à 5. La nouvelle version s'installe **par-dessus** l'anc
 
 ## À savoir
 
-- **C'est une version de test.** Elle porte un identifiant différent (`com.docusafe.app.apercu`) et une clé de signature de test, enregistrée dans le dépôt (`android/app/apercu.keystore`). Cette clé a été créée dans la session en ligne, jamais sur le PC infecté. Elle ne servira **jamais** à la publication sur le Play Store : la vraie clé sera créée en phase 6, sur une machine saine.
+- **C'est une version de test.** Elle porte un identifiant différent (`com.docsafe.app.apercu`) et une clé de signature de test, enregistrée dans le dépôt (`android/app/apercu.keystore`). Cette clé a été créée dans la session en ligne, jamais sur le PC infecté. Elle ne servira **jamais** à la publication sur le Play Store : la vraie clé sera créée en phase 6, sur une machine saine.
 - N'y mettez pas vos vrais documents tant que l'application est en développement : une version suivante pourrait demander de recréer le coffre.
 - Google Play Protect peut afficher un avertissement (« application inconnue ») : c'est normal pour une application installée hors du Play Store. Choisissez « Installer quand même ».
 - Ne transmettez pas l'APK à d'autres personnes.

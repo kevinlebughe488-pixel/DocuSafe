@@ -19,8 +19,8 @@ Tout ce qu'il faut pour publier DocSafe sur Google Play, puis sur l'App Store. *
 | Recette | Quand | Ce qu'elle fait |
 |---|---|---|
 | Aperçu Android | À chaque envoi de code | APK de test, essai sur un téléphone simulé, contrôles de publication (pour information) |
-| Publication Android | À la demande, ou quand la configuration Android change | Fichier AAB pour Google Play et APK de contrôle, avec l'identifiant définitif `com.docusafe.app` ; **contrôles bloquants** : aucune permission réseau, sauvegarde du système désactivée, application non déboguable, compatibilité avec les pages mémoire de 16 Ko |
-| Compilation iOS | À la demande, ou quand la configuration iPhone change | Compile l'application iPhone sur un Mac, sans signature (vérifie que le projet iOS est prêt). **Réussie le 15/11/2026** : 34,7 Mo, `com.docusafe.app`, iOS 15 minimum. |
+| Publication Android | À la demande, ou quand la configuration Android change | Fichier AAB pour Google Play et APK de contrôle, avec l'identifiant définitif `com.docsafe.app` ; **contrôles bloquants** : aucune permission réseau, sauvegarde du système désactivée, application non déboguable, compatibilité avec les pages mémoire de 16 Ko |
+| Compilation iOS | À la demande, ou quand la configuration iPhone change | Compile l'application iPhone sur un Mac, sans signature (vérifie que le projet iOS est prêt). **Réussie le 15/11/2026** : 34,7 Mo, `com.docsafe.app`, iOS 15 minimum. |
 
 ## Étapes, dans l'ordre
 

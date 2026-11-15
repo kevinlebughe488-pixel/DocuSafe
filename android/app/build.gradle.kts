@@ -8,7 +8,7 @@ plugins {
 }
 
 // Version « aperçu » compilée par GitHub à chaque envoi (DOCUSAFE_APERCU=1) :
-// identifiant distinct (com.docusafe.app.apercu) et clé de test versionnée,
+// identifiant distinct (com.docsafe.app.apercu) et clé de test versionnée,
 // pour l'installer à côté de la vraie application et la mettre à jour sans
 // la désinstaller. Jamais utilisée pour la publication
 // (docs/apercu-telephone.md).
@@ -60,7 +60,10 @@ android {
 
     defaultConfig {
         // Identifiant définitif après publication (D2).
-        applicationId = "com.docusafe.app"
+        // Identifiant public : com.docsafe.app (décision du 15/11/2026),
+        // définitif après publication. L'espace de noms du code (namespace)
+        // reste com.docusafe.app : il est interne et invisible.
+        applicationId = "com.docsafe.app"
         minSdk = 24
         targetSdk = 36
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
