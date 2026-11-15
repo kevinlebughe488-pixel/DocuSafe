@@ -9,21 +9,23 @@ Les numéros entre parenthèses renvoient à la liste des écrans du cahier des 
 ## 1. Première ouverture : création du coffre
 
 ```
-Splash (1) → Onboarding (2) → Création du PIN (3) → Clé de récupération (3)
-          → Biométrie, facultatif (3) → Tableau de bord vide (5)
+Splash (1) → Onboarding (2) → Création du PIN (3) → Biométrie, facultatif (3)
+          → Tableau de bord vide (5), avec le rappel « Noter ma clé »
 ```
+
+Parcours révisé le 14/11/2026 (D6 révisée) : la clé de récupération n'est plus une étape de l'inscription.
 
 | Étape | Ce que voit l'utilisateur |
 |---|---|
-| Onboarding, 4 pages courtes | 1. Bienvenue dans DocuSafe. 2. Vos documents restent sur votre téléphone : pas de compte, pas d'Internet. 3. Tout est chiffré et protégé par votre code. 4. Confidentialité : lien vers la politique et les conditions. Bouton « Créer mon coffre-fort ». |
-| Création du PIN | Saisie de 6 chiffres ou plus, puis confirmation. Un code trop simple est refusé avec une explication. |
-| Clé de récupération | La clé s'affiche. Texte clair : « Sans votre code et sans cette clé, vos documents seront définitivement perdus. Personne ne pourra les récupérer. » Bouton « Copier ». Case à cocher « J'ai conservé ma clé en lieu sûr » obligatoire pour continuer. |
-| Biométrie | Proposée seulement si le téléphone la permet. « Activer » ou « Plus tard ». |
-| Fin | Tableau de bord vide avec deux actions bien visibles : « Scanner un document » et « Importer un fichier ». |
+| Onboarding, 4 pages courtes | 1. Bienvenue dans DocSafe. 2. Vos documents restent sur votre téléphone : pas de compte, pas d'Internet. 3. Tout est chiffré et protégé par votre code. 4. Confidentialité : lien vers la politique et les conditions. Bouton « Créer mon coffre-fort ». |
+| Création du PIN | Saisie de 6 chiffres ou plus, puis confirmation. Un code trop simple est refusé avec une explication. Le coffre est créé dès la confirmation ; la clé de récupération est générée en silence. |
+| Biométrie | Proposée seulement si le téléphone la permet : « Activer Face ID » / « Activer l'empreinte », ou « Plus tard ». |
+| Fin | Tableau de bord vide avec deux actions bien visibles : « Scanner un document » et « Importer un fichier ». Un bandeau « Votre clé de récupération n'est pas encore notée… » avec le bouton « Noter ma clé » reste affiché tant que la clé n'a pas été notée. |
+| Noter ma clé | La clé s'affiche une seule fois. Texte clair : « Sans votre code et sans cette clé, vos documents seront définitivement perdus. Personne ne pourra les récupérer. » Bouton « Copier ». Case à cocher « J'ai conservé ma clé en lieu sûr » obligatoire pour terminer. Le bandeau disparaît ensuite. |
 
 Cas particuliers :
 
-- **L'utilisateur quitte avant la fin :** rien n'est créé. Il recommencera au prochain lancement.
+- **L'utilisateur quitte avant d'avoir confirmé son code :** rien n'est créé. Il recommencera au prochain lancement. S'il quitte pendant l'étape biométrie, le coffre existe et s'ouvre avec le code.
 - **Pas de biométrie sur le téléphone :** l'étape n'apparaît pas.
 - **Aucun compte, aucune connexion** à aucun moment.
 
@@ -71,9 +73,9 @@ Importation (10) → sélecteur du système → Vérification → Informations �
 | Choix de la source | « Fichiers » (PDF, images) ou « Galerie » (photos). Sélection multiple possible. |
 | Vérification | Type réel du fichier, taille, lisibilité. Fichier non accepté : message précis (« Ce format n'est pas pris en charge »). Fichier déjà présent : « Ce document est déjà dans votre coffre. Importer quand même ? » |
 | Informations | Nom (prérempli avec le nom du fichier), catégorie, champs facultatifs. Pour plusieurs fichiers : une catégorie commune, modifiable ensuite. |
-| Fin | Rappel utile : « L'original se trouve toujours dans votre galerie ou vos fichiers. Supprimez-le si vous voulez le garder uniquement dans DocuSafe. » DocuSafe ne peut pas supprimer cet original à la place de l'utilisateur. |
+| Fin | Rappel utile : « L'original se trouve toujours dans votre galerie ou vos fichiers. Supprimez-le si vous voulez le garder uniquement dans DocSafe. » DocSafe ne peut pas supprimer cet original à la place de l'utilisateur. |
 
-**Depuis une autre application :** l'utilisateur choisit « Partager » puis « DocuSafe ». DocuSafe s'ouvre, demande le déverrouillage si nécessaire, puis reprend ce même parcours à l'étape « Vérification ».
+**Depuis une autre application :** l'utilisateur choisit « Partager » puis « DocSafe ». DocSafe s'ouvre, demande le déverrouillage si nécessaire, puis reprend ce même parcours à l'étape « Vérification ».
 
 ---
 
@@ -136,7 +138,7 @@ Fiche (7) → date d'expiration → Gestion des rappels (16)        Onglet Éch�
 | Première date d'expiration | L'application explique à quoi servent les notifications, puis demande l'autorisation du système. En cas de refus, les échéances restent visibles dans l'onglet Échéances. |
 | Gestion des rappels d'un document | Activer ou désactiver chaque rappel, ajouter un délai personnalisé. |
 | Onglet Échéances | Trois groupes : « Expirés », « Dans les 30 jours », « Plus tard ». Chaque ligne indique le nombre de jours restants. |
-| Notification | Texte générique par défaut. La toucher ouvre DocuSafe : déverrouillage, puis fiche du document. |
+| Notification | Texte générique par défaut. La toucher ouvre DocSafe : déverrouillage, puis fiche du document. |
 
 Réglages associés (Paramètres → Notifications) : activer ou désactiver tous les rappels, délais par défaut, heure d'envoi, affichage du nom du document.
 
@@ -148,7 +150,7 @@ Réglages associés (Paramètres → Notifications) : activer ou désactiver tou
 Fiche (7) → Partager / Exporter → Authentification → Avertissement → Feuille de partage ou choix du dossier
 ```
 
-- **Avertissement :** « Le fichier partagé ne sera plus protégé par DocuSafe. » Boutons « Annuler » et « Continuer ».
+- **Avertissement :** « Le fichier partagé ne sera plus protégé par DocSafe. » Boutons « Annuler » et « Continuer ».
 - **Partager :** feuille de partage du système (messagerie, e-mail…).
 - **Exporter :** enregistrement d'une copie à l'emplacement choisi. Un scan s'exporte en PDF ; une image importée s'exporte dans son format d'origine.
 - Les fichiers temporaires sont supprimés automatiquement.
@@ -174,7 +176,7 @@ L'écran de confirmation affiche le nom du document et indique que la suppressio
 | Notifications | Voir §9 |
 | Stockage (19) | Espace occupé, nombre de documents, répartition par catégorie, nettoyage des fichiers temporaires |
 | Exportation des données | Exporter tous les documents en clair vers un dossier choisi (authentification et avertissement) |
-| Sauvegarde et synchronisation | Explication : les documents sont uniquement sur ce téléphone. Sauvegarde chiffrée si elle est retenue (D13). La synchronisation n'est pas proposée dans cette version : aucun bouton factice. |
+| Sauvegarde et synchronisation | Explication : les documents sont uniquement sur ce téléphone. Créer une sauvegarde chiffrée (fichier `.docsafe`, clé de récupération notée au préalable) ou en restaurer une (le contenu actuel est remplacé). La synchronisation est annoncée comme indisponible, sans bouton. Restauration aussi possible depuis l'accueil : « J'ai une sauvegarde » → fichier → clé de récupération → nouveau code. |
 | Confidentialité, Conditions d'utilisation | Textes consultables hors ligne |
 | À propos | Version, licences des composants |
 | Assistance | Questions fréquentes hors ligne, adresse de contact |

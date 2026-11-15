@@ -1,4 +1,4 @@
-/* DocuSafe – maquettes, écrans 11 à 21 : recherche, catégories, échéances, partage, paramètres, erreurs. */
+/* DocSafe – maquettes, écrans 11 à 21 : recherche, catégories, échéances, partage, paramètres, erreurs. */
 (function () {
   'use strict';
   const { I, logo, phone, btn, chip, badge, sw, cat, lead, chev, section, field, tile, thumb, docTile, CATS } = window.UI;
@@ -102,7 +102,7 @@
     overlay: `<div class="scrim low"><div class="sheet"><div class="handle"></div>
         <div class="illus sm">${I('notifications_active')}</div>
         <h3 class="center mt16">Être prévenu avant l’expiration&nbsp;?</h3>
-        <p class="t-bm center" style="margin:0 0 20px">DocuSafe vous rappelle l’échéance 90, 30 et 7 jours avant, puis le jour même. Les rappels restent sur votre téléphone.</p>
+        <p class="t-bm center" style="margin:0 0 20px">DocSafe vous rappelle l’échéance 90, 30 et 7 jours avant, puis le jour même. Les rappels restent sur votre téléphone.</p>
         <div class="col g8">${btn('Autoriser les notifications', 'filled lg block')}${btn('Plus tard', 'text block')}</div>
       </div></div>`,
   }));
@@ -116,7 +116,7 @@
   DS.frame(g8, '10a', 'Nouvelle authentification', 'Biométrie si elle est activée, sinon le clavier du code. Non redemandée si l’on vient de se déverrouiller.', phone({
     app: P.detailBar, body: P.detailBody,
     overlay: `<div class="scrim low"><div class="sheet"><div class="handle"></div>
-        <div class="row g8" style="justify-content:center">${logo(20)}<span class="t-lm">DocuSafe</span></div>
+        <div class="row g8" style="justify-content:center">${logo(20)}<span class="t-lm">DocSafe</span></div>
         <h3 class="center mt12">Confirmez votre identité</h3>
         <p class="t-bm center" style="margin:0">Pour partager «&nbsp;Passeport&nbsp;»</p>
         <div class="illus sm sec mt24">${I('fingerprint')}</div>
@@ -131,7 +131,7 @@
     overlay: `<div class="scrim mid"><div class="dialog centered">
         <div class="d-ic">${I('share')}</div>
         <h3>Partager ce document&nbsp;?</h3>
-        <p style="margin:0">Le fichier partagé <b>ne sera plus protégé</b> par DocuSafe. Envoyez-le uniquement à une personne de confiance.</p>
+        <p style="margin:0">Le fichier partagé <b>ne sera plus protégé</b> par DocSafe. Envoyez-le uniquement à une personne de confiance.</p>
         <div class="actions">${btn('Annuler', 'text')}${btn('Continuer', 'text')}</div>
       </div></div>`,
   }));
@@ -184,7 +184,7 @@
       ${tile({ lead: lead('schedule'), title: 'Heure d’envoi', trail: value('09:00') })}
       ${tile({ lead: lead('visibility_off'), title: 'Afficher le nom du document', sub: 'Désactivé : le nom n’apparaît pas sur l’écran verrouillé', wrap: true, trail: sw(false) })}
       <div class="grp">Aperçu</div>
-      <div class="pad"><div class="notif">${logo(24)}<div class="col" style="gap:2px"><span class="app">DocuSafe · maintenant</span><span class="t-ts" style="color:var(--on-surface)">Échéance dans 7 jours</span><span class="t-bm muted">Un document de votre coffre arrive à échéance.</span></div></div></div>`,
+      <div class="pad"><div class="notif">${logo(24)}<div class="col" style="gap:2px"><span class="app">DocSafe · maintenant</span><span class="t-ts" style="color:var(--on-surface)">Échéance dans 7 jours</span><span class="t-bm muted">Un document de votre coffre arrive à échéance.</span></div></div></div>`,
   }));
 
   const usage = [['finances', '97 Mo', 31], ['pro', '75 Mo', 24], ['education', '53 Mo', 17], ['identite', '37 Mo', 12], ['immo', '25 Mo', 8], ['sante', '19 Mo', 6], ['autres', '6 Mo', 2]];
@@ -234,7 +234,7 @@
   DS.frame(g10, '21b', 'Document illisible', 'Fichier modifié ou endommagé : le contenu n’est jamais affiché.', phone({
     app: { back: true, title: 'Relevé de notes – L3' },
     body: state({ kind: 'err', icon: 'broken_image', title: 'Document illisible',
-      text: 'Ce fichier a été modifié ou endommagé. Par sécurité, DocuSafe ne l’affiche pas.',
+      text: 'Ce fichier a été modifié ou endommagé. Par sécurité, DocSafe ne l’affiche pas.',
       actions: btn('Retour', 'tonal lg block') + btn('Supprimer la fiche', 'text danger block') }),
   }));
 

@@ -1,0 +1,4 @@
+# Étiquettes des tests. « screenshots » : captures d'écran produites sur
+# demande (voir test/screenshots/screenshots_test.dart).
+tags:
+  screenshots:

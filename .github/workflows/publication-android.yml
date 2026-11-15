@@ -1,0 +1,102 @@
+# Fichiers de publication Android (phase 6) : AAB pour Google Play et APK de
+# contrôle, avec l'identifiant définitif com.docsafe.app.
+# Déclenchement manuel (onglet Actions → « Publication Android » → Run
+# workflow), étiquette de version « v… », ou modification de la
+# configuration Android.
+# Mode d'emploi : docs/publication/signature.md
+name: Publication Android
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+    # Aussi quand la configuration Android ou les contrôles changent.
+    branches: ['**']
+    paths:
+      - 'android/**'
+      - 'pubspec.yaml'
+      - 'tool/check_apk.py'
+      - '.github/workflows/publication-android.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  aab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.50.0'
+          channel: stable
+          cache: true
+
+      - name: Dépendances
+        run: flutter pub get
+
+      - name: Analyse
+        run: flutter analyze
+
+      - name: Tests
+        run: flutter test --exclude-tags screenshots
+
+      # Clé d'envoi Google Play, si elle a été enregistrée dans les secrets du
+      # dépôt (Settings → Secrets and variables → Actions). Sans elle, les
+      # fichiers sont signés avec une clé de débogage : utiles pour les
+      # vérifications, refusés par Google Play.
+      - name: Clé d'envoi
+        env:
+          UPLOAD_KEYSTORE_BASE64: ${{ secrets.DOCUSAFE_UPLOAD_KEYSTORE_BASE64 }}
+          UPLOAD_STORE_PASSWORD: ${{ secrets.DOCUSAFE_UPLOAD_STORE_PASSWORD }}
+          UPLOAD_KEY_ALIAS: ${{ secrets.DOCUSAFE_UPLOAD_KEY_ALIAS }}
+          UPLOAD_KEY_PASSWORD: ${{ secrets.DOCUSAFE_UPLOAD_KEY_PASSWORD }}
+        run: |
+          if [ -n "$UPLOAD_KEYSTORE_BASE64" ]; then
+            echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+            {
+              echo "DOCUSAFE_UPLOAD_KEYSTORE=$RUNNER_TEMP/upload.jks"
+              echo "DOCUSAFE_UPLOAD_STORE_PASSWORD=$UPLOAD_STORE_PASSWORD"
+              echo "DOCUSAFE_UPLOAD_KEY_ALIAS=$UPLOAD_KEY_ALIAS"
+              echo "DOCUSAFE_UPLOAD_KEY_PASSWORD=$UPLOAD_KEY_PASSWORD"
+            } >> "$GITHUB_ENV"
+            echo "SIGNATURE=cle-d-envoi" >> "$GITHUB_ENV"
+            echo "Clé d'envoi trouvée : fichiers publiables."
+          else
+            echo "SIGNATURE=debogage" >> "$GITHUB_ENV"
+            echo "::warning::Aucune clé d'envoi : fichiers signés en débogage, non publiables."
+          fi
+
+      - name: AAB (Google Play)
+        run: flutter build appbundle --release --build-number=${{ github.run_number }}
+
+      - name: APK de contrôle
+        run: flutter build apk --release --build-number=${{ github.run_number }}
+
+      - name: Vérifications de publication
+        run: |
+          # pipefail : sans lui, un échec serait masqué par « tee ».
+          set -o pipefail
+          BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -n 1)"
+          python3 tool/check_apk.py build/app/outputs/flutter-apk/app-release.apk "$BT" | tee verifications.txt
+
+      - name: Rassemblement
+        run: |
+          mkdir -p sortie
+          cp build/app/outputs/bundle/release/app-release.aab "sortie/DocSafe-${{ github.run_number }}-$SIGNATURE.aab"
+          cp build/app/outputs/flutter-apk/app-release.apk "sortie/DocSafe-${{ github.run_number }}-$SIGNATURE.apk"
+          cp verifications.txt sortie/
+          ls -l sortie
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DocSafe-publication-${{ github.run_number }}
+          path: sortie
+          retention-days: 30

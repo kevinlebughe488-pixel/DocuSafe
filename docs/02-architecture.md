@@ -1,4 +1,4 @@
-# Architecture de DocuSafe
+# Architecture de DocSafe
 
 Document rédigé le 13/11/2026 (phase 1). Il sera mis à jour à chaque phase.
 
@@ -111,7 +111,7 @@ Les 21 écrans du cahier des charges (§5.3) sont répartis ainsi :
 | Module | Responsabilité | Écrans |
 |---|---|---|
 | `app/startup` | Démarrage, choix de la première page | 1. Splash |
-| `onboarding` | Présentation de DocuSafe, stockage local, confidentialité | 2. Onboarding |
+| `onboarding` | Présentation de DocSafe, stockage local, confidentialité | 2. Onboarding |
 | `auth` | Création du coffre, déverrouillage, récupération | 3. Configuration du coffre-fort · 4. Authentification |
 | `dashboard` | Vue d'ensemble | 5. Tableau de bord |
 | `documents` | Liste, fiche, lecture, modification, importation, favoris, récents, suppression, partage, export | 6. Liste · 7. Détail · 10. Importation · 13. Favoris · 14. Récents · 20. Confirmation de suppression |

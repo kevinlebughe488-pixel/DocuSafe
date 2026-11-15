@@ -6,6 +6,10 @@ Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera te
 |---|---|---|---|
 | P1 | Le PC de développement est infecté par un virus (« Expiro ») | **Bloquant** | Ouvert depuis le 13/11/2026 |
 | P2 | Flutter est installé mais ne peut pas s'exécuter | Bloquant (conséquence de P1) | Ouvert depuis le 13/11/2026 |
+| P3 | La session en ligne ne peut pas compiler d'APK Android | Gênant | Ouvert depuis le 13/11/2026 |
+| P4 | L'application n'a jamais été lancée sur un vrai téléphone (seulement sur le téléphone simulé de GitHub et sur Appetize) | À traiter dès que P1 est résolu | Ouvert depuis le 13/11/2026 |
+| P5 | Miniatures et lecture des PDF (PDFium), scanner du système (ML Kit, VisionKit) non vérifiés hors des tests | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
+| P6 | Partage, « Enregistrer sous », sauvegarde et restauration non vérifiés sur téléphone | À vérifier au premier lancement | Ouvert depuis le 14/11/2026 |
 
 ---
 
@@ -67,6 +71,31 @@ Ce document recense les problèmes qui bloquent ou gênent le projet. Il sera te
 Une fois le PC sain : supprimer `D:\dev\flutter`, réinstaller Flutter (15 minutes, voir [guide-installation-windows.md](guide-installation-windows.md)), vérifier avec `flutter doctor -v`, puis commencer la phase 3.
 
 ---
+
+## P3 – Pas de compilation Android dans la session en ligne
+
+- La machine Ubuntu de la session en ligne accède à `storage.googleapis.com` (Flutter), `pub.dev`, GitHub et aux dépôts Maven publics, mais **pas à `dl.google.com`**. Or le SDK Android, le plugin Android Gradle et les bibliothèques Google y sont hébergés.
+- Conséquence : `flutter analyze`, `flutter test` et la génération de code fonctionnent (c'est ainsi que la phase 3 a été écrite et testée), mais `flutter build apk` est impossible dans cette session.
+- **Contournement en place depuis le 14/11/2026 :** GitHub compile une version « aperçu » à chaque envoi et la publie dans la page Releases du dépôt (voir docs/apercu-telephone.md).
+- Autres solutions : (a) élargir l'accès réseau de l'environnement de la session en ligne à `dl.google.com` et `maven.google.com` ; (b) compiler sur le PC une fois nettoyé ; (c) utiliser un service de build dans le cloud (Codemagic, GitHub Actions), prévu de toute façon pour iOS.
+
+## P4 – Phase 3 jamais exécutée sur un téléphone
+
+- Le socle a été validé par 49 tests automatiques (chiffrement, clés, base chiffrée, écrans) et par des captures d'écran rendues par Flutter (voir `docs/captures/`).
+- Ce qui n'a pas pu être vérifié : la biométrie réelle (Keystore, `flutter_secure_storage`), le canal `FLAG_SECURE`, la vitesse d'Argon2id sur un téléphone d'entrée de gamme (réglage prévu : 0,5 à 1 s), le comportement en arrière-plan, et toute la partie iOS (marquée « à vérifier sur iOS »).
+- À faire au premier lancement : `flutter doctor -v`, `flutter run`, créer un coffre, verrouiller/déverrouiller, mesurer le temps de vérification du code.
+
+## P5 – PDF : miniatures et lecture à vérifier sur téléphone
+
+- Les miniatures des images et tout le chemin d'importation sont couverts par les tests (fichiers de test réels). Le rendu des PDF (première page en miniature, lecteur plein écran) passe par le moteur PDFium du paquet `pdfrx`, qui n'a pas pu être exercé dans la session en ligne : les tests utilisent un service de miniatures « images seulement ».
+- Si le rendu PDF échoue sur le téléphone, le document reste valide (sans miniature) et l'erreur est journalisée sans donnée sensible. À vérifier au premier lancement : miniature d'un PDF importé, ouverture d'un PDF de plusieurs pages, vitesse sur un PDF de 20 Mo.
+- **Scanner (lot b)** : l'écran du système (ML Kit sur Android, VisionKit sur iOS, repli à recadrage manuel sans services Google Play) ne peut pas s'ouvrir hors d'un téléphone. Les tests utilisent un scanner simulé qui rend de vraies images ; l'aperçu, l'assemblage en PDF, l'enregistrement chiffré et l'effacement des images en clair sont couverts. À vérifier au premier lancement : scan d'une page puis de plusieurs, refus de la caméra (message affiché), dossier du scanner vide après le scan, téléphone sans services Google Play.
+- La vitesse du chiffrement dans un isolate (Dart pur, sans accélération native) est aussi à mesurer sur un téléphone d'entrée de gamme ; le plan B est décrit dans `docs/06-dependances.md` §5.
+
+## P6 – Partage, export et sauvegarde à vérifier sur téléphone
+
+- La limite de 200 Mo de l'export complet est levée (15/11/2026) : sur Android, l'archive et la sauvegarde sont copiées par petits morceaux vers l'emplacement choisi, par un petit code natif (`MainActivity.kt`, `saveFile`). Sur iPhone, elles passent par la feuille de partage (« Enregistrer dans Fichiers ») : à vérifier sur iOS. L'espace libre sur iPhone n'est pas encore lu (affiché seulement sur Android).
+- Les tests utilisent des services simulés. À vérifier au premier lancement : feuille de partage, enregistrement dans « Téléchargements » et sur Google Drive, sauvegarde d'un coffre de plusieurs centaines de Mo, restauration sur un deuxième téléphone, suppression des fichiers temporaires.
 
 ## P2 – Flutter installé mais inutilisable
 

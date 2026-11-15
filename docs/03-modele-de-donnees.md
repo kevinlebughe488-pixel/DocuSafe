@@ -190,9 +190,12 @@ Dossier privé de l'application (inaccessible aux autres applications)
     ├── recovery.slot            Clé du coffre, protégée par la clé de récupération
     ├── files/ab/<id>.dsf        Documents chiffrés
     └── thumbs/ab/<id>.dst       Miniatures chiffrées
+└── vault_restore/               Sauvegarde décompressée, le temps d'une restauration
+                                 (déjà chiffrée ; remplace vault/ à la fin)
 
 Dossier cache privé
-└── secure_tmp/                  Fichiers temporaires en clair, purgés systématiquement
+└── secure_tmp/                  Fichiers temporaires (partage, export, sauvegarde en
+                                 préparation), purgés au verrouillage et au démarrage
 
 Stockage sécurisé du système (Android Keystore / Trousseau iOS)
 └── Clé du coffre protégée par le PIN, clé liée à la biométrie, compteur de tentatives

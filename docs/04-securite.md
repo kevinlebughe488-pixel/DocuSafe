@@ -1,4 +1,4 @@
-# Sécurité de DocuSafe
+# Sécurité de DocSafe
 
 Document rédigé le 13/11/2026 (phase 1). Il définit les règles de sécurité à respecter pendant tout le développement. Il sera complété en phase 5 par les résultats des tests.
 
@@ -10,7 +10,7 @@ Document rédigé le 13/11/2026 (phase 1). Il définit les règles de sécurité
 2. **Sans authentification, pas de clé.** Quand le coffre est verrouillé, la clé n'existe plus en mémoire. La protection ne repose pas sur un simple écran qui cache le contenu.
 3. **La biométrie ne chiffre rien.** Elle autorise le téléphone à libérer une clé protégée par son matériel.
 4. **Rien ne sort sans un geste volontaire.** Pas de serveur, pas de permission Internet, pas de sauvegarde automatique.
-5. **Pas de porte dérobée.** Personne, pas même l'éditeur de DocuSafe, ne peut ouvrir un coffre sans le PIN, la biométrie ou la clé de récupération.
+5. **Pas de porte dérobée.** Personne, pas même l'éditeur de DocSafe, ne peut ouvrir un coffre sans le PIN, la biométrie ou la clé de récupération.
 6. **Les limites sont écrites noir sur blanc** (§19).
 
 ---
@@ -35,11 +35,11 @@ Document rédigé le 13/11/2026 (phase 1). Il définit les règles de sécurité
 
 | Situation | Protection | Risque restant |
 |---|---|---|
-| Téléphone perdu ou volé, DocuSafe verrouillé | Tout est chiffré. La clé n'est pas en mémoire. Elle est enfermée dans le stockage sécurisé du téléphone **et** protégée par le PIN. | Très faible |
-| Téléphone pris alors que DocuSafe est ouvert | Verrouillage immédiat en arrière-plan, verrouillage après inactivité, nouvelle authentification avant un partage ou un export | Ce qui est à l'écran reste visible jusqu'au verrouillage |
+| Téléphone perdu ou volé, DocSafe verrouillé | Tout est chiffré. La clé n'est pas en mémoire. Elle est enfermée dans le stockage sécurisé du téléphone **et** protégée par le PIN. | Très faible |
+| Téléphone pris alors que DocSafe est ouvert | Verrouillage immédiat en arrière-plan, verrouillage après inactivité, nouvelle authentification avant un partage ou un export | Ce qui est à l'écran reste visible jusqu'au verrouillage |
 | Autre application installée sur le téléphone | Dossier privé de l'application, aucun fichier en clair ailleurs, captures d'écran bloquées | Très faible |
 | Téléphone « rooté » ou infecté par un logiciel ayant tous les droits | Données chiffrées au repos, clé biométrique liée au matériel, PIN nécessaire | **Si le coffre est déverrouillé pendant l'attaque, la clé est en mémoire.** Aucune application ne peut se protéger d'un téléphone entièrement compromis. |
-| Sauvegarde cloud du téléphone (Google, iCloud) | Sauvegarde automatique désactivée pour DocuSafe | L'utilisateur doit faire ses propres sauvegardes |
+| Sauvegarde cloud du téléphone (Google, iCloud) | Sauvegarde automatique désactivée pour DocSafe | L'utilisateur doit faire ses propres sauvegardes |
 | Regard indiscret, aperçu des applications récentes | Captures bloquées, aperçu masqué, PIN masqué à la saisie | Sur iOS, les captures d'écran ne peuvent pas être bloquées |
 | Essais répétés du PIN | Calcul volontairement lent, délais croissants après 5 échecs | Voir limite n°2 (§19) |
 | Biométrie ajoutée par un tiers | La clé biométrique est détruite dès qu'une empreinte ou un visage est ajouté au téléphone | Contrainte physique sur l'utilisateur : hors de portée d'une application |
@@ -106,10 +106,10 @@ Plan B si Argon2id est trop lent sur les téléphones modestes : PBKDF2-HMAC-SHA
 ## 6. Biométrie
 
 - **Android 9 et plus :** une copie de la clé du coffre est placée dans une zone du Keystore dont la clé n'est utilisable **qu'après une authentification biométrique forte**. C'est le matériel du téléphone qui fait respecter cette règle, pas l'application.
-- **Android 7 et 8 :** le paquet de stockage sécurisé n'assure pas cette protection matérielle sur ces versions. Plutôt que d'offrir une biométrie plus faible, DocuSafe ne la propose pas : le PIN seul est utilisé.
+- **Android 7 et 8 :** le paquet de stockage sécurisé n'assure pas cette protection matérielle sur ces versions. Plutôt que d'offrir une biométrie plus faible, DocSafe ne la propose pas : le PIN seul est utilisé.
 - **iOS** (à vérifier sur iOS) : trousseau avec contrôle d'accès biométrique, protégé par la Secure Enclave.
 - **Reconnaissance faciale sur Android :** proposée uniquement si le téléphone la classe comme « forte ». Sur beaucoup de modèles, seule l'empreinte digitale l'est.
-- **Nouvelle empreinte ou nouveau visage ajouté au téléphone :** la clé biométrique est détruite par le système. DocuSafe redemande le PIN et propose de réactiver la biométrie.
+- **Nouvelle empreinte ou nouveau visage ajouté au téléphone :** la clé biométrique est détruite par le système. DocSafe redemande le PIN et propose de réactiver la biométrie.
 - **Le PIN reste toujours valable.** Activer ou désactiver la biométrie exige le PIN.
 
 Le paquet `local_auth` sert à savoir si une biométrie est disponible, et à confirmer une opération sensible quand le coffre est déjà ouvert (§11).
@@ -122,8 +122,8 @@ Le paquet `local_auth` sert à savoir si une biométrie est disponible, et à co
 |---|---|
 | Forme | 32 caractères en 8 groupes de 4 (`XXXX-XXXX-…`), sans caractères ambigus (pas de I, L, O, U) |
 | Solidité | 160 bits aléatoires : impossible à deviner |
-| Création | Automatique, à la création du coffre |
-| Affichage | **Une seule fois.** L'utilisateur confirme l'avoir conservée avant de continuer. |
+| Création | Automatique, à la création du coffre, en silence (D6 révisée le 14/11/2026) |
+| Affichage | **Une seule fois**, quand l'utilisateur touche « Noter ma clé » (rappel sur l'accueil et dans les réglages jusqu'à sa confirmation). Comme la clé n'est jamais stockée, « Noter ma clé » en génère une nouvelle au moment de l'afficher. L'utilisateur confirme l'avoir conservée. |
 | Copie | Bouton « Copier » : le presse-papiers est marqué sensible et vidé après 60 secondes |
 | Stockage sur le téléphone | **Aucun** |
 | Utilisation | « Code oublié ? » → saisie de la clé → choix d'un nouveau PIN |
@@ -181,7 +181,7 @@ Les miniatures utilisent le même format, avec leur propre clé.
 - Sont ainsi protégés : titres, descriptions, tags, dates, catégories, réglages, index de recherche, texte OCR.
 - Les données effacées sont écrasées dans le fichier de la base (`secure_delete`).
 
-L'algorithme exact (ChaCha20-Poly1305 par défaut, ou le schéma AES-256 compatible SQLCipher) sera confirmé en phase 3 après mesure sur téléphone réel. Les deux sont robustes.
+**Confirmé en phase 3 :** schéma **ChaCha20-Poly1305** (celui par défaut de SQLite3MultipleCiphers 2.6.1), clé brute de 32 octets passée par `PRAGMA key = "x'…'"` (pas de dérivation supplémentaire côté SQLite : la clé est déjà dérivée par HKDF). Avant d'appliquer la clé, l'application vérifie que le moteur chiffré est bien présent (`PRAGMA cipher`) et refuse d'ouvrir une base en clair. Les tests vérifient que le fichier ne commence pas par `SQLite format 3` et qu'un SQLite ordinaire ne peut pas le lire.
 
 ---
 
@@ -195,9 +195,9 @@ L'algorithme exact (ChaCha20-Poly1305 par défaut, ou le schéma AES-256 compati
 
 **Au verrouillage :** fermeture de la base, effacement des clés en mémoire, libération des documents et miniatures déchiffrés, purge des fichiers temporaires, retour à l'écran de déverrouillage.
 
-**Tolérance pendant une opération lancée par DocuSafe.** Le scanner, le sélecteur de fichiers, la feuille de partage et la fenêtre biométrique font techniquement passer l'application en arrière-plan. Verrouiller à cet instant ferait perdre le travail en cours. Règle : tolérance de **5 minutes au maximum**. Au-delà, le coffre se verrouille ; au retour, l'utilisateur se réauthentifie puis reprend là où il en était.
+**Tolérance pendant une opération lancée par DocSafe.** Le scanner, le sélecteur de fichiers, la feuille de partage et la fenêtre biométrique font techniquement passer l'application en arrière-plan. Verrouiller à cet instant ferait perdre le travail en cours. Règle : tolérance de **5 minutes au maximum**. Au-delà, le coffre se verrouille ; au retour, l'utilisateur se réauthentifie puis reprend là où il en était.
 
-Le même mécanisme sert au partage entrant : si un fichier est partagé vers DocuSafe alors que le coffre est verrouillé, il attend dans le dossier temporaire privé jusqu'au déverrouillage.
+Le même mécanisme sert au partage entrant : si un fichier est partagé vers DocSafe alors que le coffre est verrouillé, il attend dans le dossier temporaire privé jusqu'au déverrouillage.
 
 ---
 
@@ -231,26 +231,41 @@ Un fichier en clair existe forcément un court instant : à la sortie du scanner
 | Lecture d'un document | Déchiffré **en mémoire** jusqu'à 20 Mo. Au-delà, fichier temporaire supprimé à la fermeture du lecteur. |
 | Sauvegardes | Dossiers temporaires exclus de toute sauvegarde |
 
-Point d'attention : sur Android, le scanner écrit ses images dans le dossier « externe privé » de l'application. Sur Android 10 et versions antérieures, ce dossier est moins bien isolé que le dossier interne. DocuSafe chiffre donc les pages puis vide ce dossier aussitôt le scan terminé.
+Point d'attention : sur Android, le scanner écrit ses images dans le dossier « externe privé » de l'application. Sur Android 10 et versions antérieures, ce dossier est moins bien isolé que le dossier interne. DocSafe chiffre donc les pages puis vide ce dossier aussitôt le scan terminé.
 
 ---
 
 ## 13. Partage et export
 
 1. Nouvelle authentification.
-2. Avertissement : « Le fichier partagé ne sera plus protégé par DocuSafe. »
+2. Avertissement : « Le fichier partagé ne sera plus protégé par DocSafe. »
 3. Déchiffrement et contrôle d'intégrité.
 4. **Partage** : fichier temporaire dans `secure_tmp/`, transmis par la feuille de partage du système avec un droit de lecture temporaire. **Export** : écriture directe à l'emplacement choisi par l'utilisateur, sans fichier intermédiaire.
 5. Suppression du fichier temporaire : 10 minutes après le partage, au verrouillage et au démarrage. (L'application qui reçoit le fichier a besoin d'un moment pour le lire ; le supprimer immédiatement ferait échouer le partage.)
+6. **Exporter mes données** (Paramètres) : mêmes étapes 1 à 3 pour chaque document, puis archive ZIP rangée par catégorie, préparée dans `secure_tmp/export/` par un isolate (chaque document déchiffré est ajouté puis effacé aussitôt). Sur Android, l'archive est copiée par petits morceaux vers l'emplacement choisi (sélecteur « Enregistrer sous » du système, code natif dans `MainActivity.kt`), sans passer par la mémoire ; sur iPhone, par la feuille de partage (« Enregistrer dans Fichiers », à vérifier sur iOS). Le dossier est supprimé dès la fin, réussie ou non. L'espace libre est contrôlé avant de commencer.
+7. Un fichier dont l'empreinte ne correspond plus ne sort jamais : le partage, l'export ou l'archive s'arrêtent avec le message « fichier altéré ».
+
+Code : `lib/core/documents/export_document.dart` (`DocumentExporter`), `lib/core/platform/share_service.dart`, parcours à l'écran dans `lib/features/documents/presentation/share/document_exit_flow.dart`.
 
 ---
+
+## 13 bis. Sauvegarde chiffrée (choix D13)
+
+1. **Créer** (Paramètres → Sauvegarde et synchronisation) : la clé de récupération doit avoir été notée (sinon l'application propose de le faire d'abord), puis nouvelle authentification.
+2. Le fichier `.docsafe` (format `DSB1`) est une archive ZIP sans compression qui contient le coffre **tel qu'il est stocké, donc déjà chiffré** : la base (copiée dans une transaction de lecture, pour une copie cohérente), les documents et miniatures (DSF1), la serrure de récupération et un manifeste (format, date, nombre de documents, empreinte SHA-256 de chaque fichier ; aucun titre). **Rien n'est déchiffré pour sauvegarder.**
+3. Le fichier est préparé dans `secure_tmp/backup/`, enregistré à l'emplacement choisi (même mécanisme que l'export), puis supprimé.
+4. **Restaurer** (depuis l'accueil « J'ai une sauvegarde », ou depuis les réglages après nouvelle authentification) : la sauvegarde est décompressée à côté du coffre (`vault_restore/`) ; seuls les noms attendus sont acceptés et chaque empreinte est contrôlée. Un fichier étranger ou abîmé est refusé sans toucher au coffre.
+5. La clé de récupération ouvre la serrure de la sauvegarde ; une clé fausse est refusée. L'utilisateur choisit ensuite un code pour ce téléphone. Alors seulement, l'ancien coffre est effacé et remplacé. La biométrie est désactivée (à réactiver dans les réglages).
+6. Une sauvegarde s'ouvre avec la clé de récupération **en vigueur au moment où elle a été créée**. Après un changement de clé, il faut refaire une sauvegarde (indiqué à l'écran).
+
+Code : `lib/core/backup/backup_service.dart`, `VaultService.restore`, écrans dans `lib/features/backup/`.
 
 ## 14. Notifications
 
 - Entièrement locales : aucun serveur.
 - **Texte générique par défaut**, sans le nom du document. Raisons : la notification apparaît sur l'écran verrouillé, et le système en conserve le texte en clair pour pouvoir la reprogrammer après un redémarrage.
 - Option « Afficher le nom du document », désactivée par défaut.
-- Toucher la notification ouvre DocuSafe sur l'écran de déverrouillage, puis sur le document.
+- Toucher la notification ouvre DocSafe sur l'écran de déverrouillage, puis sur le document.
 - Alarmes « inexactes » : un rappel peut arriver avec un léger décalage. En échange, aucune permission d'alarme exacte n'est nécessaire.
 - L'autorisation d'envoyer des notifications est demandée **au moment où l'utilisateur ajoute sa première date d'expiration**, pas au lancement.
 - Au plus 60 rappels sont programmés à l'avance (limite d'iOS : 64). Ils sont recalculés à chaque ouverture.
@@ -341,10 +356,10 @@ Une fois les clés détruites, les éventuels restes de fichiers sur la mémoire
 5. **iOS :** les captures d'écran ne peuvent pas être bloquées, et tout le code propre à iOS reste à vérifier sur un appareil.
 6. **Délai après des PIN erronés :** il peut être contourné en modifiant l'horloge du téléphone. Le calcul lent du PIN reste la vraie barrière.
 7. **Fichiers en clair transitoires** (scanner, sélecteurs, partage), notamment sur Android 10 et antérieur (§12).
-8. **Fichier partagé ou exporté :** il n'est plus protégé par DocuSafe.
+8. **Fichier partagé ou exporté :** il n'est plus protégé par DocSafe.
 9. **Rappels :** leur ponctualité dépend du fabricant du téléphone ; leur texte est conservé en clair par le système.
 10. **Pas de sauvegarde automatique :** téléphone perdu ou cassé = documents perdus, sauf sauvegarde faite par l'utilisateur (voir D13 dans [01-analyse.md](01-analyse.md)).
-11. **Reconnaissance faciale sur Android :** souvent indisponible pour DocuSafe (§6).
+11. **Reconnaissance faciale sur Android :** souvent indisponible pour DocSafe (§6).
 12. **Lecteur PDF :** composant complexe (PDFium), à garder à jour.
 13. **Pas d'audit externe.** Recommandé avant une diffusion large.
 

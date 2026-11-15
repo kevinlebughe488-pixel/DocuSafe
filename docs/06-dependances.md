@@ -12,6 +12,13 @@ Les versions seront figées dans `pubspec.lock` au moment de l'installation (pha
 
 ## 1. Paquets retenus pour le MVP
 
+### Interface
+
+| Paquet | Version | Rôle | Licence | Éditeur |
+|---|---|---|---|---|
+| `material_ui` | 1.11.0 | Widgets Material 3. Depuis Flutter 3.50, `package:flutter/material.dart` est déprécié au profit de ce paquet. | BSD-3 | flutter.dev |
+| `cupertino_ui` | 1.1.6 | Widgets et textes iOS (transitions, `GlobalCupertinoLocalizations`) | BSD-3 | flutter.dev |
+
 ### Structure de l'application
 
 | Paquet | Version | Rôle | Licence | Éditeur |
@@ -33,8 +40,8 @@ Les versions seront figées dans `pubspec.lock` au moment de l'installation (pha
 
 | Paquet | Version | Rôle | Licence | Éditeur |
 |---|---|---|---|---|
-| `cryptography` | 2.9.0 | AES-256-GCM, HKDF, Argon2id | Apache-2.0 | dint.dev |
-| `cryptography_flutter` | 2.3.4 | Accélération native de `cryptography` | Apache-2.0 | dint.dev |
+| `cryptography` | 2.9.0 | AES-256-GCM, HKDF, Argon2id, **en Dart pur** (classes `Dart…` nommées explicitement) | Apache-2.0 | dint.dev |
+| ~~`cryptography_flutter`~~ | retiré le 15/11/2026 | Accélération native de `cryptography`. Son calcul HMAC natif échouait sur Android (exception de la plateforme) et bloquait la création du coffre ; il n'est plus utilisé. | — | — |
 | `crypto` | 3.0.8 | Empreinte SHA-256 calculée au fil de la lecture | BSD-3 | dart.dev |
 | `flutter_secure_storage` | 11.2.0 | Android Keystore et Trousseau iOS, zone protégée par biométrie | BSD-3 | steenbakker.dev |
 | `local_auth` | 3.0.2 | Détection de la biométrie, confirmation des opérations sensibles | BSD-3 | flutter.dev |
@@ -43,14 +50,15 @@ Les versions seront figées dans `pubspec.lock` au moment de l'installation (pha
 
 | Paquet | Version | Rôle | Licence | Éditeur |
 |---|---|---|---|---|
-| `cunning_document_scanner` | 3.1.0 | Scanner : ML Kit (Android), VisionKit (iOS), repli à recadrage manuel | MIT | victorcarreras.dev |
+| `cunning_document_scanner` | 3.1.0 (vérifié le 14/11/2026) | Scanner : ML Kit (Android), VisionKit (iOS), repli à recadrage manuel. API `scanDocuments()` ; `cleanCache()` vide son dossier après chaque scan. | MIT | victorcarreras.dev |
 | `file_picker` | 13.3.3 | Choix d'un fichier (PDF, images), enregistrement d'un export | MIT | victorcarreras.dev |
 | `image_picker` | 1.2.4 | Choix de photos dans la galerie, sans permission | Apache-2.0 / BSD-3 | flutter.dev |
-| `receive_sharing_intent` | 1.9.0 | « Partager vers DocuSafe » | Apache-2.0 | kasem.dev |
+| `receive_sharing_intent` | 1.9.0 | « Partager vers DocSafe » | Apache-2.0 | kasem.dev |
 | `share_plus` | 13.3.1 | Feuille de partage du système | BSD-3 | fluttercommunity.dev |
-| `pdf` | 3.13.1 | Création du PDF à partir des pages scannées | Apache-2.0 | nfet.net |
-| `pdfrx` | 2.12.1 | Affichage des PDF, rendu de la première page pour la miniature | MIT | espresso3389.jp |
-| `image` | 4.12.0 | Compression des miniatures en JPEG | MIT | taosengine.com |
+| `archive` | 4.7.1 (vérifié le 14/11/2026) | « Exporter mes données » : archive ZIP écrite dans un isolate, sans compression (les PDF et les photos sont déjà compressés). Déjà présent en dépendance indirecte (via `image`), déclaré directement depuis le lot c. | MIT | taosengine.com |
+| `pdf` | 3.13.1 (vérifié le 14/11/2026) | Création du PDF à partir des pages scannées (dans un isolate) | Apache-2.0 | nfet.net |
+| `pdfrx` | 2.12.1 | Affichage des PDF, rendu de la première page pour la miniature. Télécharge PDFium depuis GitHub à la compilation (empreinte contrôlée par le paquet). Non exercé en session en ligne : voir P5. | MIT | espresso3389.jp |
+| `image` | 4.13.0 (vérifié le 14/11/2026) | Miniatures : décodage, rotation EXIF, réduction, JPEG | MIT | taosengine.com |
 
 ### Rappels
 
@@ -78,7 +86,7 @@ Les versions seront figées dans `pubspec.lock` au moment de l'installation (pha
 | `flutter_launcher_icons` | 0.14.4 | Génération des icônes Android et iOS | MIT |
 | `flutter_native_splash` | 2.4.8 | Écran de démarrage natif | MIT |
 
-**Bilan :** 25 paquets dans l'application, tous sous licence permissive (MIT, BSD, Apache-2.0), donc utilisables dans un produit commercial. Leur seule obligation est de reproduire les mentions de licence : Flutter le fait automatiquement dans l'écran « Licences » (Paramètres → À propos).
+**Bilan :** 27 paquets dans l'application, tous sous licence permissive (MIT, BSD, Apache-2.0), donc utilisables dans un produit commercial. Leur seule obligation est de reproduire les mentions de licence : Flutter le fait automatiquement dans l'écran « Licences » (Paramètres → À propos).
 
 Composants natifs embarqués : SQLite (domaine public), SQLite3MultipleCiphers (MIT), PDFium (BSD-3 / Apache-2.0), Tink (Apache-2.0). Le scanner ML Kit est soumis aux conditions d'utilisation de Google ML Kit, gratuites pour un usage commercial ; elles seront relues en phase 6.
 
@@ -127,10 +135,11 @@ Composants natifs embarqués : SQLite (domaine public), SQLite3MultipleCiphers (
 
 | Paquet | Constat | Mesure |
 |---|---|---|
-| `cryptography`, `cryptography_flutter` | Dernière version en novembre 2025 : paquets stables mais peu actifs. La partie Android utilise une configuration Gradle ancienne. | Chiffrement isolé derrière l'interface `CryptoEngine`. Compilation et mesure de vitesse dès le début de la phase 3. **Plan B : `webcrypto`** (éditeur google.dev, mis à jour le 11/11/2026), sans Argon2id mais avec PBKDF2 natif. |
+| `cryptography` | Dernière version en novembre 2025 : paquet stable mais peu actif. Son complément natif `cryptography_flutter` a été retiré le 15/11/2026 (calcul HMAC natif en échec sur Android). Tout est en Dart pur. | Chiffrement isolé derrière l'interface `CryptoEngine` (phase 3 : fait). Mesure de vitesse sur téléphone encore à faire (P4). **Plan B : `webcrypto`** (éditeur google.dev, mis à jour le 11/11/2026), sans Argon2id mais avec PBKDF2 natif. |
 | `sqlite3` | Télécharge un binaire précompilé pendant la compilation (contrôlé par empreinte SHA-256). | **La première compilation exige une connexion Internet.** |
+| `cunning_document_scanner` (ML Kit) | Ajoute les permissions INTERNET et ACCESS_NETWORK_STATE (statistiques d'usage envoyées à Google). | Retirées par `tools:node="remove"` dans le manifeste ; contrôlé à chaque compilation (`tool/check_apk.py`). Le scanner est fourni par les services Google Play, dans leur propre processus : à vérifier sur téléphone (P5). |
 | `flutter_local_notifications` | Exige `compileSdk` 37 et l'option Gradle « desugaring ». | Configuration Android en phase 3. La plateforme Android 37 est déjà installée sur le PC. |
-| `cunning_document_scanner` | Déclare ses propres règles de sauvegarde Android, qui entrent en conflit avec celles de DocuSafe. Écrit ses images dans un dossier externe privé. | Attribut `tools:replace` dans le manifeste. Purge du dossier après chaque scan. |
+| `cunning_document_scanner` | Déclare ses propres règles de sauvegarde Android, qui entrent en conflit avec celles de DocSafe. Écrit ses images dans un dossier externe privé. | Attribut `tools:replace` dans le manifeste. Purge du dossier après chaque scan. |
 | `local_auth`, `flutter_secure_storage` | La fenêtre biométrique exige que `MainActivity` hérite de `FlutterFragmentActivity`. | Configuration Android en phase 3 |
 | `receive_sharing_intent` | Sur iOS : Swift Package Manager obligatoire, `SceneDelegate`, extension de partage à créer dans Xcode. | Partie Android dans le MVP. Partie iOS reportée, comme l'autorise le cahier des charges. **À vérifier sur iOS.** |
 | `pdfrx` | Embarque PDFium (quelques Mo par architecture). iOS 15 minimum. | Livraison en AAB : chaque téléphone ne télécharge que sa propre architecture. |

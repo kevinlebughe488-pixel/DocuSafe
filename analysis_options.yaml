@@ -1,0 +1,45 @@
+# Règles de qualité du code (cahier des charges §14, choix D16).
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - lib/**/*.g.dart
+    - lib/app/l10n/generated/**
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # Les erreurs de typage implicite sont des erreurs, pas des avertissements.
+    invalid_annotation_target: ignore
+
+linter:
+  rules:
+    # Interdits : aucun affichage de données dans la console (docs/04-securite.md §15).
+    avoid_print: true
+    # Erreurs jamais avalées en silence (docs/02-architecture.md §9).
+    unawaited_futures: true
+    discarded_futures: true
+    avoid_catches_without_on_clauses: false
+    # Lisibilité et robustesse.
+    prefer_single_quotes: true
+    prefer_final_locals: true
+    prefer_final_in_for_each: true
+    always_declare_return_types: true
+    avoid_dynamic_calls: true
+    cancel_subscriptions: true
+    close_sinks: true
+    only_throw_errors: true
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    require_trailing_commas: true
+    sort_pub_dependencies: false
+    unnecessary_lambdas: true
+    use_super_parameters: true
+    directives_ordering: true
+    avoid_redundant_argument_values: true
+    use_colored_box: true
+    use_decorated_box: true

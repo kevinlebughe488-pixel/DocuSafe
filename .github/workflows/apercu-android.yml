@@ -1,0 +1,168 @@
+# Compile la version « aperçu » Android à chaque envoi sur GitHub et la
+# publie dans la page « Releases » du dépôt (étiquette « apercu »).
+# Mode d'emploi : docs/apercu-telephone.md
+name: Aperçu Android
+
+on:
+  push:
+    branches: ['**']
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apercu-android
+  # Un envoi pendant une compilation attend son tour : le test sur émulateur
+  # en cours va au bout.
+  cancel-in-progress: false
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.50.0'
+          channel: stable
+          cache: true
+
+      - name: Dépendances
+        run: flutter pub get
+
+      - name: Analyse
+        run: flutter analyze
+
+      - name: Tests
+        run: flutter test --exclude-tags screenshots
+
+      - name: Compilation de l'APK
+        env:
+          DOCUSAFE_APERCU: '1'
+        run: flutter build apk --release --build-number=${{ github.run_number }} --dart-define=DOCUSAFE_APERCU=true
+
+      # Informatif sur l'aperçu (la version publiée est contrôlée de façon
+      # bloquante par « Publication Android »).
+      - name: Vérifications de publication
+        continue-on-error: true
+        run: |
+          BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -n 1)"
+          python3 tool/check_apk.py build/app/outputs/flutter-apk/app-release.apk "$BT"
+
+      - name: Renommage
+        run: |
+          mkdir -p sortie
+          cp build/app/outputs/flutter-apk/app-release.apk "sortie/DocSafe-apercu-${{ github.run_number }}.apk"
+
+      - name: Copie téléchargeable (30 jours)
+        uses: actions/upload-artifact@v4
+        with:
+          name: DocSafe-apercu-${{ github.run_number }}
+          path: sortie/*.apk
+          retention-days: 30
+
+      # Aperçu dans le navigateur : l'APK est envoyé sur Appetize.io (un
+      # téléphone Android simulé dans une page web), toujours à la même
+      # adresse. Seulement si le secret APPETIZE_API_TOKEN existe
+      # (docs/apercu-telephone.md). Un échec ici ne bloque rien.
+      - name: Aperçu dans le navigateur (Appetize)
+        continue-on-error: true
+        env:
+          APPETIZE_API_TOKEN: ${{ secrets.APPETIZE_API_TOKEN }}
+        run: |
+          if [ -z "$APPETIZE_API_TOKEN" ]; then
+            echo "Pas de jeton Appetize : étape ignorée (voir docs/apercu-telephone.md)."
+            exit 0
+          fi
+          API=https://api.appetize.io/v1/apps
+          APK=$(ls sortie/*.apk | head -n 1)
+          KEY=$(curl -sSf -H "X-API-KEY: $APPETIZE_API_TOKEN" "$API" \
+            | jq -r '.data[]? | select(.note == "docsafe-apercu") | .publicKey' | head -n 1)
+          TARGET="$API${KEY:+/$KEY}"
+          RESP=$(curl -sSf -X POST -H "X-API-KEY: $APPETIZE_API_TOKEN" \
+            -F "file=@$APK" -F "platform=android" -F "note=docsafe-apercu" "$TARGET")
+          KEY=$(echo "$RESP" | jq -r '.publicKey')
+          if [ -z "$KEY" ] || [ "$KEY" = "null" ]; then
+            echo "::warning::Réponse inattendue d'Appetize."
+            exit 1
+          fi
+          echo "APPETIZE_URL=https://appetize.io/app/$KEY" >> "$GITHUB_ENV"
+          echo "### Aperçu dans le navigateur : https://appetize.io/app/$KEY" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publication dans « Releases »
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES="Version de test compilée automatiquement depuis la branche ${GITHUB_REF_NAME}, commit ${GITHUB_SHA::7}. À installer sur un téléphone Android, ou à essayer dans le navigateur (voir docs/apercu-telephone.md). Ne pas diffuser."
+          if [ -n "${APPETIZE_URL:-}" ]; then
+            NOTES="**Essayer dans le navigateur : ${APPETIZE_URL}**
+
+          ${NOTES}"
+          fi
+          TITLE="Aperçu n°${{ github.run_number }} (${GITHUB_REF_NAME})"
+          # La page et son étiquette sont gardées ; seul le fichier change.
+          # (Le jeton de GitHub n'a pas le droit de créer une étiquette sur un
+          # envoi qui modifie les recettes : la recréer à chaque fois échouait.)
+          if gh release view apercu > /dev/null 2>&1; then
+            for asset in $(gh release view apercu --json assets -q '.assets[].name'); do
+              gh release delete-asset apercu "$asset" --yes
+            done
+            gh release upload apercu sortie/*.apk
+            gh release edit apercu --prerelease --title "$TITLE" --notes "$NOTES"
+          else
+            # Première fois : étiquette posée sur la branche principale.
+            gh release create apercu sortie/*.apk \
+              --prerelease \
+              --target "${{ github.event.repository.default_branch }}" \
+              --title "$TITLE" \
+              --notes "$NOTES"
+          fi
+
+  # Test de fumée : un émulateur Android installe l'APK et crée un coffre.
+  # Le journal de cette étape montre chaque écran et les erreurs éventuelles.
+  emulateur:
+    needs: apk
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: DocSafe-apercu-${{ github.run_number }}
+          path: apk
+
+      - name: Accélération matérielle (KVM)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Parcours sur émulateur
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
+          script: python3 tool/smoke_test.py "$(ls apk/*.apk | head -n 1)" sortie-emulateur
+
+      - name: Capture et journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: emulateur-${{ github.run_number }}
+          path: sortie-emulateur
+          retention-days: 14

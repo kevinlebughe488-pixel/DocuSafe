@@ -46,3 +46,9 @@ key.properties
 *.mobileprovision
 .env
 .env.*
+
+# Graphe graphify : reconstruit à chaque session (tool/graphify_bootstrap.sh)
+graphify-out/
+
+# Clé de test « aperçu » : versionnée volontairement, jamais pour la publication.
+!android/app/apercu.keystore

@@ -1,4 +1,4 @@
-# Système de design de DocuSafe
+# Système de design de DocSafe
 
 Document rédigé le 13/11/2026 (phase 2). Il fixe les règles visuelles de l'application. Les maquettes qui les appliquent se trouvent dans [maquettes/index.html](maquettes/index.html).
 
@@ -26,13 +26,13 @@ La page contient 46 écrans, avec un bouton **Clair / Sombre**.
 
 | Élément | Choix |
 |---|---|
-| Nom affiché | DocuSafe |
+| Nom affiché | DocSafe |
 | Signature | « Vos documents, protégés. » |
 | Symbole | Un document blanc à coin replié, percé d'une serrure, sur un carré bleu aux angles arrondis |
-| Couleur de marque | Bleu DocuSafe `#205DB0` |
+| Couleur de marque | Bleu DocSafe `#205DB0` |
 | Couleur d'accent | Sarcelle `#246867`, réservée à tout ce qui évoque la protection |
 
-Le symbole est une proposition, dessinée en vectoriel dans les maquettes. L'icône définitive (toutes tailles Android et iOS) sera produite en phase 6.
+Le symbole est dessiné en vectoriel (`DsLogo`). Les icônes de l'application sont produites à partir de la même géométrie par `tool/generate_icons.py` (phase 6) : icônes Android classiques, icône adaptative et monochrome (Android 13), toutes les tailles iOS (carrées, opaques), icône 512 × 512 et bannière 1024 × 500 pour Google Play (`docs/publication/images/`).
 
 ### Ton des textes
 
@@ -170,7 +170,7 @@ Norme visée : WCAG niveau AA (4,5 pour un texte, 3 pour un élément graphique)
 | `bodyMedium` | 14 / 20 | normale | Texte courant, seconde ligne d'une liste |
 | `bodySmall` | 12 / 16 | normale | Aides sous les champs |
 | `labelLarge` | 14 / 20 | moyenne | Boutons, puces |
-| `labelMedium` | 12 / 16 | moyenne | Barre de navigation, étiquettes d'état |
+| `labelMedium` | 12 / 16 | moyenne | Étiquettes d'état ; barre de navigation en 11, sans espacement des lettres (révision du 14/11/2026 : cinq libellés sur un écran de 360 points) |
 
 La clé de récupération s'affiche en police à chasse fixe, pour distinguer chaque caractère.
 
@@ -222,7 +222,7 @@ Ils sont configurés une seule fois dans le thème : `FilledButton`, `FilledButt
 | Plein, rouge | Action destructrice confirmée (« Supprimer définitivement ») |
 | Grand (hauteur 56) | Bouton unique en bas d'un écran d'étape |
 
-### 7.2. Composants propres à DocuSafe
+### 7.2. Composants propres à DocSafe
 
 | Composant | Rôle | Écrans |
 |---|---|---|
@@ -331,6 +331,7 @@ Les maquettes HTML ne sont pas réutilisées dans l'application : elles servent 
 | M5 | Lecture d'un document toujours sur fond sombre | Met le document en valeur, repose les yeux |
 | M6 | Symbole : document à serrure | Proposition. Icône définitive en phase 6. |
 | M7 | Écran dédié pour confirmer une suppression | Demandé par le cahier des charges (écran n° 20) ; « Annuler » y est mis en avant |
+| M8 | **Révision du 14/11/2026 :** la maquette 3b (clé de récupération) n'est plus une étape de la création du coffre. Elle devient l'écran « Noter ma clé », ouvert depuis un bandeau d'avertissement sur l'accueil et depuis Sécurité. L'étape biométrie passe de « 3 sur 3 » à « 2 sur 2 ». Sur iPhone, les mots « Face ID » et « Touch ID » remplacent « empreinte ». | Inscription plus légère (D6 révisée), sans retirer la porte de secours. Les captures réelles sont dans `captures/`. |
 
 ---
 

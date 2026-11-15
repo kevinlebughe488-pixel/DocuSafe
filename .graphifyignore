@@ -1,0 +1,17 @@
+# Fichiers exclus du graphe graphify (même syntaxe que .gitignore).
+# Code généré : il gonfle le graphe sans rien apprendre de plus.
+*.g.dart
+lib/app/l10n/generated/
+# Maquettes HTML, captures d'écran, fichiers de test binaires.
+docs/maquettes/
+docs/captures/
+test/fixtures/
+# Projets natifs générés par Flutter.
+ios/Runner.xcodeproj/
+ios/Runner.xcworkspace/
+ios/Flutter/
+android/gradle/
+# Sorties de compilation et de graphify.
+build/
+.dart_tool/
+graphify-out/

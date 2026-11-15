@@ -1,0 +1,81 @@
+name: docusafe
+description: "Coffre-fort de documents chiffré et hors ligne."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.14.0
+  flutter: ">=3.50.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Interface : depuis Flutter 3.50, les widgets Material et Cupertino sont
+  # fournis par ces deux paquets officiels (package:flutter/material.dart est
+  # déprécié).
+  material_ui: 1.11.0
+  cupertino_ui: 1.1.6
+
+  # Structure de l'application
+  flutter_riverpod: 3.5.0
+  go_router: 18.1.4
+  intl: 0.20.3
+
+  # Données
+  drift: 2.35.4
+  sqlite3: 3.9.1
+  path_provider: 2.1.6
+  path: 1.9.1
+
+  # Sécurité
+  cryptography: 2.9.0
+  crypto: 3.0.8
+  flutter_secure_storage: 11.2.0
+  local_auth: 3.0.2
+
+  # Documents
+  file_picker: 13.3.3
+  image_picker: 1.2.4
+  pdfrx: 2.12.1
+  image: 4.13.0
+  cunning_document_scanner: 3.1.0
+  pdf: 3.13.1
+
+  # Rappels
+  flutter_local_notifications: 23.0.2
+  timezone: 0.11.2
+  flutter_timezone: 5.1.1
+
+  # Partage
+  share_plus: 13.3.1
+  archive: 4.7.1
+
+  # Divers
+  package_info_plus: 10.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  drift_dev: 2.35.3
+  build_runner: 2.17.1
+  flutter_lints: 6.0.0
+  mocktail: 1.0.5
+
+# Moteur SQLite chiffré (SQLite3MultipleCiphers) fourni par le paquet sqlite3.
+# Voir docs/06-dependances.md (D3). Ne pas utiliser sqlcipher_flutter_libs,
+# sqlite3_flutter_libs ni drift_flutter.
+hooks:
+  user_defines:
+    sqlite3:
+      source: sqlite3mc
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/legal/
