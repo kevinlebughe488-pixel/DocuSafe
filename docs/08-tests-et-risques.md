@@ -79,6 +79,7 @@ Les tests d'intégration du paquet `integration_test` (scanner réel, sélecteur
 | Une erreur imprévue pendant la création du coffre laissait la roue tourner sans fin | Majeur | Même essai | Toute erreur est affichée ; la vérification de la biométrie ne peut plus bloquer l'entrée |
 | Le contrôle de cohérence décrit dans la documentation n'était pas écrit | Mineur | Relecture | Fichiers orphelins supprimés au déverrouillage |
 | À la réouverture du coffre, la reprogrammation des rappels lisait encore la base fermée de la session précédente (rappels non reprogrammés) | Majeur | Journal du téléphone simulé, puis test de régression | Le service des rappels est construit sur la session qui vient de s'ouvrir |
+| **La version publiable contenait la permission Internet** (et l'état du réseau), ajoutée par un paquet pour ses statistiques d'usage (scanner ML Kit) | Bloquant (règle D8, fiche « aucune donnée collectée ») | Contrôle automatique `tool/check_apk.py` (phase 6) | Permissions retirées explicitement dans le manifeste ; contrôle rendu vraiment bloquant |
 | Quitter l'écran de restauration sans restaurer provoquait une erreur interne | Mineur | Captures d'écran | Corrigé |
 | La barre de répartition de l'écran Stockage ne s'affichait pas | Mineur | Captures d'écran | Corrigé |
 

@@ -82,6 +82,8 @@ jobs:
 
       - name: Vérifications de publication
         run: |
+          # pipefail : sans lui, un échec serait masqué par « tee ».
+          set -o pipefail
           BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -n 1)"
           python3 tool/check_apk.py build/app/outputs/flutter-apk/app-release.apk "$BT" | tee verifications.txt
 
