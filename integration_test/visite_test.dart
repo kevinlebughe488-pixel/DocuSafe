@@ -185,20 +185,32 @@ void main() {
     step('coffre rouvert');
 
     final router = container.read(routerProvider);
+    // Onglets : on y va directement. Écrans de détail : ouverts par-dessus,
+    // comme au doigt (flèche de retour visible), puis refermés.
     Future<void> visit(String route, Finder expected, String name) async {
       router.go(route);
       await waitFor(tester, expected);
       await capture(tester, name);
     }
 
+    Future<void> open(String route, Finder expected, String name) async {
+      unawaited(router.push(route));
+      await waitFor(tester, expected);
+      await capture(tester, name);
+      router.pop();
+      for (var i = 0; i < 4; i++) {
+        await tester.pump(const Duration(milliseconds: 150));
+      }
+    }
+
     await visit(Routes.documents, find.text('Contrat de bail'), '07-documents');
-    await visit(Routes.document(passportId!), find.text('Passeport'), '08-fiche');
+    await open(Routes.document(passportId!), find.text('Ajouté le'), '08-fiche');
     await visit(Routes.deadlines, find.text('Passeport'), '09-echeances');
     await visit(Routes.scan, find.text('Numériser'), '10-scanner');
     await visit(Routes.settings, find.text('Autorisations'), '11-parametres');
-    await visit(Routes.settingsSecurity, find.text('Changer le code'), '12-securite');
-    await visit(Routes.settingsPermissions, find.text('Numérisation'), '13-autorisations');
-    await visit(Routes.settingsHelp, find.text("J'ai oublié mon code"), '14-aide');
+    await open(Routes.settingsSecurity, find.text('Changer le code'), '12-securite');
+    await open(Routes.settingsPermissions, find.text('Numérisation'), '13-autorisations');
+    await open(Routes.settingsHelp, find.text("J'ai oublié mon code"), '14-aide');
     step('visite terminée');
   }, timeout: const Timeout(Duration(minutes: 10)));
 }
